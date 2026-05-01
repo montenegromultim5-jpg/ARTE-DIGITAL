@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARTE DIGITAL — Imprenta de Alta Gama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        ::selection { background: #D2F86D; color: #0F3D2E; }
+        html { scroll-behavior: smooth; }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.8s ease-out forwards; }
+        .fade-up-delay-1 { animation: fadeUp 0.8s ease-out 0.15s forwards; opacity: 0; }
+        .fade-up-delay-2 { animation: fadeUp 0.8s ease-out 0.3s forwards; opacity: 0; }
+        .fade-up-delay-3 { animation: fadeUp 0.8s ease-out 0.45s forwards; opacity: 0; }
+        .fade-up-delay-4 { animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; }
+
+        @keyframes inkSpread {
+            0% { transform: scale(0); opacity: 0.6; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+        .ink-spread { animation: inkSpread 1.5s ease-out forwards; }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        .float-anim-delay { animation: float 6s ease-in-out 2s infinite; }
+
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        .ink-border {
+            border-image: linear-gradient(135deg, #0F3D2E, #D2F86D, #0F3D2E) 1;
+        }
+
+        .service-card:hover .service-icon {
+            background-color: #D2F86D;
+            color: #0F3D2E;
+        }
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .star-filled { color: #0F3D2E; }
+        .star-empty { color: #E2E8F0; }
+
+        .nav-scrolled {
+            background: rgba(255,255,255,0.95) !important;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#0F3D2E',
+                        accent: '#D2F86D',
+                        'accent-hover': '#c2eb5b',
+                        'brand-hover': '#1a4f3d',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-slate-700 paper-texture">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#inicio" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-brand rounded-lg flex items-center justify-center group-hover:bg-accent transition-colors duration-200">
+                    <i data-lucide="printer" class="w-5 h-5 text-accent group-hover:text-brand transition-colors duration-200"></i>
+                </div>
+                <div>
+                    <span class="font-serif text-lg font-semibold text-brand tracking-tight">ARTE DIGITAL</span>
+                    <span class="hidden sm:block text-[10px] uppercase tracking-[0.25em] text-slate-400 font-medium">Imprenta de Alta Gama</span>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="#inicio" class="text-sm font-medium text-slate-600 hover:text-brand transition-colors">Inicio</a>
+                <a href="#nosotros" class="text-sm font-medium text-slate-600 hover:text-brand transition-colors">Nosotros</a>
+                <a href="#servicios" class="text-sm font-medium text-slate-600 hover:text-brand transition-colors">Servicios</a>
+                <a href="#galeria" class="text-sm font-medium text-slate-600 hover:text-brand transition-colors">Galería</a>
+                <a href="#reseñas" class="text-sm font-medium text-slate-600 hover:text-brand transition-colors">Reseñas</a>
+                <a href="#contacto" class="text-sm font-medium text-slate-600 hover:text-brand transition-colors">Contacto</a>
+                <a href="tel:7222340533" class="bg-brand text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-brand-hover transition-colors">
+                    Llamar ahora
+                </a>
+            </div>
+            <button id="menuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
+                <i data-lucide="menu" class="w-5 h-5 text-brand"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-white">
+        <div class="px-6 h-20 flex items-center justify-between">
+            <span class="font-serif text-lg font-semibold text-brand">ARTE DIGITAL</span>
+            <button id="closeMenu" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
+                <i data-lucide="x" class="w-5 h-5 text-brand"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-1 px-6 mt-4">
+            <a href="#inicio" class="mobile-link text-lg font-medium text-slate-700 py-3 border-b border-slate-100 hover:text-brand transition-colors">Inicio</a>
+            <a href="#nosotros" class="mobile-link text-lg font-medium text-slate-700 py-3 border-b border-slate-100 hover:text-brand transition-colors">Nosotros</a>
+            <a href="#servicios" class="mobile-link text-lg font-medium text-slate-700 py-3 border-b border-slate-100 hover:text-brand transition-colors">Servicios</a>
+            <a href="#galeria" class="mobile-link text-lg font-medium text-slate-700 py-3 border-b border-slate-100 hover:text-brand transition-colors">Galería</a>
+            <a href="#reseñas" class="mobile-link text-lg font-medium text-slate-700 py-3 border-b border-slate-100 hover:text-brand transition-colors">Reseñas</a>
+            <a href="#contacto" class="mobile-link text-lg font-medium text-slate-700 py-3 border-b border-slate-100 hover:text-brand transition-colors">Contacto</a>
+            <a href="tel:7222340533" class="mt-6 bg-brand text-white text-center text-lg font-medium px-6 py-4 rounded-full hover:bg-brand-hover transition-colors">
+                Llamar ahora
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative min-h-screen flex items-center overflow-hidden bg-brand">
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 right-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        
+        <!-- Ink splatters decorative -->
+        <div class="absolute top-32 left-[15%] w-3 h-3 bg-accent/30 rounded-full float-anim"></div>
+        <div class="absolute top-[60%] right-[20%] w-2 h-2 bg-accent/20 rounded-full float-anim-delay"></div>
+        <div class="absolute bottom-[30%] left-[8%] w-4 h-4 bg-accent/15 rounded-full float-anim"></div>
+
+        <!-- Grid pattern overlay -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: repeating-linear-gradient(0deg, white 0px, white 1px, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 60px);"></div>
+
+        <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 lg:pt-40 lg:pb-28 w-full relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div>
+                    <!-- Badge -->
+                    <div class="fade-up inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-8">
+                        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+                        <span class="text-xs font-medium text-white/80 uppercase tracking-wider">Publicidad de Correo Directo</span>
+                    </div>
+                    
+                    <h1 class="fade-up-delay-1 font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight mb-6">
+                        Arte<br>
+                        <span class="text-accent">Digital</span>
+                    </h1>
+                    
+                    <p class="fade-up-delay-2 text-lg md:text-xl text-white/70 leading-relaxed max-w-lg mb-10">
+                        Imprenta de alta gama con una amplia variedad de posibilidades para tus proyectos. Impresiones económicas con calidad excepcional y entrega rápida.
+                    </p>
+                    
+                    <div class="fade-up-delay-3 flex flex-col sm:flex-row gap-4">
+                        <a href="#servicios" class="inline-flex items-center justify-center gap-2 bg-accent text-brand font-medium text-base px-8 py-4 rounded-full hover:bg-accent-hover transition-colors">
+                            Ver servicios
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="tel:7222340533" class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium text-base px-8 py-4 rounded-full hover:bg-white/20 transition-colors">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            722 234 0533
+                        </a>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="fade-up-delay-4 mt-12 flex items-center gap-8">
+                        <div>
+                            <div class="text-3xl font-serif font-bold text-white">4.5</div>
+                            <div class="flex gap-0.5 mt-1">
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-accent text-accent"></i>
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-accent text-accent"></i>
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-accent text-accent"></i>
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-accent text-accent"></i>
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-accent/40 text-accent/40"></i>
+                            </div>
+                            <div class="text-xs text-white/50 mt-1">4 reseñas</div>
+                        </div>
+                        <div class="w-px h-12 bg-white/20"></div>
+                        <div>
+                            <div class="text-3xl font-serif font-bold text-white">10+</div>
+                            <div class="text-xs text-white/50 mt-1">Años de<br>experiencia</div>
+                        </div>
+                        <div class="w-px h-12 bg-white/20"></div>
+                        <div>
+                            <div class="text-3xl font-serif font-bold text-white">500+</div>
+                            <div class="text-xs text-white/50 mt-1">Proyectos<br>realizados</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image Composition -->
+                <div class="relative hidden lg:block">
+                    <div class="relative z-10">
+                        <img src="https://picsum.photos/seed/printing-press-hero/600/700.jpg" alt="Imprenta Arte Digital" class="w-full h-[560px] object-cover rounded-2xl shadow-2xl">
+                        <!-- Overlay gradient -->
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-brand/30 to-transparent"></div>
+                    </div>
+                    <!-- Floating card -->
+                    <div class="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl p-5 z-20 fade-up-delay-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center">
+                                <i data-lucide="clock" class="w-5 h-5 text-brand"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-brand">Abierto ahora</div>
+                                <div class="text-xs text-slate-500">Cierra a las 9:00 p.m.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Floating card 2 -->
+                    <div class="absolute -top-4 -right-4 bg-white rounded-xl shadow-xl p-4 z-20 fade-up-delay-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-brand rounded-full flex items-center justify-center">
+                                <i data-lucide="zap" class="w-4 h-4 text-accent"></i>
+                            </div>
+                            <div class="text-xs font-semibold text-brand">Entrega Rápida</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+            <span class="text-[10px] uppercase tracking-[0.3em] text-white/40 font-medium">Descubre más</span>
+            <div class="w-5 h-8 border-2 border-white/20 rounded-full flex justify-center pt-1.5">
+                <div class="w-1 h-2 bg-accent rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Banner -->
+    <div class="bg-accent py-3 overflow-hidden">
+        <div class="marquee-track">
+            <span class="flex items-center gap-8 px-4 text-brand text-xs font-semibold uppercase tracking-[0.2em] whitespace-nowrap">
+                <span>★ Impresión Digital</span><span>★ Diseño Gráfico</span><span>★ Tarjetas de Presentación</span><span>★ Volantes y Folletos</span><span>★ Rotulación</span><span>★ Sublimación</span><span>★ Invitaciones</span><span>★ Empaques</span><span>★ Tesis</span><span>★ Troqueles</span><span>★ Camisetas</span><span>★ Lonas y Banners</span>
+            </span>
+            <span class="flex items-center gap-8 px-4 text-brand text-xs font-semibold uppercase tracking-[0.2em] whitespace-nowrap">
+                <span>★ Impresión Digital</span><span>★ Diseño Gráfico</span><span>★ Tarjetas de Presentación</span><span>★ Volantes y Folletos</span><span>★ Rotulación</span><span>★ Sublimación</span><span>★ Invitaciones</span><span>★ Empaques</span><span>★ Tesis</span><span>★ Troqueles</span><span>★ Camisetas</span><span>★ Lonas y Banners</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="nosotros" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <img src="https://picsum.photos/seed/print-shop-interior/600/500.jpg" alt="Interior de la imprenta" class="w-full h-[480px] object-cover rounded-2xl">
+                    <!-- Decorative frame -->
+                    <div class="absolute -bottom-4 -right-4 w-full h-full border-2 border-accent rounded-2xl -z-10"></div>
+                    <!-- Experience badge -->
+                    <div class="absolute top-6 left-6 bg-brand text-white px-5 py-3 rounded-xl shadow-lg">
+                        <div class="text-2xl font-serif font-bold text-accent">10+</div>
+                        <div class="text-[10px] uppercase tracking-wider text-white/70">Años de experiencia</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="inline-flex items-center gap-2 mb-4">
+                        <div class="w-8 h-px bg-accent"></div>
+                        <span class="text-xs font-medium uppercase tracking-[0.2em] text-brand">Sobre Nosotros</span>
+                    </div>
+                    <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-brand leading-tight tracking-tight mb-6">
+                        Tradición tipográfica con <span class="text-accent" style="-webkit-text-stroke: 1px #0F3D2E;">tecnología</span> moderna
+                    </h2>
+                    <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                        En <strong class="text-brand">Arte Digital</strong> combinamos la pasión por el oficio de la imprenta con la tecnología más avanzada. Desde nuestra ubicación en Santiago Tilapa, hemos servido a cientos de clientes con un compromiso inquebrantable: calidad de alta gama a precios accesibles.
+                    </p>
+                    <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                        Cada proyecto que pasa por nuestras manos recibe un trato personalizado. Nos ajustamos a tu presupuesto y te ofrecemos múltiples opciones para que el resultado final supere tus expectativas.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-brand">Calidad Premium</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Acabados profesionales</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-brand">Precios Accesibles</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Para todos los presupuestos</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-brand">Entrega Rápida</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Tiempos de entrega cortos</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-brand">Asesoría Gratis</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Te ayudamos con tu diseño</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servicios" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <div class="w-8 h-px bg-accent"></div>
+                    <span class="text-xs font-medium uppercase tracking-[0.2em] text-brand">Nuestros Servicios</span>
+                    <div class="w-8 h-px bg-accent"></div>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-brand leading-tight tracking-tight mb-4">
+                    Todo lo que necesitas <br>en un solo lugar
+                </h2>
+                <p class="text-lg text-slate-500 leading-relaxed">
+                    Ofrecemos una amplia gama de servicios de impresión y diseño para cubrir todas tus necesidades.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="printer" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Impresión Digital</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Alta resolución en color y blanco/negro. Ideal para documentos, fotografías y material promocional con acabados profesionales.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Color</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">B/N</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Alta Res.</span>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="palette" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Diseño Gráfico</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Creación de logotipos, identidades corporativas, imágenes para redes sociales y piezas publicitarias impactantes.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Logos</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Branding</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Redes</span>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="credit-card" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Tarjetas de Presentación</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Tarjetas en diversos materiales y acabados: mate, gloss, laminadas, troqueladas, stamping en oro o plata.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Mate</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Gloss</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Stamping</span>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="file-text" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Volantes y Folletos</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Impresión de volantes, trípticos, dípticos y catálogos en diferentes tamaños y gramajes de papel.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Trípticos</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Catálogos</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Flyers</span>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="type" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Rotulación y Lonas</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Rotulación de negocios, lonas vinil, banners, cintas, decoración de interiores y exteriores a gran formato.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Vinil</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Lona</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Banner</span>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="shirt" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Sublimación y Textiles</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Personalización de camisetas, playeras, sudaderas, gorras, tazas y más con técnica de sublimación y serigrafía.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Playeras</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Tazas</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Gorras</span>
+                    </div>
+                </div>
+
+                <!-- Service 7 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="heart" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Invitaciones</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Invitaciones para bodas, XV años, bautizos, cumpleaños y eventos especiales con diseños exclusivos y elegantes.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Bodas</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">XV Años</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Eventos</span>
+                    </div>
+                </div>
+
+                <!-- Service 8 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="book-open" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Tesis y Engargolados</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Impresión profesional de tesis, manuales, reportes y documentos con engargolado, encuadernación y acetatos.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Engargolado</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Anillado</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Acetato</span>
+                    </div>
+                </div>
+
+                <!-- Service 9 -->
+                <div class="service-card bg-white rounded-xl p-8 border border-slate-200 transition-all duration-300 cursor-pointer">
+                    <div class="service-icon w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                        <i data-lucide="scissors" class="w-6 h-6 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-semibold text-brand mb-3">Troqueles y Corte Láser</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Cortes especiales, troqueles a medida, etiquetas, stikers, empaques personalizados con formas únicas.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Stickers</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Etiquetas</span>
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Empaques</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-24 bg-brand relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: repeating-linear-gradient(0deg, white 0px, white 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 40px);"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <div class="w-8 h-px bg-accent"></div>
+                    <span class="text-xs font-medium uppercase tracking-[0.2em] text-accent">Proceso de Trabajo</span>
+                    <div class="w-8 h-px bg-accent"></div>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-4">
+                    De la idea al impreso
+                </h2>
+                <p class="text-lg text-white/60 leading-relaxed">
+                    Un proceso sencillo y transparente para que tu proyecto se materialice sin complicaciones.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center relative">
+                    <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="font-serif text-2xl font-bold text-accent">01</span>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-white mb-2">Consulta</h3>
+                    <p class="text-sm text-white/50 leading-relaxed">Platícanos tu proyecto y te asesoramos sin compromiso sobre las mejores opciones.</p>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-accent/30 to-transparent"></div>
+                </div>
+                <div class="text-center relative">
+                    <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="font-serif text-2xl font-bold text-accent">02</span>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-white mb-2">Diseño</h3>
+                    <p class="text-sm text-white/50 leading-relaxed">Creamos o ajustamos tu diseño hasta que quede exactamente como lo imaginas.</p>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-accent/30 to-transparent"></div>
+                </div>
+                <div class="text-center relative">
+                    <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="font-serif text-2xl font-bold text-accent">03</span>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-white mb-2">Impresión</h3>
+                    <p class="text-sm text-white/50 leading-relaxed">Procesamos tu trabajo con equipos de alta calidad y materiales premium.</p>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-accent/30 to-transparent"></div>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="font-serif text-2xl font-bold text-brand">04</span>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-white mb-2">Entrega</h3>
+                    <p class="text-sm text-white/50 leading-relaxed">Recibe tu producto terminado rápidamente, listo para usar o distribuir.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="galeria" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <div class="w-8 h-px bg-accent"></div>
+                    <span class="text-xs font-medium uppercase tracking-[0.2em] text-brand">Galería</span>
+                    <div class="w-8 h-px bg-accent"></div>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-brand leading-tight tracking-tight mb-4">
+                    Nuestros trabajos
+                </h2>
+                <p class="text-lg text-slate-500 leading-relaxed">
+                    Una muestra de lo que podemos crear para ti.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="gallery-item row-span-2 overflow-hidden rounded-xl cursor-pointer group">
+                    <img src="https://picsum.photos/seed/business-cards-print/400/600.jpg" alt="Tarjetas de presentación" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 rounded-xl">
+                        <span class="text-white font-medium text-sm">Tarjetas de Presentación</span>
+                    </div>
+                </div>
+                <div class="gallery-item overflow-hidden rounded-xl cursor-pointer group relative">
+                    <img src="https://picsum.photos/seed/flyer-design-print/400/300.jpg" alt="Volantes" class="w-full h-56 object-cover transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 rounded-xl">
+                        <span class="text-white font-medium text-sm">Volantes</span>
+                    </div>
+                </div>
+                <div class="gallery-item overflow-hidden rounded-xl cursor-pointer group relative">
+                    <img src="https://picsum.photos/seed/tshirt-printing-sub/400/300.jpg" alt="Sublimación" class="w-full h-56 object-cover transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 rounded-xl">
+                        <span class="text-white font-medium text-sm">Sublimación</span>
+                    </div>
+                </div>
+                <div class="gallery-item row-span-2 overflow-hidden rounded-xl cursor-pointer group relative">
+                    <img src="https://picsum.photos/seed/banner-lona-print/400/600.jpg" alt="Lonas y Banners" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 rounded-xl">
+                        <span class="text-white font-medium text-sm">Lonas y Banners</span>
+                    </div>
+                </div>
+                <div class="gallery-item overflow-hidden rounded-xl cursor-pointer group relative">
+                    <img src="https://picsum.photos/seed/wedding-invitation-design/400/300.jpg" alt="Invitaciones" class="w-full h-56 object-cover transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 rounded-xl">
+                        <span class="text-white font-medium text-sm">Invitaciones</span>
+                    </div>
+                </div>
+                <div class="gallery-item overflow-hidden rounded-xl cursor-pointer group relative">
+                    <img src="https://picsum.photos/seed/sticker-die-cut/400/300.jpg" alt="Stickers y Troqueles" class="w-full h-56 object-cover transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 rounded-xl">
+                        <span class="text-white font-medium text-sm">Stickers y Troqueles</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reseñas" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-5 gap-12 items-start">
+                <!-- Summary -->
+                <div class="lg:col-span-2 lg:sticky lg:top-28">
+                    <div class="inline-flex items-center gap-2 mb-4">
+                        <div class="w-8 h-px bg-accent"></div>
+                        <span class="text-xs font-medium uppercase tracking-[0.2em] text-brand">Reseñas</span>
+                    </div>
+                    <h2 class="font-serif text-3xl md:text-4xl font-bold text-brand leading-tight tracking-tight mb-6">
+                        Lo que dicen nuestros clientes
+                    </h2>
+                    
+                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="text-6xl font-serif font-bold text-brand">4.5</div>
+                            <div>
+                                <div class="flex gap-1">
+                                    <i data-lucide="star" class="w-5 h-5 fill-accent text-accent"></i>
+                                    <i data-lucide="star" class="w-5 h-5 fill-accent text-accent"></i>
+                                    <i data-lucide="star" class="w-5 h-5 fill-accent text-accent"></i>
+                                    <i data-lucide="star" class="w-5 h-5 fill-accent text-accent"></i>
+                                    <i data-lucide="star" class="w-5 h-5 fill-accent/30 text-accent/30"></i>
+                                </div>
+                                <div class="text-sm text-slate-500 mt-1">4 reseñas en Google</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rating bars -->
+                        <div class="space-y-2.5">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-medium text-slate-500 w-3">5</span>
+                                <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent rounded-full" style="width: 75%"></div>
+                                </div>
+                                <i data-lucide="star" class="w-3 h-3 text-slate-400"></i>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-medium text-slate-500 w-3">4</span>
+                                <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent rounded-full" style="width: 25%"></div>
+                                </div>
+                                <i data-lucide="star" class="w-3 h-3 text-slate-400"></i>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-medium text-slate-500 w-3">3</span>
+                                <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent rounded-full" style="width: 0%"></div>
+                                </div>
+                                <i data-lucide="star" class="w-3 h-3 text-slate-400"></i>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-medium text-slate-500 w-3">2</span>
+                                <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent rounded-full" style="width: 0%"></div>
+                                </div>
+                                <i data-lucide="star" class="w-3 h-3 text-slate-400"></i>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-medium text-slate-500 w-3">1</span>
+                                <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent rounded-full" style="width: 0%"></div>
+                                </div>
+                                <i data-lucide="star" class="w-3 h-3 text-slate-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews -->
+                <div class="lg:col-span-3 space-y-6">
+                    <!-- Review 1 -->
+                    <div class="bg-white rounded-xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-brand rounded-full flex items-center justify-center">
+                                    <span class="text-white font-semibold text-lg">R</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-brand">Raúl Aguilar</div>
+                                    <div class="text-xs text-slate-400">2 reseñas · 5 fotos</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-slate-400">Hace 2 años</span>
+                        </div>
+                        <div class="flex gap-0.5 mb-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            Una excelente imprenta, con una alta gama de posibilidades para proyectos, tareas y demás. Es de alta gama, las impresiones económicas. Y la entrega, rápida.
+                        </p>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="bg-white rounded-xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center">
+                                    <span class="text-brand font-semibold text-lg">Y</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-brand">Yesica Silva</div>
+                                    <div class="text-xs text-slate-400">1 reseña</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-slate-400">Hace 1 año</span>
+                        </div>
+                        <div class="flex gap-0.5 mb-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            Me encantó el trabajo que realizan, se ajustan a tu presupuesto y te manejan muchas opciones. Se los recomiendo mucho!
+                        </p>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="bg-white rounded-xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center">
+                                    <span class="text-brand font-semibold text-lg">E</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-brand">Eduardo Quiroz</div>
+                                    <div class="text-xs text-slate-400">5 reseñas · 12 fotos</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-slate-400">Hace 4 años</span>
+                        </div>
+                        <div class="flex gap-0.5 mb-4">
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-accent text-accent"></i>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            Excelente servicio y atención. La calidad de impresión es impresionante, siempre cumplen con los tiempos de entrega y el precio es muy accesible. Mi imprenta de confianza.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-brand rounded-3xl p-12 md:p-16 relative overflow-hidden">
+                <!-- Decorative -->
+                <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-60 h-60 bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+                <div class="absolute inset-0 opacity-[0.03]" style="background-image: repeating-linear-gradient(0deg, white 0px, white 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 40px);"></div>
+                
+                <div class="relative z-10 text-center max-w-2xl mx-auto">
+                    <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-6">
+                        ¿Tienes un proyecto en mente?
+                    </h2>
+                    <p class="text-lg text-white/60 leading-relaxed mb-10">
+                        Contáctanos hoy y recibe una cotización sin compromiso. Nos ajustamos a tu presupuesto.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="tel:7222340533" class="inline-flex items-center justify-center gap-2 bg-accent text-brand font-medium text-base px-8 py-4 rounded-full hover:bg-accent-hover transition-colors">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            722 234 0533
+                        </a>
+                        <a href="https://wa.me/527222340533" target="_blank" class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium text-base px-8 py-4 rounded-full hover:bg-white/20 transition-colors">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <div class="w-8 h-px bg-accent"></div>
+                    <span class="text-xs font-medium uppercase tracking-[0.2em] text-brand">Contacto</span>
+                    <div class="w-8 h-px bg-accent"></div>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-brand leading-tight tracking-tight mb-4">
+                    Visítanos o escríbenos
+                </h2>
+                <p class="text-lg text-slate-500 leading-relaxed">
+                    Estamos en Santiago Tilapa, Estado de México. ¡Te esperamos!
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Address -->
+                <div class="bg-white rounded-xl p-8 border border-slate-200">
+                    <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-brand mb-2">Dirección</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                        Morelos 105, Rojastitlan,<br>52650 Santiago Tilapa, Méx.
+                    </p>
+                    <a href="https://maps.google.com/?q=5HMH+X2+Santiago+Tilapa+Estado+de+Mexico" target="_blank" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:text-brand-hover transition-colors">
+                        Cómo llegar
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <!-- Phone -->
+                <div class="bg-white rounded-xl p-8 border border-slate-200">
+                    <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="phone" class="w-5 h-5 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-brand mb-2">Teléfono</h3>
+                    <a href="tel:7222340533" class="text-slate-500 text-sm hover:text-brand transition-colors block mb-4">
+                        722 234 0533
+                    </a>
+                    <a href="https://wa.me/527222340533" target="_blank" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:text-brand-hover transition-colors">
+                        Enviar WhatsApp
+                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <!-- Hours -->
+                <div class="bg-white rounded-xl p-8 border border-slate-200">
+                    <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-5">
+                        <i data-lucide="clock" class="w-5 h-5 text-brand"></i>
+                    </div>
+                    <h3 class="font-serif text-lg font-semibold text-brand mb-2">Horario</h3>
+                    <div class="space-y-1.5 mb-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Lunes - Viernes</span>
+                            <span class="text-brand font-medium">9:00 - 21:00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Sábado</span>
+                            <span class="text-brand font-medium">9:00 - 18:00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Domingo</span>
+                            <span class="text-slate-400 font-medium">Cerrado</span>
+                        </div>
+                    </div>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-medium text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                        Abierto ahora
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="mt-8 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.5!2d-99.4!3d19.15!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA5JzAwLjAiTiA5OcKwMjQnMDAuMCJX!5e0!3m2!1ses!2smx!4v1" 
+                    width="100%" 
+                    height="400" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="w-full">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <!-- Brand -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+                            <i data-lucide="printer" class="w-5 h-5 text-brand"></i>
+                        </div>
+                        <div>
+                            <span class="font-serif text-lg font-semibold text-white">ARTE DIGITAL</span>
+                            <span class="block text-[10px] uppercase tracking-[0.25em] text-white/40 font-medium">Imprenta de Alta Gama</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-white/50 leading-relaxed max-w-sm mb-6">
+                        Tu imprenta de confianza en Santiago Tilapa. Calidad, precio y rapidez en cada impresión.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent hover:text-brand transition-all duration-200 group">
+                            <i data-lucide="facebook" class="w-4 h-4 text-white/60 group-hover:text-brand"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent hover:text-brand transition-all duration-200 group">
+                            <i data-lucide="instagram" class="w-4 h-4 text-white/60 group-hover:text-brand"></i>
+                        </a>
+                        <a href="https://wa.me/527222340533" target="_blank" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent hover:text-brand transition-all duration-200 group">
+                            <i data-lucide="message-circle" class="w-4 h-4 text-white/60 group-hover:text-brand"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-xs font-medium uppercase tracking-[0.2em] text-white/40 mb-5">Navegación</h4>
+                    <div class="space-y-3">
+                        <a href="#inicio" class="block text-sm text-white/60 hover:text-accent transition-colors">Inicio</a>
+                        <a href="#nosotros" class="block text-sm text-white/60 hover:text-accent transition-colors">Nosotros</a>
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Servicios</a>
+                        <a href="#galeria" class="block text-sm text-white/60 hover:text-accent transition-colors">Galería</a>
+                        <a href="#reseñas" class="block text-sm text-white/60 hover:text-accent transition-colors">Reseñas</a>
+                        <a href="#contacto" class="block text-sm text-white/60 hover:text-accent transition-colors">Contacto</a>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-xs font-medium uppercase tracking-[0.2em] text-white/40 mb-5">Servicios</h4>
+                    <div class="space-y-3">
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Impresión Digital</a>
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Diseño Gráfico</a>
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Tarjetas</a>
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Volantes y Folletos</a>
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Rotulación</a>
+                        <a href="#servicios" class="block text-sm text-white/60 hover:text-accent transition-colors">Sublimación</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-white/30">
+                    © 2025 Arte Digital. Todos los derechos reservados.
+                </p>
+                <p class="text-xs text-white/30">
+                    Morelos 105, Santiago Tilapa, Estado de México
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/527222340533?text=Hola,%20me%20interesa%20cotizar%20un%20servicio%20de%20impresión" target="_blank" 
+       class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 hover:scale-110 transition-all duration-200 group">
+        <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
+        <span class="absolute right-full mr-3 bg-white text-brand text-xs font-medium px-3 py-1.5 rounded-lg shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            ¡Escríbenos!
+        </span>
+    </a>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="fixed bottom-6 left-6 z-50 w-10 h-10 bg-brand rounded-full flex items-center justify-center shadow-lg hover:bg-brand-hover transition-all duration-200 opacity-0 translate-y-4 pointer-events-none">
+        <i data-lucide="chevron-up" class="w-5 h-5 text-white"></i>
+    </button>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+            
+            // Back to top button
+            if (window.scrollY > 600) {
+                backToTop.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                backToTop.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTop.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                backToTop.classList.remove('opacity-100', 'translate-y-0');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Scroll animations with Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        document.querySelectorAll('.service-card, .gallery-item, #contacto .bg-white, footer').forEach((el, i) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `opacity 0.6s ease-out ${i % 4 * 0.1}s, transform 0.6s ease-out ${i % 4 * 0.1}s`;
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
