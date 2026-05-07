@@ -1,610 +1,1132 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Montenegro · Fotografía & Video | Capulhuac</title>
-<meta name="description" content="Fotografía y video profesional de alta calidad en Capulhuac de Mirafuentes. Impresión, retratos, eventos y más.">
-<meta name="robots" content="index, follow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest" defer></script>
-<style>
-:root {
---cream: #f7f3ee; --dark: #0d0b09; --dark-2: #100e0a;
---gold: #c9a96e; --gold-light: #e8d4b0; --gold-dark: #8b6f3e;
---stone: #6b6560; --stone-light: #9e9892;
---border: rgba(201,169,110,0.18); --border-subtle: rgba(255,255,255,0.07);
-}
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; font-size: 16px; }
-body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--cream); overflow-x: hidden; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--dark); }
-::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
-
-/* ─ NAV & DROPDOWN ── */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 2rem; height: 70px; display: flex; align-items: center; justify-content: space-between; transition: background .5s, border-color .5s; border-bottom: 1px solid transparent; }
-nav.scrolled { background: rgba(13,11,9,0.92); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border); }
-.nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; cursor: pointer; }
-.nav-logo img { height: 40px; width: auto; }
-.nav-logo-text { display: flex; flex-direction: column; }
-.nav-logo-main { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500; letter-spacing: 0.1em; color: var(--cream); text-transform: uppercase; line-height: 1; }
-.nav-logo-sub { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 300; }
-
-.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
-.nav-links a { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-light); text-decoration: none; transition: color .3s; font-weight: 400; }
-.nav-links a:hover, .nav-links a.active { color: var(--gold); }
-
-/* Dropdown Elegante */
-.nav-dropdown { position: relative; }
-.nav-dropdown-trigger { background: none; border: none; font-family: inherit; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-light); cursor: pointer; display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0; }
-.nav-dropdown-trigger i { width: 12px; height: 12px; transition: transform .3s; }
-.nav-dropdown:hover .nav-dropdown-trigger i { transform: rotate(180deg); }
-.nav-dropdown-content {
-  position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px);
-  background: var(--dark-2); border: 1px solid var(--border); min-width: 220px;
-  padding: 0.5rem 0; opacity: 0; visibility: hidden; transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.6); z-index: 110;
-}
-.nav-dropdown:hover .nav-dropdown-content { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-.nav-dropdown-content a {
-  display: block; padding: 0.75rem 1.5rem; font-size: 0.75rem; color: var(--stone-light);
-  text-decoration: none; transition: all 0.2s ease; border-left: 2px solid transparent;
-}
-.nav-dropdown-content a:hover { background: rgba(201,169,110,0.06); color: var(--gold); border-left-color: var(--gold); padding-left: 1.8rem; }
-
-.nav-cta { display: flex; align-items: center; gap: 1.5rem; }
-.btn-call { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border: 1px solid var(--border); background: transparent; color: var(--gold); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: all .3s; font-family: 'DM Sans', sans-serif; }
-.btn-call:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
-.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 8px; cursor: pointer; }
-.hamburger span { display: block; width: 22px; height: 1px; background: var(--cream); transition: all .3s; }
-.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
-
-/* ── MOBILE MENU ── */
-.mobile-menu { position: fixed; inset: 0; z-index: 90; background: var(--dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transform: translateY(-100%); transition: transform .6s cubic-bezier(0.76, 0, 0.24, 1); }
-.mobile-menu.open { transform: translateY(0); }
-.mobile-menu a { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--cream); text-decoration: none; letter-spacing: 0.05em; transition: color .3s; }
-.mobile-menu a:hover { color: var(--gold); }
-.mobile-menu-bottom { position: absolute; bottom: 2.5rem; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--stone); text-transform: uppercase; }
-
-/* ── HERO ─ */
-#inicio { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 6rem 2rem 4rem; }
-.hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #0d0b09 0%, #13110d 50%, #0a0907 100%); z-index: 0; }
-.hero-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; text-align: center; }
-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 300; line-height: 0.95; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
-h1 em { font-style: italic; color: var(--gold); }
-.hero-tagline { font-size: 0.9rem; color: var(--stone-light); max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.7; font-weight: 300; }
-.hero-actions { display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
-.btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 2rem; background: var(--gold); color: var(--dark); text-decoration: none; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; transition: background .3s; font-family: 'DM Sans', sans-serif; }
-.btn-primary:hover { background: var(--gold-light); }
-.btn-secondary { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone-light); text-decoration: none; transition: color .3s; }
-.btn-secondary::after { content: '→'; font-size: 1rem; transition: transform .3s; }
-.btn-secondary:hover { color: var(--cream); }
-.btn-secondary:hover::after { transform: translateX(4px); }
-
-/* ── SECTIONS ── */
-section { position: relative; z-index: 1; padding: 5rem 2rem; }
-.section-label { display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
-.section-label::before { content: ''; width: 25px; height: 1px; background: var(--gold); }
-.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.01em; }
-.section-title em { font-style: italic; color: var(--gold); }
-
-/* ── CALCULATOR & QUOTER ── */
-#precios { background: var(--dark-2); }
-.calc-card { border: 1px solid var(--border); padding: 2rem; background: rgba(255,255,255,0.01); max-width: 700px; margin: 2rem auto 0; }
-.calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-.calc-field label { display: block; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone); margin-bottom: 0.4rem; }
-.calc-field select, .calc-field input { width: 100%; padding: 0.7rem 0.8rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 300; outline: none; transition: border-color .3s; }
-.calc-field select:focus, .calc-field input:focus { border-color: var(--gold-dark); }
-.calc-field select option { background: var(--dark); }
-.calc-frame-wrap { grid-column: span 3; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 0; }
-.calc-frame-wrap.visible { max-height: 80px; opacity: 1; margin-top: 0.5rem; }
-.calc-result { text-align: center; padding: 1.5rem; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.02); margin-top: 1rem; }
-.calc-result-price { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--gold); line-height: 1; }
-.calc-note { font-size: 0.6rem; color: var(--stone); margin-top: 0.8rem; text-align: center; line-height: 1.5; opacity: 0.8; }
-
-#cotizador { background: var(--dark); }
-.quoter-box { border: 1px solid var(--border); padding: 2rem; max-width: 600px; margin: 2rem auto 0; background: rgba(255,255,255,0.01); }
-.quoter-result { margin-top: 1.5rem; padding: 1rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--cream); }
-.quoter-result strong { color: var(--gold); }
-
-/* ── PACKAGES ── */
-#paquetes { background: var(--dark-2); }
-.packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-.package-card { border: 1px solid var(--border); padding: 1.8rem; background: rgba(201,169,110,0.02); transition: transform .3s; }
-.package-card:hover { transform: translateY(-4px); }
-.package-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 0.5rem; }
-.package-price { font-size: 1.8rem; font-weight: 300; margin-bottom: 1rem; }
-.package-features { list-style: none; margin-bottom: 1.5rem; }
-.package-features li { font-size: 0.75rem; color: var(--stone-light); margin-bottom: 0.5rem; padding-left: 1rem; position: relative; }
-.package-features li::before { content: '•'; position: absolute; left: 0; color: var(--gold); }
-
-/* ── MAP & CONTACT ── */
-.map-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
-.map-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone-light); text-decoration: none; border: 1px solid var(--border); transition: all .3s; font-family: 'DM Sans', sans-serif; }
-.map-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,169,110,0.03); }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 2rem; }
-.form-field { background: var(--dark); padding: 0; position: relative; }
-.form-field.full { grid-column: span 2; }
-.form-field label { display: block; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone); padding: 0.8rem 1rem 0; }
-.form-field input, .form-field select, .form-field textarea { width: 100%; background: none; border: none; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 300; padding: 0.4rem 1rem 0.8rem; outline: none; resize: none; }
-.form-submit-wrap { background: var(--dark); border: 1px solid var(--border); border-top: 1px solid var(--border); padding: 1px; grid-column: span 2; }
-.btn-submit { width: 100%; padding: 1rem; background: var(--gold); color: var(--dark); font-family: 'DM Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; border: none; transition: background .3s; cursor: pointer; }
-.btn-submit:hover { background: var(--gold-light); }
-
-/* ── FOOTER & FLOATING ── */
-footer { background: var(--dark); border-top: 1px solid var(--border); padding: 4rem 2rem 2rem; }
-.footer-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
-.footer-col-title { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
-.footer-links { display: flex; flex-direction: column; gap: 0.6rem; list-style: none; }
-.footer-links a, .footer-links span { font-size: 0.75rem; color: var(--stone); text-decoration: none; font-weight: 300; }
-.footer-links a:hover { color: var(--gold); }
-.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.65rem; color: var(--stone); }
-.wa-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; width: 50px; height: 50px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: all .3s; }
-.wa-btn:hover { transform: scale(1.1); }
-.wa-btn svg { width: 24px; height: 24px; color: white; fill: white; }
-#btnTop { position: fixed; bottom: 5rem; right: 2rem; z-index: 40; width: 40px; height: 40px; border: 1px solid var(--border); background: var(--dark); display: flex; align-items: center; justify-content: center; color: var(--cream); opacity: 0; visibility: hidden; transition: all .3s; cursor: pointer; }
-#btnTop.show { opacity: 1; visibility: visible; }
-
-/* ── ADMIN PANEL ── */
-.modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(13,11,9,0.95); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 1rem; }
-.modal-overlay.active { display: flex; }
-.modal-box { border: 1px solid var(--border); background: var(--dark-2); padding: 2rem; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-.modal-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; color: var(--gold); }
-.modal-close { background: none; border: 1px solid var(--border); color: var(--cream); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.modal-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-.modal-tab { padding: 0.5rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--stone); font-size: 0.65rem; cursor: pointer; transition: all .2s; }
-.modal-tab.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
-.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.admin-field { margin-bottom: 1rem; }
-.admin-field label { display: block; font-size: 0.6rem; color: var(--stone); margin-bottom: 0.3rem; }
-.admin-field input, .admin-field textarea { width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--cream); font-size: 0.8rem; }
-.admin-btn { background: var(--gold); color: var(--dark); border: none; padding: 0.6rem 1.2rem; font-size: 0.7rem; cursor: pointer; margin-top: 0.5rem; transition: background .2s; }
-.admin-btn:hover { background: var(--gold-light); }
-.admin-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--stone-light); }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 768px) {
-  nav { padding: 0 1rem; height: 60px; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .hero-actions { flex-direction: column; width: 100%; }
-  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
-  .calc-grid, .form-grid, .admin-grid { grid-template-columns: 1fr; }
-  .form-field.full, .form-submit-wrap, .calc-frame-wrap { grid-column: span 1; }
-  .map-buttons { flex-direction: column; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Fotográfico | Fotografía, Video y Más</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50:'#fdf8f0',100:'#f5efe6',200:'#e8d5b8',300:'#d4a574',
+                            400:'#c8a97e',500:'#b8860b',600:'#8b6914',700:'#6b4f10',
+                            800:'#3d2b1f',900:'#2a1f14',950:'#1a110a'
+                        }
+                    },
+                    fontFamily: {
+                        display:['Oswald','sans-serif'],
+                        body:['Inter','sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:#0d0906;color:#f5efe6;overflow-x:hidden}
+        .font-display{font-family:'Oswald',sans-serif}
+        ::selection{background:#d4a574;color:#0d0906}
+        .glass{background:rgba(26,17,10,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+        .grad-text{background:linear-gradient(to right,#d4a574,#f5efe6,#c8a97e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        @keyframes fadeUp{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
+        .reveal{opacity:0;transform:translateY(30px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+        .reveal.active{opacity:1;transform:translateY(0)}
+        @keyframes bounce{0%,100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}
+        .animate-bounce-slow{animation:bounce 2s infinite}
+        .tab-btn.active{background:#d4a574;color:#0d0906}
+        .dropdown-menu{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+        .dropdown-menu.open{max-height:500px}
+        .chat-msg{animation:fadeUp 0.3s ease-out}
+        @media(max-width:640px){
+            .hero-phone{font-size:1.25rem!important}
+        }
+    </style>
 </head>
 <body>
-<!-- NAV -->
-<nav id="mainNav">
-  <a href="#inicio" class="nav-logo" id="navLogo">
-    <img src="logo.png" alt="Montenegro Logo">
-    <div class="nav-logo-text">
-      <span class="nav-logo-main">Montenegro</span>
-      <span class="nav-logo-sub">Fotografía & Video</span>
+
+<!-- ====== NAVBAR ====== -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-brand-800/50" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <a href="#inicio" class="flex items-center gap-2 shrink-0">
+                <!-- REEMPLAZAR con tu logo: <img src="tu-logo.png" class="h-9 w-auto"> -->
+                <div class="w-9 h-9 rounded-full bg-brand-300 flex items-center justify-center">
+                    <iconify-icon icon="lucide:aperture" width="20" class="text-brand-950"></iconify-icon>
+                </div>
+                <span class="font-display text-lg font-600 tracking-wide text-brand-200 hidden sm:block">ESTUDIO FOTOGRÁFICO</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden lg:flex items-center gap-6">
+                <a href="#inicio" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Inicio</a>
+                <a href="#foto-video" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Foto y Video</a>
+                <a href="#identificacion" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Identificación</a>
+                <a href="#restauracion" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Restauración</a>
+                <a href="#impresion" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Impresión</a>
+                <a href="#paquetes" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Paquetes</a>
+
+                <!-- Otros Servicios Dropdown -->
+                <div class="relative group">
+                    <button class="text-sm font-medium text-brand-300 hover:text-brand-100 transition flex items-center gap-1">
+                        Otros Servicios
+                        <iconify-icon icon="lucide:chevron-down" width="14" class="transition-transform group-hover:rotate-180"></iconify-icon>
+                    </button>
+                    <div class="absolute top-full right-0 mt-2 w-64 bg-brand-900/95 backdrop-blur-md border border-brand-700/50 rounded-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-2xl">
+                        <a href="#otros-enmarcadas" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-800/60 transition text-sm text-brand-200">
+                            <iconify-icon icon="lucide:frame" width="16" class="text-brand-400"></iconify-icon>Fotos Enmarcadas
+                        </a>
+                        <a href="#otros-lona" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-800/60 transition text-sm text-brand-200">
+                            <iconify-icon icon="lucide:rectangle-horizontal" width="16" class="text-brand-400"></iconify-icon>Impresión en Lona
+                        </a>
+                        <a href="#otros-sublimacion" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-800/60 transition text-sm text-brand-200">
+                            <iconify-icon icon="lucide:shirt" width="16" class="text-brand-400"></iconify-icon>Sublimación en Tasas
+                        </a>
+                        <a href="#otros-credenciales" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-800/60 transition text-sm text-brand-200">
+                            <iconify-icon icon="lucide:badge-check" width="16" class="text-brand-400"></iconify-icon>Credenciales Escolares
+                        </a>
+                        <a href="#otros-graduacion" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-800/60 transition text-sm text-brand-200">
+                            <iconify-icon icon="lucide:graduation-cap" width="16" class="text-brand-400"></iconify-icon>Servicio de Graduación
+                        </a>
+                    </div>
+                </div>
+                <a href="#ubicacion" class="text-sm font-medium text-brand-300 hover:text-brand-100 transition">Contacto</a>
+            </div>
+
+            <!-- Phone + CTA -->
+            <div class="hidden lg:flex items-center gap-4">
+                <a href="tel:+521234567890" class="text-sm text-brand-300 hover:text-brand-100 transition flex items-center gap-1">
+                    <iconify-icon icon="lucide:phone" width="14"></iconify-icon>
+                    <span class="font-medium">123 456 7890</span>
+                </a>
+                <a href="#cotizar" class="px-4 py-2 bg-brand-300 text-brand-950 text-sm font-500 rounded-lg hover:bg-brand-200 transition">Cotizar</a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobileToggle" class="lg:hidden p-2 text-brand-300">
+                <iconify-icon icon="lucide:menu" width="24" id="menuIcon"></iconify-icon>
+            </button>
+        </div>
     </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#inicio">Inicio</a></li>
-    <li><a href="#servicios">Servicios</a></li>
-    <li class="nav-dropdown">
-      <button class="nav-dropdown-trigger">Otros Servicios <i data-lucide="chevron-down"></i></button>
-      <div class="nav-dropdown-content">
-        <a href="#servicios">Fotos Enmarcadas</a>
-        <a href="#servicios">Lonas y Gran Formato</a>
-        <a href="#servicios">Sublimación</a>
-        <a href="#servicios">Credenciales Escolares</a>
-        <a href="#servicios">Sesiones de Graduación</a>
-      </div>
-    </li>
-    <li><a href="#precios">Precios</a></li>
-    <li><a href="#paquetes">Paquetes</a></li>
-    <li><a href="#cotizador">Cotizar</a></li>
-    <li><a href="#contacto">Contacto</a></li>
-  </ul>
-  <div class="nav-cta">
-    <a href="tel:7296990786" class="btn-call"><i data-lucide="phone"></i> 729 699 0786</a>
-    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-  </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="lg:hidden hidden border-t border-brand-800/50">
+        <div class="px-4 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
+            <a href="#inicio" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Inicio</a>
+            <a href="#foto-video" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Fotografía y Video</a>
+            <a href="#identificacion" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Identificación</a>
+            <a href="#restauracion" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Restauración y Edición</a>
+            <a href="#impresion" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Impresión de Fotos</a>
+            <a href="#paquetes" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Paquetes</a>
+            <div class="pt-2 border-t border-brand-800/50">
+                <p class="px-3 py-1 text-[10px] font-500 uppercase tracking-widest text-brand-500">Otros Servicios</p>
+                <a href="#otros-enmarcadas" class="block px-3 py-2 rounded-lg text-brand-300 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Fotos Enmarcadas</a>
+                <a href="#otros-lona" class="block px-3 py-2 rounded-lg text-brand-300 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Impresión en Lona</a>
+                <a href="#otros-sublimacion" class="block px-3 py-2 rounded-lg text-brand-300 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Sublimación en Tasas</a>
+                <a href="#otros-credenciales" class="block px-3 py-2 rounded-lg text-brand-300 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Credenciales Escolares</a>
+                <a href="#otros-graduacion" class="block px-3 py-2 rounded-lg text-brand-300 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Servicio de Graduación</a>
+            </div>
+            <a href="#ubicacion" class="block px-3 py-2.5 rounded-lg text-brand-200 hover:bg-brand-800/60 transition text-sm" onclick="closeMobile()">Contacto y Ubicación</a>
+            <div class="pt-3 border-t border-brand-800/50">
+                <a href="tel:+521234567890" class="flex items-center gap-2 px-3 py-2 text-brand-300 text-sm">
+                    <iconify-icon icon="lucide:phone" width="16"></iconify-icon>123 456 7890
+                </a>
+                <a href="#cotizar" class="block mt-2 text-center px-4 py-2.5 bg-brand-300 text-brand-950 text-sm font-500 rounded-lg" onclick="closeMobile()">Cotizar Ahora</a>
+            </div>
+        </div>
+    </div>
 </nav>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#inicio" class="mobile-link">Inicio</a>
-  <a href="#servicios" class="mobile-link">Servicios</a>
-  <a href="#precios" class="mobile-link">Precios</a>
-  <a href="#paquetes" class="mobile-link">Paquetes</a>
-  <a href="#cotizador" class="mobile-link">Cotizar</a>
-  <a href="#contacto" class="mobile-link">Contacto</a>
-  <div class="mobile-menu-bottom">729 699 0786</div>
-</div>
-
-<!-- HERO -->
-<section id="inicio">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <h1>Capturamos<br>los <em>momentos</em><br>que perduran</h1>
-    <p class="hero-tagline">Estudio profesional en Capulhuac. Identificaciones, eventos, video, impresión y restauración con calidad garantizada.</p>
-    <div class="hero-actions">
-      <a href="#precios" class="btn-primary"><i data-lucide="calculator"></i> Calcular Precio</a>
-      <a href="#galeria" class="btn-secondary">Ver Portafolio</a>
+<!-- ====== HERO ====== -->
+<section id="inicio" class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <img src="https://picsum.photos/seed/studio-hero/1600/900.jpg" alt="Estudio Fotográfico" class="absolute inset-0 w-full h-full object-cover object-center opacity-30">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0d0906] via-[#0d0906]/60 to-transparent"></div>
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <p class="text-[10px] sm:text-xs font-500 uppercase tracking-[0.25em] text-brand-400 mb-4">Estudio Fotográfico Profesional</p>
+        <h1 class="font-display text-4xl sm:text-5xl md:text-7xl font-700 tracking-tight leading-[0.95] mb-6">
+            <span class="grad-text">Capturamos</span><br>
+            <span class="text-brand-100">tus momentos</span>
+        </h1>
+        <p class="text-sm sm:text-base font-300 text-brand-300/80 max-w-lg mx-auto mb-6 leading-relaxed">
+            Fotografía, video, restauración e impresión profesional con la calidad que tus recuerdos merecen.
+        </p>
+        <!-- Teléfono visible en móvil -->
+        <a href="tel:+521234567890" class="hero-phone inline-flex items-center gap-2 text-brand-300 text-lg sm:text-xl font-500 mb-8 hover:text-brand-200 transition">
+            <iconify-icon icon="lucide:phone" width="20"></iconify-icon>
+            123 456 7890
+        </a>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="#foto-video" class="px-8 py-3.5 bg-brand-300 text-brand-950 text-sm font-500 uppercase tracking-widest rounded-lg hover:bg-brand-200 transition">
+                Ver Portafolio
+            </a>
+            <a href="#cotizar" class="px-8 py-3.5 border border-brand-600 text-brand-300 text-sm font-500 uppercase tracking-widest rounded-lg hover:bg-brand-300/10 transition">
+                Cotizar
+            </a>
+        </div>
     </div>
-  </div>
+    <a href="#foto-video" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-brand-400 animate-bounce-slow">
+        <iconify-icon icon="lucide:chevron-down" width="28"></iconify-icon>
+    </a>
 </section>
 
-<!-- SERVICES -->
-<section id="servicios">
-  <div class="section-label">Servicios Profesionales</div>
-  <h2 class="section-title">Todo lo que <em>necesitas</em></h2>
-  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-top:2rem;">
-    <div style="padding:1.5rem; border:1px solid var(--border);"><h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold); margin-bottom:0.5rem;">Identificación Oficial</h3><p style="font-size:0.8rem; color:var(--stone-light);">Visa, pasaporte, credencial, título, filiación, miñón.</p></div>
-    <div style="padding:1.5rem; border:1px solid var(--border);"><h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold); margin-bottom:0.5rem;">Video & Estudio</h3><p style="font-size:0.8rem; color:var(--stone-light);">Eventos sociales, retratos infantiles, sesiones controladas.</p></div>
-    <div style="padding:1.5rem; border:1px solid var(--border);"><h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--gold); margin-bottom:0.5rem;">Edición & Restauración</h3><p style="font-size:0.8rem; color:var(--stone-light);">Retoque, digitalización, montaje, cambio de fondo.</p></div>
-  </div>
+<!-- ====== 01 — FOTOGRAFÍA Y VIDEO ====== -->
+<section id="foto-video" class="py-16 sm:py-24 px-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 mb-10">
+            <span class="text-brand-600 font-display text-5xl font-700 opacity-30">01</span>
+            <div>
+                <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500">Servicio</p>
+                <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Fotografía y Video</h2>
+            </div>
+        </div>
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] group">
+                <img src="https://picsum.photos/seed/event-social1/800/600.jpg" alt="Fotografía de eventos" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-950/90 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 class="font-display text-xl font-600 text-brand-100 mb-1">Fotografía de Eventos</h3>
+                    <p class="text-sm font-300 text-brand-300">Bodas, XV años, bautizos, cumpleaños y más</p>
+                </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] group">
+                <img src="https://picsum.photos/seed/video-event2/800/600.jpg" alt="Video de eventos" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-950/90 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 class="font-display text-xl font-600 text-brand-100 mb-1">Video Profesional</h3>
+                    <p class="text-sm font-300 text-brand-300">Cobertura de video, edición y entrega digital</p>
+                </div>
+            </div>
+        </div>
+        <p class="reveal text-sm text-brand-400 font-300 leading-relaxed max-w-2xl">
+            Contamos con paquetes completos de fotografía y video para todo tipo de eventos sociales. Capturamos cada momento importante con calidad profesional y entrega puntual.
+        </p>
+    </div>
 </section>
 
-<!-- PRICING & CALCULATOR -->
-<section id="precios">
-  <div class="section-label">Precios Dinámicos</div>
-  <h2 class="section-title">Calcula tu <em>pedido</em></h2>
-  <div class="calc-card">
-    <div class="calc-grid">
-      <div class="calc-field">
-        <label>Tipo de Servicio</label>
-        <select id="calcType">
-          <option value="">Selecciona...</option>
-          <option value="sola">Foto Sola (Papel)</option>
-          <option value="texturizada">Texturizada</option>
-          <option value="enmarcada">Enmarcada</option>
-        </select>
-      </div>
-      <div class="calc-field">
-        <label>Tamaño</label>
-        <select id="calcSize" disabled><option value="">Elige tipo primero</option></select>
-      </div>
-      <div class="calc-field">
-        <label>Cantidad / Horas</label>
-        <input type="number" id="calcQty" min="1" value="1">
-      </div>
+<!-- ====== 02 — FOTOGRAFÍAS DE IDENTIFICACIÓN ====== -->
+<section id="identificacion" class="py-16 sm:py-24 px-4 bg-brand-950/50">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 mb-10">
+            <span class="text-brand-600 font-display text-5xl font-700 opacity-30">02</span>
+            <div>
+                <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500">Servicio</p>
+                <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Fotografías de Identificación</h2>
+            </div>
+        </div>
+        <div class="reveal grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:baby" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Infantil</h3>
+                <p class="text-xs text-brand-500 mt-1">Para menores de edad</p>
+            </div>
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:user" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Miñón</h3>
+                <p class="text-xs text-brand-500 mt-1">Formato miñón</p>
+            </div>
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:globe" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Visa</h3>
+                <p class="text-xs text-brand-500 mt-1">Para trámites de visa</p>
+            </div>
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:scroll-text" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Diploma</h3>
+                <p class="text-xs text-brand-500 mt-1">Para diplomas y títulos</p>
+            </div>
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:plane" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Pasaporte</h3>
+                <p class="text-xs text-brand-500 mt-1">Para pasaporte mexicano</p>
+            </div>
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:award" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Título</h3>
+                <p class="text-xs text-brand-500 mt-1">Para título profesional</p>
+            </div>
+            <div class="bg-brand-900/80 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 transition group">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-brand-800/60 flex items-center justify-center group-hover:bg-brand-300 group-hover:text-brand-950 transition">
+                    <iconify-icon icon="lucide:fingerprint" width="24" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-sm font-500 text-brand-200">Filiación</h3>
+                <p class="text-xs text-brand-500 mt-1">Para filiación oficial</p>
+            </div>
+        </div>
+        <p class="reveal text-xs text-brand-500 mt-6 text-center">Entrega inmediata · Cumple con requisitos oficiales · Tamaño y formato según necesidad</p>
     </div>
-    <div class="calc-frame-wrap" id="frameWrap">
-      <div class="calc-field">
-        <label>Tipo de Marco</label>
-        <select id="calcFrame"></select>
-      </div>
-    </div>
-    <div class="calc-result" id="calcResult">
-      <p style="color:var(--stone); font-size:0.8rem;">Selecciona tipo y tamaño para ver el precio</p>
-    </div>
-    <p class="calc-note">Descuentos automáticos por mayoreo aplicados. Precios sujetos a cambio. Confirmar por WhatsApp.</p>
-  </div>
 </section>
 
-<!-- PACKAGES -->
-<section id="paquetes">
-  <div class="section-label">Paquetes Foto & Video</div>
-  <h2 class="section-title">Elige tu <em>experiencia</em></h2>
-  <div class="packages-grid" id="packagesGrid">
-    <!-- Se cargan dinámicamente -->
-  </div>
-</section>
-
-<!-- QUOTING ASSISTANT -->
-<section id="cotizador">
-  <div class="section-label">Asistente de Cotización</div>
-  <h2 class="section-title">Calcula tu <em>presupuesto</em></h2>
-  <div class="quoter-box">
-    <div class="calc-grid">
-      <div class="calc-field">
-        <label>Servicio Principal</label>
-        <select id="quoteService">
-          <option value="">Selecciona...</option>
-          <option value="identificacion">Identificación Oficial</option>
-          <option value="estudio">Sesión Estudio/Infantil</option>
-          <option value="video">Video Profesional</option>
-          <option value="impresion">Impresión/Lona</option>
-          <option value="restauracion">Restauración/Digitalización</option>
-          <option value="enmarcado">Enmarcado</option>
-          <option value="paquete">Paquete Completo</option>
-        </select>
-      </div>
-      <div class="calc-field">
-        <label>Cantidad / Horas</label>
-        <input type="number" id="quoteQty" min="1" value="1">
-      </div>
-      <div class="calc-field">
-        <label>Urgencia / Extra</label>
-        <select id="quoteExtra">
-          <option value="0">Normal</option>
-          <option value="1.2">Entrega Express (+20%)</option>
-          <option value="1.5">Mismo día (+50%)</option>
-        </select>
-      </div>
+<!-- ====== 03 — RESTAURACIÓN, DIGITALIZACIÓN, EDICIÓN Y ENMARCADAS ====== -->
+<section id="restauracion" class="py-16 sm:py-24 px-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 mb-6">
+            <span class="text-brand-600 font-display text-5xl font-700 opacity-30">03</span>
+            <div>
+                <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500">Servicio</p>
+                <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Restauración, Edición y Enmarcadas</h2>
+            </div>
+        </div>
+        <p class="reveal text-sm text-brand-400 font-300 leading-relaxed max-w-2xl mb-10">
+            Contamos con el servicio de restauración de fotografías, digitalización, edición de fotografías, montaje de personas, cambio de fondos y fotografías enmarcadas.
+        </p>
+        <div class="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Restauración -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl p-6 hover:border-brand-600/50 transition group">
+                <div class="w-12 h-12 rounded-xl bg-brand-800/60 flex items-center justify-center mb-4 group-hover:bg-brand-300 transition">
+                    <iconify-icon icon="lucide:sparkles" width="22" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-lg font-500 text-brand-100 mb-2">Restauración</h3>
+                <p class="text-sm font-300 text-brand-400 leading-relaxed">Recuperamos fotografías dañadas, rasgadas, con manchas o deterioradas por el tiempo.</p>
+            </div>
+            <!-- Digitalización -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl p-6 hover:border-brand-600/50 transition group">
+                <div class="w-12 h-12 rounded-xl bg-brand-800/60 flex items-center justify-center mb-4 group-hover:bg-brand-300 transition">
+                    <iconify-icon icon="lucide:scan" width="22" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-lg font-500 text-brand-100 mb-2">Digitalización</h3>
+                <p class="text-sm font-300 text-brand-400 leading-relaxed">Convertimos tus fotos físicas o negativos a formato digital con alta resolución.</p>
+            </div>
+            <!-- Edición -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl p-6 hover:border-brand-600/50 transition group">
+                <div class="w-12 h-12 rounded-xl bg-brand-800/60 flex items-center justify-center mb-4 group-hover:bg-brand-300 transition">
+                    <iconify-icon icon="lucide:wand-2" width="22" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-lg font-500 text-brand-100 mb-2">Edición de Fotografías</h3>
+                <p class="text-sm font-300 text-brand-400 leading-relaxed">Montaje de personas, cambio de fondos, corrección de color y ajustes profesionales.</p>
+            </div>
+            <!-- Enmarcadas -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl p-6 hover:border-brand-600/50 transition group">
+                <div class="w-12 h-12 rounded-xl bg-brand-800/60 flex items-center justify-center mb-4 group-hover:bg-brand-300 transition">
+                    <iconify-icon icon="lucide:frame" width="22" class="text-brand-300 group-hover:text-brand-950 transition"></iconify-icon>
+                </div>
+                <h3 class="font-display text-lg font-500 text-brand-100 mb-2">Fotografías Enmarcadas</h3>
+                <p class="text-sm font-300 text-brand-400 leading-relaxed">Enmarcamos tus fotos con molduras de diferentes estilos y acabados.</p>
+            </div>
+        </div>
+        <!-- Before/After visual -->
+        <div class="reveal mt-10 grid grid-cols-2 gap-4 max-w-lg mx-auto">
+            <div class="relative rounded-xl overflow-hidden aspect-square">
+                <img src="https://picsum.photos/seed/old-photo-damaged/400/400.jpg" alt="Antes" class="w-full h-full object-cover opacity-60">
+                <span class="absolute bottom-2 left-2 text-[10px] font-500 uppercase tracking-widest bg-red-900/80 text-red-200 px-2 py-1 rounded">Antes</span>
+            </div>
+            <div class="relative rounded-xl overflow-hidden aspect-square">
+                <img src="https://picsum.photos/seed/old-photo-restored/400/400.jpg" alt="Después" class="w-full h-full object-cover opacity-80">
+                <span class="absolute bottom-2 left-2 text-[10px] font-500 uppercase tracking-widest bg-green-900/80 text-green-200 px-2 py-1 rounded">Después</span>
+            </div>
+        </div>
     </div>
-    <div class="quoter-result" id="quoteResult">
-      <p style="color:var(--stone);">Selecciona un servicio para ver una estimación.</p>
+</section>
+
+<!-- ====== BADGES ELEGANTES ====== -->
+<section class="py-10 px-4 border-y border-brand-800/30">
+    <div class="max-w-5xl mx-auto flex flex-wrap justify-center gap-8 sm:gap-16">
+        <div class="flex items-center gap-2.5 opacity-50 hover:opacity-80 transition">
+            <iconify-icon icon="lucide:gem" width="18" class="text-brand-500"></iconify-icon>
+            <span class="text-xs font-400 uppercase tracking-widest text-brand-500">Calidad Premium</span>
+        </div>
+        <div class="flex items-center gap-2.5 opacity-50 hover:opacity-80 transition">
+            <iconify-icon icon="lucide:handshake" width="18" class="text-brand-500"></iconify-icon>
+            <span class="text-xs font-400 uppercase tracking-widest text-brand-500">Trato Justo</span>
+        </div>
+        <div class="flex items-center gap-2.5 opacity-50 hover:opacity-80 transition">
+            <iconify-icon icon="lucide:clock" width="18" class="text-brand-500"></iconify-icon>
+            <span class="text-xs font-400 uppercase tracking-widest text-brand-500">Entrega Puntual</span>
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contacto">
-  <div class="section-label">Contacto</div>
-  <h2 class="section-title">Estamos <em>para ti</em></h2>
-  <div class="map-buttons">
-    <a href="https://www.google.com/maps/dir/?api=1&destination=Porfirio+Diaz+280+Capulhuac+de+Mirafuentes" target="_blank" class="map-btn"><i data-lucide="map"></i> Google Maps</a>
-    <a href="https://maps.apple.com/?q=Porfirio+Diaz+280+Capulhuac+de+Mirafuentes" target="_blank" class="map-btn"><i data-lucide="compass"></i> Apple Maps</a>
-    <a href="https://wa.me/527296990786" target="_blank" class="map-btn"><i data-lucide="message-square"></i> WhatsApp</a>
-  </div>
-  <div class="form-grid" id="contactForm">
-    <div class="form-field"><label for="fname">Nombre *</label><input type="text" id="fname" required></div>
-    <div class="form-field"><label for="fphone">Teléfono</label><input type="tel" id="fphone"></div>
-    <div class="form-field full"><label for="fservice">Servicio</label><select id="fservice"><option>Impresión</option><option>Video</option><option>Retratos</option><option>Eventos</option><option>Restauración</option><option>Otro</option></select></div>
-    <div class="form-field full"><label for="fmsg">Mensaje *</label><textarea id="fmsg" rows="3" required></textarea></div>
-    <div class="form-submit-wrap"><button type="button" class="btn-submit" onclick="sendToWhatsApp()">Enviar por WhatsApp</button></div>
-  </div>
+<!-- ====== IMPRESIÓN DE FOTOS (con pestañas y calculadora) ====== -->
+<section id="impresion" class="py-16 sm:py-24 px-4 bg-brand-950/50">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 mb-10">
+            <span class="text-brand-600 font-display text-5xl font-700 opacity-30">04</span>
+            <div>
+                <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500">Servicio</p>
+                <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Impresión de Fotos</h2>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="reveal flex flex-wrap gap-2 mb-8">
+            <button class="tab-btn active px-4 py-2 text-xs font-500 uppercase tracking-widest rounded-lg border border-brand-700/50 text-brand-300 transition" data-tab="regulares" onclick="switchTab('regulares')">Regulares</button>
+            <button class="tab-btn px-4 py-2 text-xs font-500 uppercase tracking-widest rounded-lg border border-brand-700/50 text-brand-300 transition" data-tab="texturizados" onclick="switchTab('texturizados')">Texturizados</button>
+            <button class="tab-btn px-4 py-2 text-xs font-500 uppercase tracking-widest rounded-lg border border-brand-700/50 text-brand-300 transition" data-tab="montados" onclick="switchTab('montados')">Montados</button>
+            <button class="tab-btn px-4 py-2 text-xs font-500 uppercase tracking-widest rounded-lg border border-brand-700/50 text-brand-300 transition" data-tab="enmarcados" onclick="switchTab('enmarcados')">Enmarcados</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="reveal">
+            <!-- Regulares -->
+            <div id="tab-regulares" class="tab-content">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">2.5 × 3.5"</span><span class="text-xs text-brand-500 ml-2">credencial</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$5</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="5" data-product="2.5x3.5 Regular" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">3 × 4"</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$8</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="8" data-product="3x4 Regular" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">4 × 6"</span><span class="text-xs text-brand-500 ml-2">postal</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$10</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="10" data-product="4x6 Regular" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">5 × 7"</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$15</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="15" data-product="5x7 Regular" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 10"</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$25</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="25" data-product="8x10 Regular" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 12"</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$30</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="30" data-product="8x12 Regular" onchange="updateCalc()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Texturizados -->
+            <div id="tab-texturizados" class="tab-content hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">4 × 6"</span><span class="text-xs text-brand-500 ml-2">texturizado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$15</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="15" data-product="4x6 Texturizado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">5 × 7"</span><span class="text-xs text-brand-500 ml-2">texturizado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$20</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="20" data-product="5x7 Texturizado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 10"</span><span class="text-xs text-brand-500 ml-2">texturizado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$35</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="35" data-product="8x10 Texturizado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 12"</span><span class="text-xs text-brand-500 ml-2">texturizado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$40</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="40" data-product="8x12 Texturizado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Montados -->
+            <div id="tab-montados" class="tab-content hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">5 × 7"</span><span class="text-xs text-brand-500 ml-2">montado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$30</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="30" data-product="5x7 Montado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 10"</span><span class="text-xs text-brand-500 ml-2">montado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$45</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="45" data-product="8x10 Montado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 12"</span><span class="text-xs text-brand-500 ml-2">montado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$55</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="55" data-product="8x12 Montado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enmarcados -->
+            <div id="tab-enmarcados" class="tab-content hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">5 × 7"</span><span class="text-xs text-brand-500 ml-2">enmarcado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$80</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="80" data-product="5x7 Enmarcado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 10"</span><span class="text-xs text-brand-500 ml-2">enmarcado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$120</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="120" data-product="8x10 Enmarcado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">8 × 12"</span><span class="text-xs text-brand-500 ml-2">enmarcado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$150</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="150" data-product="8x12 Enmarcado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-900/60 border border-brand-800/40 rounded-xl px-4 py-3">
+                        <div><span class="text-sm text-brand-200">11 × 14"</span><span class="text-xs text-brand-500 ml-2">enmarcado</span></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-brand-300 font-500">$200</span>
+                            <input type="number" min="0" value="0" class="w-12 bg-brand-800/60 border border-brand-700/50 rounded text-center text-xs text-brand-200 py-1" data-price="200" data-product="11x14 Enmarcado" onchange="updateCalc()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculadora -->
+        <div class="reveal mt-8 bg-brand-900/80 border border-brand-700/50 rounded-2xl p-6 max-w-md">
+            <h3 class="font-display text-lg font-500 text-brand-200 mb-4 flex items-center gap-2">
+                <iconify-icon icon="lucide:calculator" width="20" class="text-brand-400"></iconify-icon>
+                Calculadora de Precios
+            </h3>
+            <div id="calcItems" class="space-y-2 mb-4 max-h-48 overflow-y-auto text-sm">
+                <p class="text-brand-500 text-xs">Selecciona cantidades arriba para calcular</p>
+            </div>
+            <div class="border-t border-brand-700/50 pt-3 flex justify-between items-center">
+                <span class="text-sm text-brand-300 font-500">Total estimado:</span>
+                <span id="calcTotal" class="font-display text-2xl font-700 text-brand-300">$0</span>
+            </div>
+            <p class="text-[10px] text-brand-600 mt-2">* Precios aproximados. Consulta precios exactos en tienda.</p>
+        </div>
+    </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div><div class="footer-col-title">Montenegro</div><p style="font-size:0.8rem; color:var(--stone); line-height:1.6;">Fotografía & Video profesional en Capulhuac. Calidad, rapidez y trato humano.</p></div>
-    <div><div class="footer-col-title">Enlaces</div><ul class="footer-links"><li><a href="#inicio">Inicio</a></li><li><a href="#servicios">Servicios</a></li><li><a href="#precios">Precios</a></li><li><a href="#paquetes">Paquetes</a></li></ul></div>
-    <div><div class="footer-col-title">Contacto</div><ul class="footer-links"><li><a href="tel:7296990786">729 699 0786</a></li><li><span>Porfirio Díaz 280, Capulhuac</span></li><li><span>Lun–Sáb · 9am–7pm</span></li></ul></div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2025 Foto y Video Montenegro</span>
-    <span>Diseño optimizado · Client-side Admin</span>
-  </div>
+<!-- ====== PAQUETES FOTOGRAFÍA Y VIDEO ====== -->
+<section id="paquetes" class="py-16 sm:py-24 px-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 mb-10">
+            <span class="text-brand-600 font-display text-5xl font-700 opacity-30">05</span>
+            <div>
+                <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500">Paquetes</p>
+                <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Paquetes de Fotografía y Video</h2>
+            </div>
+        </div>
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Paquete Básico -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl overflow-hidden hover:border-brand-600/50 transition">
+                <img src="https://picsum.photos/seed/pkg-basic/600/300.jpg" alt="Paquete básico" class="w-full h-40 object-cover opacity-60">
+                <div class="p-6">
+                    <h3 class="font-display text-xl font-600 text-brand-100 mb-1">Paquete Básico</h3>
+                    <p class="text-2xl font-display font-700 text-brand-300 mb-4">$3,500</p>
+                    <ul class="space-y-2 text-sm text-brand-400 font-300">
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Cobertura de 4 horas</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>100 fotos editadas en digital</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Video resumen de 3 min</li>
+                    </ul>
+                    <!-- AGREGAR MÁS ITEMS AQUÍ -->
+                    <a href="#cotizar" class="mt-5 block text-center px-4 py-2.5 bg-brand-300 text-brand-950 text-xs font-500 uppercase tracking-widest rounded-lg hover:bg-brand-200 transition">Cotizar</a>
+                </div>
+            </div>
+            <!-- Paquete Intermedio -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl overflow-hidden hover:border-brand-600/50 transition relative">
+                <div class="absolute top-3 right-3 bg-brand-300 text-brand-950 text-[10px] font-600 uppercase tracking-widest px-2.5 py-1 rounded-full z-10">Popular</div>
+                <img src="https://picsum.photos/seed/pkg-inter/600/300.jpg" alt="Paquete intermedio" class="w-full h-40 object-cover opacity-60">
+                <div class="p-6">
+                    <h3 class="font-display text-xl font-600 text-brand-100 mb-1">Paquete Intermedio</h3>
+                    <p class="text-2xl font-display font-700 text-brand-300 mb-4">$6,000</p>
+                    <ul class="space-y-2 text-sm text-brand-400 font-300">
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Cobertura de 6 horas</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>200 fotos editadas en digital</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Video resumen de 5 min</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Sesión previa al evento</li>
+                    </ul>
+                    <!-- AGREGAR MÁS ITEMS AQUÍ -->
+                    <a href="#cotizar" class="mt-5 block text-center px-4 py-2.5 bg-brand-300 text-brand-950 text-xs font-500 uppercase tracking-widest rounded-lg hover:bg-brand-200 transition">Cotizar</a>
+                </div>
+            </div>
+            <!-- Paquete Premium -->
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-2xl overflow-hidden hover:border-brand-600/50 transition">
+                <img src="https://picsum.photos/seed/pkg-premium/600/300.jpg" alt="Paquete premium" class="w-full h-40 object-cover opacity-60">
+                <div class="p-6">
+                    <h3 class="font-display text-xl font-600 text-brand-100 mb-1">Paquete Premium</h3>
+                    <p class="text-2xl font-display font-700 text-brand-300 mb-4">$10,000</p>
+                    <ul class="space-y-2 text-sm text-brand-400 font-300">
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Cobertura de 8 horas</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>300 fotos editadas en digital</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Video resumen de 8 min</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Sesión previa + drone</li>
+                        <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="text-brand-500 mt-0.5 shrink-0"></iconify-icon>Álbum digital + impresión</li>
+                    </ul>
+                    <!-- AGREGAR MÁS ITEMS AQUÍ -->
+                    <a href="#cotizar" class="mt-5 block text-center px-4 py-2.5 bg-brand-300 text-brand-950 text-xs font-500 uppercase tracking-widest rounded-lg hover:bg-brand-200 transition">Cotizar</a>
+                </div>
+            </div>
+        </div>
+        <p class="reveal text-xs text-brand-600 mt-6 text-center">* Los paquetes son personalizables. Contáctanos para ajustarlos a tu evento.</p>
+    </div>
+</section>
+
+<!-- ====== OTROS SERVICIOS (desplegable) ====== -->
+<section id="otros-servicios" class="py-10 sm:py-16 px-4 bg-brand-950/50">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal text-center mb-8">
+            <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500 mb-2">También ofrecemos</p>
+            <h2 class="font-display text-2xl sm:text-3xl font-600 tracking-tight text-brand-100">Otros Servicios</h2>
+        </div>
+        <div class="reveal grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <a href="#otros-enmarcadas" class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 hover:bg-brand-800/40 transition group">
+                <iconify-icon icon="lucide:frame" width="28" class="text-brand-500 group-hover:text-brand-300 transition mb-2"></iconify-icon>
+                <p class="text-xs font-500 text-brand-300">Fotos Enmarcadas</p>
+            </a>
+            <a href="#otros-lona" class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 hover:bg-brand-800/40 transition group">
+                <iconify-icon icon="lucide:rectangle-horizontal" width="28" class="text-brand-500 group-hover:text-brand-300 transition mb-2"></iconify-icon>
+                <p class="text-xs font-500 text-brand-300">Impresión en Lona</p>
+            </a>
+            <a href="#otros-sublimacion" class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 hover:bg-brand-800/40 transition group">
+                <iconify-icon icon="lucide:shirt" width="28" class="text-brand-500 group-hover:text-brand-300 transition mb-2"></iconify-icon>
+                <p class="text-xs font-500 text-brand-300">Sublimación en Tasas</p>
+            </a>
+            <a href="#otros-credenciales" class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 hover:bg-brand-800/40 transition group">
+                <iconify-icon icon="lucide:badge-check" width="28" class="text-brand-500 group-hover:text-brand-300 transition mb-2"></iconify-icon>
+                <p class="text-xs font-500 text-brand-300">Credenciales Escolares</p>
+            </a>
+            <a href="#otros-graduacion" class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 text-center hover:border-brand-600/60 hover:bg-brand-800/40 transition group">
+                <iconify-icon icon="lucide:graduation-cap" width="28" class="text-brand-500 group-hover:text-brand-300 transition mb-2"></iconify-icon>
+                <p class="text-xs font-500 text-brand-300">Servicio de Graduación</p>
+            </a>
+        </div>
+
+        <!-- Detalles desplegables -->
+        <div class="reveal mt-6 space-y-3 max-w-3xl mx-auto">
+            <div class="bg-brand-900/60 border border-brand-800/40 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between px-5 py-4 text-left">
+                    <span class="text-sm font-500 text-brand-200">Fotos Enmarcadas</span>
+                    <iconify-icon icon="lucide:chevron-down" width="18" class="text-brand-500 transition-transform"></iconify-icon>
+                </button>
+                <div class="dropdown-menu px-5 pb-4">
+                    <p class="text-sm text-brand-400 font-300">Enmarcamos tus fotografías con molduras de alta calidad en diferentes estilos: clásico, moderno, rústico y más. Disponibles en distintos tamaños.</p>
+                </div>
+            </div>
+            <div id="otros-lona" class="bg-brand-900/60 border border-brand-800/40 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between px-5 py-4 text-left">
+                    <span class="text-sm font-500 text-brand-200">Impresión en Lona</span>
+                    <iconify-icon icon="lucide:chevron-down" width="18" class="text-brand-500 transition-transform"></iconify-icon>
+                </button>
+                <div class="dropdown-menu px-5 pb-4">
+                    <p class="text-sm text-brand-400 font-300">Impresión de gran formato en lona para banners, publicidad, decoración de eventos y más. Diferentes acabados y medidas disponibles.</p>
+                </div>
+            </div>
+            <div id="otros-sublimacion" class="bg-brand-900/60 border border-brand-800/40 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between px-5 py-4 text-left">
+                    <span class="text-sm font-500 text-brand-200">Sublimación en Tasas</span>
+                    <iconify-icon icon="lucide:chevron-down" width="18" class="text-brand-500 transition-transform"></iconify-icon>
+                </button>
+                <div class="dropdown-menu px-5 pb-4">
+                    <p class="text-sm text-brand-400 font-300">Personaliza tus tasas, tazas y recipientes con tus fotos, logos o diseños. Ideales para regalos y promocionales.</p>
+                </div>
+            </div>
+            <div id="otros-credenciales" class="bg-brand-900/60 border border-brand-800/40 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between px-5 py-4 text-left">
+                    <span class="text-sm font-500 text-brand-200">Credenciales Escolares</span>
+                    <iconify-icon icon="lucide:chevron-down" width="18" class="text-brand-500 transition-transform"></iconify-icon>
+                </button>
+                <div class="dropdown-menu px-5 pb-4">
+                    <p class="text-sm text-brand-400 font-300">Toma de fotografía e impresión de credenciales escolares para instituciones. Incluye diseño, toma fotográfica y producción.</p>
+                </div>
+            </div>
+            <div id="otros-graduacion" class="bg-brand-900/60 border border-brand-800/40 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between px-5 py-4 text-left">
+                    <span class="text-sm font-500 text-brand-200">Servicio de Graduación</span>
+                    <iconify-icon icon="lucide:chevron-down" width="18" class="text-brand-500 transition-transform"></iconify-icon>
+                </button>
+                <div class="dropdown-menu px-5 pb-4">
+                    <p class="text-sm text-brand-400 font-300">Servicio completo para ceremonias de graduación: toma de fotos individuales y grupales, video de la ceremonia, impresión y entrega digital.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== ASISTENTE DE COTIZACIÓN ====== -->
+<section id="cotizar" class="py-16 sm:py-24 px-4">
+    <div class="max-w-2xl mx-auto">
+        <div class="reveal text-center mb-8">
+            <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500 mb-2">Asistente</p>
+            <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Cotiza tu Servicio</h2>
+            <p class="text-sm text-brand-400 font-300 mt-2">Responde algunas preguntas y obtén un precio estimado</p>
+        </div>
+        <div class="reveal bg-brand-900/80 border border-brand-800/50 rounded-2xl p-6 sm:p-8">
+            <!-- Chat Container -->
+            <div id="chatContainer" class="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
+                <!-- Messages will be added by JS -->
+            </div>
+            <!-- Quick Replies -->
+            <div id="quickReplies" class="flex flex-wrap gap-2">
+                <!-- Buttons added by JS -->
+            </div>
+            <!-- Custom Input (hidden initially) -->
+            <div id="customInput" class="hidden mt-3 flex gap-2">
+                <input type="text" id="userInput" placeholder="Escribe tu respuesta..." class="flex-1 bg-brand-800/60 border border-brand-700/50 rounded-lg px-4 py-2.5 text-sm text-brand-200 placeholder:text-brand-600 focus:outline-none focus:border-brand-500">
+                <button onclick="sendCustomInput()" class="px-4 py-2.5 bg-brand-300 text-brand-950 rounded-lg text-sm font-500 hover:bg-brand-200 transition">
+                    <iconify-icon icon="lucide:send" width="16"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== UBICACIÓN ====== -->
+<section id="ubicacion" class="py-16 sm:py-24 px-4 bg-brand-950/50">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal flex items-center gap-3 mb-10">
+            <span class="text-brand-600 font-display text-5xl font-700 opacity-30">06</span>
+            <div>
+                <p class="text-[10px] font-500 uppercase tracking-[0.25em] text-brand-500">Encuéntranos</p>
+                <h2 class="font-display text-2xl sm:text-4xl font-600 tracking-tight text-brand-100">Ubicación y Contacto</h2>
+            </div>
+        </div>
+        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Map -->
+            <div class="rounded-2xl overflow-hidden border border-brand-800/40 h-64 sm:h-80 lg:h-auto">
+                <!-- REEMPLAZAR con tu dirección real en el iframe src -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.661233982508!2d-99.13320642414091!3d19.432608040954184!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f92b3a7c58e3%3A0x63caaf392f49f482!2sZocalo%2C%20Ciudad%20de%20M%C3%A9xico!5e0!3m2!1ses-419!2smx!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="min-h-[250px]"></iframe>
+            </div>
+            <!-- Info -->
+            <div class="space-y-5">
+                <div class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-brand-800/60 flex items-center justify-center shrink-0">
+                        <iconify-icon icon="lucide:map-pin" width="18" class="text-brand-400"></iconify-icon>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-500 text-brand-200 mb-1">Dirección</h3>
+                        <!-- REEMPLAZAR con tu dirección real -->
+                        <p class="text-sm text-brand-400 font-300">Calle Principal #123, Col. Centro, Ciudad de México</p>
+                    </div>
+                </div>
+                <div class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-brand-800/60 flex items-center justify-center shrink-0">
+                        <iconify-icon icon="lucide:phone" width="18" class="text-brand-400"></iconify-icon>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-500 text-brand-200 mb-1">Teléfono</h3>
+                        <a href="tel:+521234567890" class="text-sm text-brand-400 font-300 hover:text-brand-300 transition">123 456 7890</a>
+                    </div>
+                </div>
+                <div class="bg-brand-900/60 border border-brand-800/40 rounded-xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-brand-800/60 flex items-center justify-center shrink-0">
+                        <iconify-icon icon="lucide:clock" width="18" class="text-brand-400"></iconify-icon>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-500 text-brand-200 mb-1">Horario</h3>
+                        <p class="text-sm text-brand-400 font-300">Lunes a Sábado: 9:00 - 19:00<br>Domingo: Cerrado</p>
+                    </div>
+                </div>
+                <!-- Map Links -->
+                <div class="flex gap-3">
+                    <a href="https://maps.google.com/?q=Zocalo+Ciudad+de+Mexico" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-brand-900/60 border border-brand-800/40 rounded-xl text-sm text-brand-300 hover:bg-brand-800/60 hover:border-brand-600/50 transition">
+                        <iconify-icon icon="lucide:map" width="16"></iconify-icon>Google Maps
+                    </a>
+                    <a href="maps://maps.apple.com/?q=Zocalo+Ciudad+de+Mexico" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-brand-900/60 border border-brand-800/40 rounded-xl text-sm text-brand-300 hover:bg-brand-800/60 hover:border-brand-600/50 transition">
+                        <iconify-icon icon="lucide:navigation" width="16"></iconify-icon>Apple Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer class="border-t border-brand-800/30 py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+            <!-- Logo y descripción -->
+            <div class="sm:col-span-2 lg:col-span-1">
+                <!-- REEMPLAZAR con tu logo: <img src="tu-logo.png" class="h-10 w-auto mb-4"> -->
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-9 h-9 rounded-full bg-brand-300 flex items-center justify-center">
+                        <iconify-icon icon="lucide:aperture" width="20" class="text-brand-950"></iconify-icon>
+                    </div>
+                    <span class="font-display text-lg font-600 tracking-wide text-brand-200">ESTUDIO FOTOGRÁFICO</span>
+                </div>
+                <p class="text-sm text-brand-500 font-300 leading-relaxed">Fotografía, video, restauración e impresión profesional.</p>
+            </div>
+            <!-- Servicios -->
+            <div>
+                <h4 class="font-display text-xs font-500 uppercase tracking-widest text-brand-400 mb-4">Servicios</h4>
+                <ul class="space-y-2">
+                    <li><a href="#foto-video" class="text-sm text-brand-500 hover:text-brand-300 transition">Fotografía y Video</a></li>
+                    <li><a href="#identificacion" class="text-sm text-brand-500 hover:text-brand-300 transition">Identificación</a></li>
+                    <li><a href="#restauracion" class="text-sm text-brand-500 hover:text-brand-300 transition">Restauración</a></li>
+                    <li><a href="#impresion" class="text-sm text-brand-500 hover:text-brand-300 transition">Impresión</a></li>
+                </ul>
+            </div>
+            <!-- Otros -->
+            <div>
+                <h4 class="font-display text-xs font-500 uppercase tracking-widest text-brand-400 mb-4">Otros Servicios</h4>
+                <ul class="space-y-2">
+                    <li><a href="#otros-servicios" class="text-sm text-brand-500 hover:text-brand-300 transition">Fotos Enmarcadas</a></li>
+                    <li><a href="#otros-servicios" class="text-sm text-brand-500 hover:text-brand-300 transition">Lona</a></li>
+                    <li><a href="#otros-servicios" class="text-sm text-brand-500 hover:text-brand-300 transition">Sublimación</a></li>
+                    <li><a href="#otros-servicios" class="text-sm text-brand-500 hover:text-brand-300 transition">Credenciales</a></li>
+                </ul>
+            </div>
+            <!-- Contacto -->
+            <div>
+                <h4 class="font-display text-xs font-500 uppercase tracking-widest text-brand-400 mb-4">Contacto</h4>
+                <ul class="space-y-2">
+                    <li><a href="tel:+521234567890" class="text-sm text-brand-500 hover:text-brand-300 transition">123 456 7890</a></li>
+                    <li><a href="https://wa.me/521234567890" target="_blank" class="text-sm text-brand-500 hover:text-brand-300 transition">WhatsApp</a></li>
+                    <li><a href="#ubicacion" class="text-sm text-brand-500 hover:text-brand-300 transition">Ubicación</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-brand-800/30 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p class="text-xs text-brand-600 font-300">© 2025 Estudio Fotográfico. Todos los derechos reservados.</p>
+            <!-- Logos de marca / partners -->
+            <div class="flex items-center gap-4 opacity-40">
+                <!-- REEMPLAZAR con tus logos de marca/partners -->
+                <div class="w-8 h-8 rounded bg-brand-800 flex items-center justify-center">
+                    <iconify-icon icon="lucide:camera" width="14" class="text-brand-400"></iconify-icon>
+                </div>
+                <div class="w-8 h-8 rounded bg-brand-800 flex items-center justify-center">
+                    <iconify-icon icon="lucide:printer" width="14" class="text-brand-400"></iconify-icon>
+                </div>
+                <div class="w-8 h-8 rounded bg-brand-800 flex items-center justify-center">
+                    <iconify-icon icon="lucide:image" width="14" class="text-brand-400"></iconify-icon>
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<!-- FLOATING BTNS -->
-<a href="https://wa.me/527296990786" class="wa-btn" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-<button id="btnTop" aria-label="Ir arriba"><i data-lucide="chevron-up"></i></button>
+<!-- ====== WHATSAPP FLOTANTE (sin recuadro café arriba) ====== -->
+<a href="https://wa.me/521234567890?text=Hola%2C%20me%20interesa%20cotizar%20un%20servicio" target="_blank" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 hover:bg-green-400 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300" aria-label="WhatsApp">
+    <iconify-icon icon="lucide:message-circle" width="28" class="text-white"></iconify-icon>
+</a>
 
-<!-- ADMIN MODAL -->
-<div class="modal-overlay" id="adminModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>Panel de Administración</h3>
-      <button class="modal-close" onclick="closeAdmin()"><i data-lucide="x"></i></button>
-    </div>
-    <div id="adminLogin">
-      <div class="admin-field"><label>Usuario</label><input type="text" id="adminUser"></div>
-      <div class="admin-field"><label>Contraseña</label><input type="password" id="adminPass"></div>
-      <button class="admin-btn" onclick="loginAdmin()">Acceder</button>
-    </div>
-    <div id="adminPanel" style="display:none;">
-      <div class="modal-tabs">
-        <button class="modal-tab active" data-tab="precios">Precios</button>
-        <button class="modal-tab" data-tab="marcos">Marcos</button>
-        <button class="modal-tab" data-tab="descuentos">Descuentos</button>
-        <button class="modal-tab" data-tab="paquetes">Paquetes</button>
-      </div>
-      <div id="tab-precios" class="admin-tab-content">
-        <div class="admin-grid">
-          <div class="admin-field"><label>Precio Base 4x6 (Sola)</label><input type="number" id="p_4x6"></div>
-          <div class="admin-field"><label>Precio Base 5x7 (Sola)</label><input type="number" id="p_5x7"></div>
-          <div class="admin-field"><label>Precio Base 8x10 (Sola)</label><input type="number" id="p_8x10"></div>
-          <div class="admin-field"><label>Precio Base 11x14 (Sola)</label><input type="number" id="p_11x14"></div>
-          <div class="admin-field"><label>Precio Base 16x20 (Sola)</label><input type="number" id="p_16x20"></div>
-          <div class="admin-field"><label>Multiplicador Texturizada</label><input type="number" id="m_text" step="0.1"></div>
-        </div>
-        <button class="admin-btn" onclick="saveAdmin()">Guardar Precios</button>
-      </div>
-      <div id="tab-marcos" class="admin-tab-content" style="display:none;">
-        <div class="admin-field"><label>Tipos de Marco (JSON Array)</label><textarea id="adminFrames" rows="4"></textarea></div>
-        <p style="font-size:0.65rem; color:var(--stone); margin-bottom:0.5rem;">Formato: [{"id":"simple","name":"Marco Simple","add":0},{"id":"doble","name":"Marco Doble","add":15}]</p>
-        <button class="admin-btn" onclick="saveAdmin()">Actualizar Marcos</button>
-      </div>
-      <div id="tab-descuentos" class="admin-tab-content" style="display:none;">
-        <div class="admin-grid">
-          <div class="admin-field"><label>Umbral Mayoreo 1 (cant)</label><input type="number" id="d1_min"></div>
-          <div class="admin-field"><label>Descuento 1 (%)</label><input type="number" id="d1_pct"></div>
-          <div class="admin-field"><label>Umbral Mayoreo 2 (cant)</label><input type="number" id="d2_min"></div>
-          <div class="admin-field"><label>Descuento 2 (%)</label><input type="number" id="d2_pct"></div>
-        </div>
-        <button class="admin-btn" onclick="saveAdmin()">Guardar Descuentos</button>
-      </div>
-      <div id="tab-paquetes" class="admin-tab-content" style="display:none;">
-        <div class="admin-field"><label>Paquetes (HTML)</label><textarea id="adminPacks" rows="6"></textarea></div>
-        <button class="admin-btn" onclick="saveAdmin()">Actualizar Paquetes</button>
-      </div>
-      <button class="admin-btn secondary" onclick="resetAdmin()">Restaurar Valores por Defecto</button>
-      <button class="admin-btn secondary" style="margin-left:0.5rem;" onclick="logoutAdmin()">Cerrar Sesión</button>
-    </div>
-  </div>
-</div>
-
+<!-- ====== JAVASCRIPT ====== -->
 <script>
-// ── DEFAULT DATA ──
-const DEFAULT_DATA = {
-  prices: { sola: { '4x6':12, '5x7':18, '8x10':30, '11x14':45, '16x20':70 }, text_mult: 1.5 },
-  frames: [{id:'simple',name:'Marco Simple (Madera)',add:0},{id:'doble',name:'Marco Doble (Madera)',add:15},{id:'metalico',name:'Marco Metálico',add:25},{id:'premium',name:'Marco Premium + Vidrio',add:40}],
-  discounts: [{min:10, pct:10}, {min:50, pct:15}],
-  packages: `<div class="package-card"><div class="package-name">Básico</div><div class="package-price">$800</div><ul class="package-features"><li>1 hora de sesión</li><li>15 fotos editadas</li><li>Entrega digital</li></ul><a href="#contacto" class="btn-primary" style="font-size:0.6rem; padding:0.6rem;">Cotizar</a></div>
-<div class="package-card"><div class="package-name">Premium</div><div class="package-price">$1,800</div><ul class="package-features"><li>2 horas + video corto</li><li>30 fotos editadas</li><li>5 impresas 5x7</li></ul><a href="#contacto" class="btn-primary" style="font-size:0.6rem; padding:0.6rem;">Cotizar</a></div>
-<div class="package-card"><div class="package-name">Evento</div><div class="package-price">$4,500</div><ul class="package-features"><li>4 horas cobertura</li><li>Video highlight</li><li>50 fotos editadas</li></ul><a href="#contacto" class="btn-primary" style="font-size:0.6rem; padding:0.6rem;">Cotizar</a></div>`
+// ========== Mobile Menu ==========
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuIcon = document.getElementById('menuIcon');
+let menuOpen = false;
+
+mobileToggle.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileMenu.classList.toggle('hidden');
+    menuIcon.setAttribute('icon', menuOpen ? 'lucide:x' : 'lucide:menu');
+});
+
+function closeMobile() {
+    menuOpen = false;
+    mobileMenu.classList.add('hidden');
+    menuIcon.setAttribute('icon', 'lucide:menu');
+}
+
+// ========== Scroll Reveal ==========
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+revealElements.forEach(el => revealObserver.observe(el));
+
+// ========== Tabs ==========
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tabName).classList.remove('hidden');
+    document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+}
+
+// ========== Price Calculator ==========
+function updateCalc() {
+    const inputs = document.querySelectorAll('.tab-content input[type="number"]');
+    let items = [];
+    let total = 0;
+    inputs.forEach(input => {
+        const qty = parseInt(input.value) || 0;
+        if (qty > 0) {
+            const price = parseInt(input.dataset.price);
+            const product = input.dataset.product;
+            const subtotal = price * qty;
+            total += subtotal;
+            items.push({ product, qty, subtotal });
+        }
+    });
+    const container = document.getElementById('calcItems');
+    if (items.length === 0) {
+        container.innerHTML = '<p class="text-brand-500 text-xs">Selecciona cantidades arriba para calcular</p>';
+    } else {
+        container.innerHTML = items.map(item =>
+            `<div class="flex justify-between text-brand-300">
+                <span class="text-xs">${item.product} × ${item.qty}</span>
+                <span class="text-xs font-500">$${item.subtotal}</span>
+            </div>`
+        ).join('');
+    }
+    document.getElementById('calcTotal').textContent = '$' + total.toLocaleString();
+}
+
+// ========== Accordion ==========
+function toggleAccordion(btn) {
+    const content = btn.nextElementSibling;
+    const icon = btn.querySelector('iconify-icon');
+    const isOpen = content.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.dropdown-menu').forEach(el => {
+        el.previousElementSibling.querySelector('iconify-icon').style.transform = '';
+    });
+    if (!isOpen) {
+        content.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// ========== Quote Assistant ==========
+// DATOS DE PRECIOS - MODIFICA ESTOS VALORES CON TUS PRECIOS REALES
+const pricingData = {
+    "Fotografía de Eventos": {
+        "Básico (4 hrs, 100 fotos)": 3500,
+        "Intermedio (6 hrs, 200 fotos)": 6000,
+        "Premium (8 hrs, 300 fotos)": 10000
+    },
+    "Video de Eventos": {
+        "Video resumen 3 min": 2000,
+        "Video resumen 5 min": 3500,
+        "Video resumen 8 min": 5000,
+        "Cobertura completa": 8000
+    },
+    "Fotografías de Identificación": {
+        "Infantil / Miñón": 80,
+        "Visa / Pasaporte": 120,
+        "Diploma / Título": 100,
+        "Filiación": 100
+    },
+    "Restauración": {
+        "Restauración básica": 200,
+        "Restauración avanzada": 500,
+        "Restauración extrema": 800
+    },
+    "Digitalización": {
+        "Hasta 20 fotos": 300,
+        "Hasta 50 fotos": 600,
+        "Hasta 100 fotos": 1000
+    },
+    "Edición de Fotos": {
+        "Cambio de fondo": 100,
+        "Montaje de personas": 150,
+        "Corrección profesional": 80
+    },
+    "Impresión de Fotos": {
+        "Revisar tabla de precios": 0
+    },
+    "Fotos Enmarcadas": {
+        "5×7 enmarcado": 80,
+        "8×10 enmarcado": 120,
+        "11×14 enmarcado": 200
+    },
+    "Lona": {
+        "Lona pequeña (hasta 1m)": 250,
+        "Lona mediana (hasta 2m)": 500,
+        "Lona grande (hasta 3m)": 800
+    },
+    "Sublimación en Tasas": {
+        "1 tasa": 80,
+        "5 tasas": 350,
+        "10 tasas": 600
+    },
+    "Credenciales Escolares": {
+        "Hasta 50 credenciales": 750,
+        "Hasta 100 credenciales": 1200,
+        "Hasta 200 credenciales": 2000
+    },
+    "Graduación": {
+        "Paquete individual": 300,
+        "Paquete grupal (10+)": 2500,
+        "Paquete completo": 5000
+    }
 };
 
-let appData = JSON.parse(localStorage.getItem('montenegro_config')) || DEFAULT_DATA;
-const saveData = () => localStorage.setItem('montenegro_config', JSON.stringify(appData));
+let chatStep = 0;
+let selectedCategory = '';
+let selectedService = '';
+let chatHistory = [];
 
-// ── INIT UI ──
-function initUI() {
-  document.getElementById('packagesGrid').innerHTML = appData.packages;
-  if(typeof lucide !== 'undefined') lucide.createIcons();
-  updateCalcOptions();
-  loadAdminFields();
+function initChat() {
+    chatStep = 0;
+    selectedCategory = '';
+    selectedService = '';
+    chatHistory = [];
+    const container = document.getElementById('chatContainer');
+    container.innerHTML = '';
+    addBotMessage('¡Hola! 👋 Soy tu asistente de cotización. ¿Qué servicio te interesa?');
+    showCategoryOptions();
 }
 
-// ── CALCULATOR LOGIC ──
-const calcType = document.getElementById('calcType');
-const calcSize = document.getElementById('calcSize');
-const calcQty = document.getElementById('calcQty');
-const calcFrame = document.getElementById('calcFrame');
-const calcResult = document.getElementById('calcResult');
-const frameWrap = document.getElementById('frameWrap');
-
-function updateCalcOptions() {
-  calcSize.innerHTML = '<option value="">Selecciona tamaño</option>';
-  calcFrame.innerHTML = '';
-  appData.frames.forEach(f => {
-    const o = document.createElement('option');
-    o.value = JSON.stringify(f);
-    o.textContent = `${f.name} (+$${f.add})`;
-    calcFrame.appendChild(o);
-  });
+function addBotMessage(text) {
+    const container = document.getElementById('chatContainer');
+    const div = document.createElement('div');
+    div.className = 'chat-msg flex gap-2 items-start';
+    div.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-brand-300 flex items-center justify-center shrink-0">
+            <iconify-icon icon="lucide:bot" width="14" class="text-brand-950"></iconify-icon>
+        </div>
+        <div class="bg-brand-800/80 rounded-xl rounded-tl-sm px-4 py-2.5 max-w-[85%]">
+            <p class="text-sm text-brand-200 font-300">${text}</p>
+        </div>
+    `;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 }
 
-calcType.addEventListener('change', () => {
-  const t = calcType.value;
-  calcSize.innerHTML = '<option value="">Selecciona tamaño</option>';
-  calcSize.disabled = !t;
-  if(!t) { frameWrap.classList.remove('visible'); updateCalc(); return; }
-  
-  const sizes = Object.keys(appData.prices.sola);
-  sizes.forEach(s => {
-    const o = document.createElement('option');
-    o.value = s; o.textContent = s.toUpperCase();
-    calcSize.appendChild(o);
-  });
-  frameWrap.classList.toggle('visible', t === 'enmarcada');
-  updateCalc();
-});
-
-calcSize.addEventListener('change', updateCalc);
-calcQty.addEventListener('input', updateCalc);
-calcFrame.addEventListener('change', updateCalc);
-
-function updateCalc() {
-  const t = calcType.value, s = calcSize.value, q = Math.max(1, parseInt(calcQty.value)||1);
-  if(!t || !s) { calcResult.innerHTML = '<p style="color:var(--stone)">Selecciona tipo y tamaño</p>'; return; }
-  
-  let base = appData.prices.sola[s];
-  if(t === 'texturizada') base *= appData.prices.text_mult;
-  
-  let frameAdd = 0;
-  if(t === 'enmarcada' && calcFrame.value) frameAdd = JSON.parse(calcFrame.value).add;
-  
-  let unit = base + frameAdd;
-  let disc = 0;
-  appData.discounts.forEach(d => { if(q >= d.min) disc = Math.max(disc, d.pct/100); });
-  
-  const total = Math.round(unit * q * (1-disc));
-  calcResult.innerHTML = `<div class="calc-result-price">$${total}</div><p style="color:var(--stone);font-size:0.75rem">${q} x $${unit.toFixed(0)}${disc>0?` (-${disc*100}%)`:''}</p>`;
+function addUserMessage(text) {
+    const container = document.getElementById('chatContainer');
+    const div = document.createElement('div');
+    div.className = 'chat-msg flex gap-2 items-start justify-end';
+    div.innerHTML = `
+        <div class="bg-brand-600/30 border border-brand-600/30 rounded-xl rounded-tr-sm px-4 py-2.5 max-w-[85%]">
+            <p class="text-sm text-brand-200 font-300">${text}</p>
+        </div>
+    `;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 }
 
-// ── QUOTING ASSISTANT ──
-const basePrices = { identificacion: 60, estudio: 500, video: 800, impresion: 50, restauracion: 300, enmarcado: 400, paquete: 1200 };
-document.getElementById('quoteService').addEventListener('change', calcQuote);
-document.getElementById('quoteQty').addEventListener('input', calcQuote);
-document.getElementById('quoteExtra').addEventListener('change', calcQuote);
-function calcQuote() {
-  const s = document.getElementById('quoteService').value, q = Math.max(1, parseInt(document.getElementById('quoteQty').value)||1), e = parseFloat(document.getElementById('quoteExtra').value)||1;
-  if(!s) return;
-  const est = Math.round(basePrices[s] * q * e);
-  document.getElementById('quoteResult').innerHTML = `<strong>Estimado:</strong> $${est} MXN<br><span style="font-size:0.7rem;color:var(--stone)">Precio referencial. Confirmar por WhatsApp.</span>`;
+function showCategoryOptions() {
+    const container = document.getElementById('quickReplies');
+    const categories = Object.keys(pricingData);
+    container.innerHTML = categories.map(cat =>
+        `<button onclick="selectCategory('${cat}')" class="px-3 py-1.5 text-xs border border-brand-700/50 rounded-lg text-brand-300 hover:bg-brand-300 hover:text-brand-950 transition">${cat}</button>`
+    ).join('');
+    document.getElementById('customInput').classList.add('hidden');
 }
 
-// ── WHATSAPP FORM ──
-function sendToWhatsApp() {
-  const n = document.getElementById('fname').value.trim(), m = document.getElementById('fmsg').value.trim();
-  if(!n || !m) return alert('Completa nombre y mensaje');
-  window.open(`https://wa.me/527296990786?text=${encodeURIComponent(`Hola, soy ${n}. ${m}`)}`, '_blank');
+function selectCategory(cat) {
+    selectedCategory = cat;
+    addUserMessage(cat);
+    const options = pricingData[cat];
+    if (cat === 'Impresión de Fotos') {
+        addBotMessage('Para impresión de fotos, consulta nuestra tabla de precios en la sección de Impresión donde puedes calcular el total según el tamaño y cantidad. 👇');
+        addBotMessage('<a href="#impresion" class="underline text-brand-300">Ir a Impresión de Fotos</a>');
+        addBotMessage('¿Te interesa otro servicio?');
+        showCategoryOptions();
+        return;
+    }
+    const optionKeys = Object.keys(options);
+    addBotMessage('¿Qué opción necesitas?');
+    const container = document.getElementById('quickReplies');
+    container.innerHTML = optionKeys.map(opt =>
+        `<button onclick="selectOption('${opt}')" class="px-3 py-1.5 text-xs border border-brand-700/50 rounded-lg text-brand-300 hover:bg-brand-300 hover:text-brand-950 transition">${opt}</button>`
+    ).join('');
 }
 
-// ── ADMIN PANEL ──
-let clickCount = 0, clickTimer;
-document.getElementById('navLogo').addEventListener('click', () => {
-  clickCount++; clearTimeout(clickTimer);
-  clickTimer = setTimeout(() => clickCount = 0, 800);
-  if(clickCount === 3) { openAdmin(); clickCount = 0; }
-});
-function openAdmin() { document.getElementById('adminModal').classList.add('active'); }
-function closeAdmin() { document.getElementById('adminModal').classList.remove('active'); }
-
-document.querySelectorAll('.modal-tab').forEach(t => t.addEventListener('click', function() {
-  document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
-  this.classList.add('active');
-  document.querySelectorAll('.admin-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('tab-'+this.dataset.tab).style.display = 'block';
-}));
-
-function loginAdmin() {
-  if(document.getElementById('adminUser').value === 'Montenegro' && document.getElementById('adminPass').value === 'Gilberto123@') {
-    document.getElementById('adminLogin').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    loadAdminFields();
-  } else { alert('Credenciales incorrectas'); }
-}
-function logoutAdmin() { document.getElementById('adminLogin').style.display = 'block'; document.getElementById('adminPanel').style.display = 'none'; }
-
-function loadAdminFields() {
-  document.getElementById('p_4x6').value = appData.prices.sola['4x6'];
-  document.getElementById('p_5x7').value = appData.prices.sola['5x7'];
-  document.getElementById('p_8x10').value = appData.prices.sola['8x10'];
-  document.getElementById('p_11x14').value = appData.prices.sola['11x14'];
-  document.getElementById('p_16x20').value = appData.prices.sola['16x20'];
-  document.getElementById('m_text').value = appData.prices.text_mult;
-  document.getElementById('adminFrames').value = JSON.stringify(appData.frames, null, 2);
-  document.getElementById('d1_min').value = appData.discounts[0].min;
-  document.getElementById('d1_pct').value = appData.discounts[0].pct;
-  document.getElementById('d2_min').value = appData.discounts[1].min;
-  document.getElementById('d2_pct').value = appData.discounts[1].pct;
-  document.getElementById('adminPacks').value = appData.packages;
+function selectOption(opt) {
+    selectedService = opt;
+    addUserMessage(opt);
+    const price = pricingData[selectedCategory][opt];
+    if (price > 0) {
+        addBotMessage(`El precio estimado para <strong>${opt}</strong> es de <strong class="text-brand-300">$${price.toLocaleString()} MXN</strong>.`);
+    }
+    addBotMessage('¿Necesitas algo más o quieres contactarnos para confirmar?');
+    const container = document.getElementById('quickReplies');
+    container.innerHTML = `
+        <button onclick="showCategoryOptions()" class="px-3 py-1.5 text-xs border border-brand-700/50 rounded-lg text-brand-300 hover:bg-brand-300 hover:text-brand-950 transition">Otro servicio</button>
+        <a href="https://wa.me/521234567890?text=Hola,%20me%20interesa:%20${encodeURIComponent(selectedCategory + ' - ' + selectedService)}" target="_blank" class="px-3 py-1.5 text-xs border border-green-600/50 rounded-lg text-green-300 hover:bg-green-600 hover:text-white transition">WhatsApp</a>
+        <button onclick="initChat()" class="px-3 py-1.5 text-xs border border-brand-700/50 rounded-lg text-brand-300 hover:bg-brand-300 hover:text-brand-950 transition">Reiniciar</button>
+    `;
 }
 
-function saveAdmin() {
-  appData.prices.sola['4x6'] = parseFloat(document.getElementById('p_4x6').value);
-  appData.prices.sola['5x7'] = parseFloat(document.getElementById('p_5x7').value);
-  appData.prices.sola['8x10'] = parseFloat(document.getElementById('p_8x10').value);
-  appData.prices.sola['11x14'] = parseFloat(document.getElementById('p_11x14').value);
-  appData.prices.sola['16x20'] = parseFloat(document.getElementById('p_16x20').value);
-  appData.prices.text_mult = parseFloat(document.getElementById('m_text').value);
-  
-  try { appData.frames = JSON.parse(document.getElementById('adminFrames').value); } catch(e) { alert('Error en formato JSON de marcos'); return; }
-  
-  appData.discounts = [
-    {min: parseInt(document.getElementById('d1_min').value), pct: parseInt(document.getElementById('d1_pct').value)},
-    {min: parseInt(document.getElementById('d2_min').value), pct: parseInt(document.getElementById('d2_pct').value)}
-  ];
-  appData.packages = document.getElementById('adminPacks').value;
-  
-  saveData();
-  initUI();
-  alert('✅ Cambios guardados y aplicados.');
+function sendCustomInput() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text) return;
+    addUserMessage(text);
+    input.value = '';
+    addBotMessage('Gracias por tu mensaje. Para darte una cotización exacta, te recomiendo contactarnos directamente por WhatsApp.');
+    const container = document.getElementById('quickReplies');
+    container.innerHTML = `
+        <a href="https://wa.me/521234567890?text=${encodeURIComponent(text)}" target="_blank" class="px-3 py-1.5 text-xs border border-green-600/50 rounded-lg text-green-300 hover:bg-green-600 hover:text-white transition">Enviar por WhatsApp</a>
+        <button onclick="showCategoryOptions()" class="px-3 py-1.5 text-xs border border-brand-700/50 rounded-lg text-brand-300 hover:bg-brand-300 hover:text-brand-950 transition">Ver servicios</button>
+    `;
 }
 
-function resetAdmin() {
-  if(confirm('¿Restaurar valores originales? Se perderán los cambios locales.')) {
-    localStorage.removeItem('montenegro_config');
-    appData = DEFAULT_DATA;
-    initUI();
-    loadAdminFields();
-  }
-}
+// Init chat when section is visible
+const chatSection = document.getElementById('cotizar');
+const chatObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+        initChat();
+        chatObserver.disconnect();
+    }
+}, { threshold: 0.3 });
+chatObserver.observe(chatSection);
 
-// ── NAV & MOBILE ──
+// ========== Navbar Scroll Effect ==========
+let lastScroll = 0;
 window.addEventListener('scroll', () => {
-  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 50);
-  document.getElementById('btnTop').classList.toggle('show', window.scrollY > 400);
+    const navbar = document.getElementById('navbar');
+    const currentScroll = window.pageYOffset;
+    if (currentScroll > 50) {
+        navbar.classList.add('shadow-2xl');
+    } else {
+        navbar.classList.remove('shadow-2xl');
+    }
+    lastScroll = currentScroll;
 });
-document.getElementById('btnTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-hamburger.addEventListener('click', () => { mobileMenu.classList.toggle('open'); hamburger.classList.toggle('open'); });
-document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamburger.classList.remove('open'); }));
 
-// Init
-initUI();
+// ========== Smooth scroll for anchor links ==========
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            const offset = 80;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+    });
+});
 </script>
+
 </body>
 </html>
