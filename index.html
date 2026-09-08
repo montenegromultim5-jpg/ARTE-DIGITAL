@@ -1,4 +1,5 @@
 
+<!-- Versión 2.3 - Optimizada -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -81,7 +82,7 @@
         .btn-outline:active { border-color: var(--text); background: var(--text); color: #fff; }
         .btn-accent { background: var(--accent); color: #fff; }
         .btn-accent:active { background: var(--accent-hover); transform: scale(.97); }
-        .btn-sm { padding: .45rem 1rem; font-size: .78rem; min-height: 44px; }
+        .btn-sm { padding: .45rem 1rem; font-size: .78rem; min-height: 44px; /* Mejorado para touch */ }
         
         /* FILTROS PORTAFOLIO */
         .port-filters { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.8rem; margin-top: 1.5rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -162,7 +163,7 @@
             background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2);
             padding: 0.6rem 1.2rem; border-radius: 50px; cursor: pointer; backdrop-filter: blur(8px);
             font-family: var(--fb); font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s;
-            pointer-events: auto; min-height: 44px;
+            pointer-events: auto; min-height: 44px; /* Touch target */
         }
         .btn-regresar-fijo:hover { background: rgba(0,0,0,0.9); border-color: var(--c-accent); color: var(--c-accent); }
 
@@ -196,7 +197,7 @@
         .px-set-section { margin-bottom: 4rem; scroll-margin-top: 90px; }
         .px-set-title { font-family: var(--fh); font-size: 2.2rem; text-align: center; margin-bottom: 2rem; font-weight: 400; color: var(--c-text); letter-spacing: 1px; }
         
-        /* ════ LA MAGIA DEL ACOMODO V2.3 ════ */
+        /* ════ LA MAGIA DEL ACOMODO V2.0 ════ */
         .px-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
@@ -204,7 +205,7 @@
             grid-auto-flow: dense; 
             gap: 12px; 
         }
-        .pc { position: relative; border-radius: 4px; overflow: hidden; background: var(--c-surface2); cursor: pointer; will-change: transform; }
+        .pc { position: relative; border-radius: 4px; overflow: hidden; background: var(--c-surface2); cursor: pointer; }
         .pc.vertical { grid-row: span 2; }
         .pc.horizontal { grid-row: span 1; }
         .pc img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s, filter .4s, opacity .4s; pointer-events: none; display: block; opacity: 0; }
@@ -225,6 +226,7 @@
         .gallery-print-mode .pc .dlb { display: none !important; }
         .gallery-print-mode .pc:hover img { transform: none; filter: brightness(0.85); }
         
+        /* Uso de safe-area-inset para iOS/Android modernos */
         .fab-print { position: fixed; bottom: max(2rem, env(safe-area-inset-bottom, 2rem)); right: 2rem; z-index: 150; background: var(--c-accent); color: #fff; border: none; border-radius: 50px; padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0,0,0,0.5); cursor: pointer; font-family: var(--fb); font-size: 0.9rem; font-weight: 500; transition: transform 0.2s, background 0.2s; min-height: 48px; }
         .fab-print:hover { transform: scale(1.05); background: var(--c-accent-hover); }
         .fab-print svg { width: 20px; height: 20px; fill: #fff; }
@@ -364,7 +366,7 @@
         .pb-wrapper { display: flex; flex-direction: column; justify-content: center; align-items: center; perspective: 3500px; width: 100%; position: relative; z-index: 2; flex: 1 1 auto; min-height: 0; padding-bottom: 20px; }
         .pb-ambient { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%); filter: blur(60px); pointer-events: none; transition: opacity 0.8s; z-index: -1; }
         .pb-book { width: min(100%, 420px); max-width: 90vw; aspect-ratio: 1 / 1; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); filter: drop-shadow(0 30px 60px rgba(0,0,0,0.7)) drop-shadow(0 5px 15px rgba(0,0,0,0.5)); touch-action: none; cursor: pointer; margin-top: 2rem; z-index: 10; }
-        .pb-paper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transform-style: preserve-3d; transform-origin: left center; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 2px 5px 5px 2px; cursor: pointer; will-change: transform; }
+        .pb-paper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transform-style: preserve-3d; transform-origin: left center; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 2px 5px 5px 2px; cursor: pointer; }
         .pb-front, .pb-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #0a0a0e; overflow: hidden; border-radius: 2px 5px 5px 2px; }
         .pb-back { transform: rotateY(180deg); border-radius: 5px 2px 2px 5px; }
         .pb-img-fit { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -530,6 +532,7 @@
             
             <div id="portFilters" class="port-filters"></div>
             <div class="portfolio-grid" id="portGrid"></div>
+            <!-- Contenedor para el botón "Ver más" -->
             <div id="portMoreBtn" style="text-align: center; margin-top: 2rem;"></div>
         </section>
         <section class="section" id="servicios">
@@ -871,7 +874,7 @@
         var isPrintMode = false;
         var draggedPhotoIdx = -1; 
         
-        window.portfolioLimit = 6; // Límite de items a mostrar inicialmente en el portafolio
+        window.portfolioLimit = 6; 
 
         function pSrc(p, s) { s = s || 800; if (p.driveId) return 'https://lh3.googleusercontent.com/d/' + p.driveId + '=s' + s; return (p.src || '').replace(/w=\d+/, 'w=' + s); }
         function pDl(p) { if (p.driveId) return 'https://drive.google.com/uc?export=download&id=' + p.driveId; return (p.src || '').replace('w=800', 'w=1600'); }
@@ -884,7 +887,6 @@
         function toDisplayDate(ms) { if (!ms) return ''; let d = new Date(ms); let m = ('0' + (d.getMonth() + 1)).slice(-2); let day = ('0' + d.getDate()).slice(-2); return `${day}/${m}/${d.getFullYear()}`; }
         function addOneYear() { let el = document.getElementById('ce_expire'); if(!el.value) return; let d = new Date(el.value + 'T12:00:00'); d.setFullYear(d.getFullYear() + 1); el.value = toDateInput(d.getTime()); }
 
-        /* Convertir links a Embed (V2.3) */
         function getEmbedUrl(url) {
             if (!url) return '';
             if (url.includes('drive.google.com/file/d/')) {
@@ -897,7 +899,6 @@
             return url;
         }
 
-        /* ══════ FUNCIÓN DE CARGA GENERAL (BASE64) V2.3 ══════ */
         function uploadGeneralImg(input, targetId) {
             var file = input.files[0]; if (!file) return; var reader = new FileReader();
             reader.onload = function(e) { 
@@ -913,7 +914,6 @@
             reader.readAsDataURL(file); input.value = '';
         }
 
-        /* ══════ GESTIÓN DE URL Y BOTON ATRÁS (POPSTATE) ══════ */
         function pushUrlState(client, view) {
             var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             if (!client) {
@@ -941,7 +941,6 @@
             }
         }
 
-        /* ══════ DESCARGA DIRECTA FORZADA ══════ */
         function downloadPhoto(src, name, e) {
             if(e) { e.preventDefault(); e.stopPropagation(); }
             var dId = null;
@@ -968,7 +967,6 @@
             }
         }
 
-        /* ══════ RENDERIZADO PÚBLICO Y FILTROS MÓVILES ══════ */
         function renderPublic() {
             var s = D.settings;
             document.getElementById('heroDesc').textContent = s.heroDesc; document.getElementById('ftAddr').textContent = s.address;
@@ -978,7 +976,6 @@
             }
             
             var pf = document.getElementById('portFilters'); 
-            
             var labels = ['Todos'];
             D.portfolio.forEach(function(img) { var l = img.label || 'General'; if (!labels.includes(l)) labels.push(l); });
             
@@ -993,7 +990,7 @@
                 });
             }
             pf.innerHTML = pfHtml;
-            filterPortfolio(window.currentPortFilter);
+            filterPortfolio(window.currentPortFilter); 
 
             var sg = document.getElementById('servGrid');
             var sgHtml = '';
@@ -1015,7 +1012,7 @@
                 '<div class="contact-detail"><span class="icon">📞</span> <a href="tel:' + s.phoneRaw + '" style="color:var(--text-muted);text-decoration:none">' + esc(s.phone) + '</a></div>' +
                 '<div class="contact-detail"><span class="icon">📍</span> ' + esc(s.address) + '</div>' +
                 '<div class="contact-detail"><span class="icon">🕒</span> ' + esc(s.hours) + '</div>' +
-                '<div class="contact-detail"><span class="icon">🔗</span> <a href="' + esc(s.facebook) + '" target="_blank" rel="noopener" style="color:var(--accent)">facebook.com</a></div>' +
+                '<div class="contact-detail"><span class="icon">🔗</span> <a href="' + esc(s.facebook) + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">facebook.com</a></div>' +
                 '<div class="map-container"><iframe src="' + esc(s.mapEmbed) + '" title="Ubicación" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>';
             
             var sel = document.getElementById('servSelect'); 
@@ -1034,7 +1031,7 @@
             document.getElementById('cpWaLink').href = 'https://wa.me/' + s.waNumber; document.getElementById('cpWaLink').textContent = s.phone;
         }
 
-        /* ══════ PORTAFOLIO COMPACTO Y VIDEO (V2.3) ══════ */
+        /* ══════ OPTIMIZACIÓN: DocumentFragment en Portafolio ══════ */
         function filterPortfolio(filter, showAll = false) {
             window.currentPortFilter = filter;
             var grid = document.getElementById('portGrid'); grid.innerHTML = '';
@@ -1046,6 +1043,7 @@
 
             var limit = showAll ? filtered.length : window.portfolioLimit;
             var toShow = filtered.slice(0, limit);
+            var frag = document.createDocumentFragment();
 
             toShow.forEach(function(item) {
                 var d = document.createElement('div'); d.className = 'portfolio-item';
@@ -1065,8 +1063,9 @@
                     lbIdx = 0;
                     showLB();
                 });
-                grid.appendChild(d);
+                frag.appendChild(d);
             });
+            grid.appendChild(frag);
 
             var btnContainer = document.getElementById('portMoreBtn');
             if (!btnContainer) {
@@ -1084,7 +1083,6 @@
             }
         }
 
-        /* ══════ NAVEGACIÓN OPTIMIZADA ══════ */
         function navTo(id, e) {
             if(e) e.preventDefault();
             closeMenu();
@@ -1115,7 +1113,6 @@
             }
         }, { passive: true });
 
-        /* ══════ LOGO 3 CLICKS → ADMIN ══════ */
         document.getElementById('logoBtn').addEventListener('click', function(e) {
             e.preventDefault(); logoClicks++; clearTimeout(logoTimer); logoTimer = setTimeout(function() { logoClicks = 0; }, 800);
             if (logoClicks >= 3) { logoClicks = 0; openAdmLogin(); }
@@ -1137,7 +1134,6 @@
         }
         document.getElementById('admPassIn').addEventListener('keydown', function(e) { if (e.key === 'Enter') doAdmLogin(); });
 
-        /* ══════ LOGIN CLIENTE ══════ */
         function openLogin() { document.getElementById('codeIn').value = ''; document.getElementById('loginErr').classList.remove('show'); document.getElementById('loginModal').classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(function() { document.getElementById('codeIn').focus(); }, 100); }
         function closeLogin() { document.getElementById('loginModal').classList.remove('active'); document.body.style.overflow = ''; }
         function doLogin() {
@@ -1147,7 +1143,6 @@
         }
         document.getElementById('codeIn').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
 
-        /* ══════ PORTAL CLIENTE Y AUTO-ROUTING ══════ */
         function getActiveItemsCount(c) {
             var count = 0;
             if (c.hasVideo && c.video && c.video.youtubeId) count++;
@@ -1265,7 +1260,6 @@
             cards.innerHTML = cardsHtml;
         }
 
-        /* ══════ VISTAS ESPECÍFICAS Y BOTONES "REGRESAR" ══════ */
         function openVideoView() {
             var c = D.clients[curClient];
             document.getElementById('cpMainView').style.display = 'none'; document.getElementById('cpVideoView').style.display = 'block';
@@ -1286,7 +1280,7 @@
         }
         function closeVideoView() { document.getElementById('vidWrap').innerHTML = ''; document.getElementById('cpVideoView').style.display = 'none'; showMainView(); }
 
-        /* ══════ GALERÍA ESTILO PIXIESET Y MODO IMPRESIÓN ══════ */
+        /* ══════ OPTIMIZACIÓN: Render Pixieset Gallery Batching ══════ */
         function openGalleryView() {
             var c = D.clients[curClient];
             document.getElementById('cpHdrMain').style.display = 'none'; 
@@ -1294,7 +1288,6 @@
             document.getElementById('cpPhotobookView').style.display = 'none'; document.getElementById('cpGalleryView').style.display = 'block';
             
             portalPhotos = c.photos || [];
-            
             var coverImg = c.galleryCover ? c.galleryCover : (portalPhotos.length > 0 ? pSrc(portalPhotos[0], 1600) : 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&fit=crop');
             
             if (coverImg.includes('/d/')) {
@@ -1369,74 +1362,52 @@
 
             var navInner = document.getElementById('pxNavInner');
             var content = document.getElementById('pxContent');
-            navInner.innerHTML = ''; content.innerHTML = '';
-
             var setNames = Object.keys(sets).sort((a,b) => a === 'General' ? -1 : a.localeCompare(b));
 
-            var fragNav = document.createDocumentFragment();
-            var fragContent = document.createDocumentFragment();
+            var navHtml = '';
+            var contentFrag = document.createDocumentFragment();
 
             setNames.forEach((setName, idx) => {
                 var safeId = 'set-' + setName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                var navItem = document.createElement('div');
-                navItem.className = 'px-nav-item' + (idx===0?' active':'');
-                navItem.textContent = setName;
-                navItem.onclick = function() { scrollToSet(safeId, this); };
-                fragNav.appendChild(navItem);
-
+                navHtml += `<div class="px-nav-item ${idx===0?'active':''}" onclick="scrollToSet('${safeId}', this)">${esc(setName)}</div>`;
+                
                 var section = document.createElement('div');
                 section.className = 'px-set-section';
                 section.id = safeId;
-                var title = document.createElement('h3');
-                title.className = 'px-set-title';
-                title.textContent = setName;
-                section.appendChild(title);
-
+                section.innerHTML = `<h3 class="px-set-title">${esc(setName)}</h3>`;
+                
                 var grid = document.createElement('div');
                 grid.className = 'px-grid';
+                var gridFrag = document.createDocumentFragment();
 
                 sets[setName].forEach(item => {
                     var i = item.index; var p = item.photo; var isSel = selected[i];
                     var d = document.createElement('div');
                     d.className = 'pc';
                     
-                    var img = document.createElement('img');
-                    img.src = pSrc(p, 600);
-                    img.alt = p.name || '';
-                    img.loading = 'lazy';
-                    img.onload = function() {
-                        if (this.naturalHeight > this.naturalWidth) d.classList.add('vertical');
-                        else d.classList.add('horizontal');
-                        this.classList.add('loaded');
-                    };
-                    
-                    var chk = document.createElement('div');
-                    chk.className = 'chk' + (isSel ? ' on' : '');
-                    chk.id = 'chk-' + i;
-                    chk.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-                    
-                    var dlb = document.createElement('button');
-                    dlb.className = 'dlb';
-                    dlb.type = 'button';
-                    dlb.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>';
-                    dlb.onclick = function(e) { triggerDownload(i, e); };
-                    
-                    d.appendChild(img);
-                    d.appendChild(chk);
-                    d.appendChild(dlb);
+                    d.innerHTML = `
+                        <img src="${pSrc(p, 600)}" alt="${esc(p.name || '')}" loading="lazy" onload="this.parentElement.classList.add(this.naturalHeight > this.naturalWidth ? 'vertical' : 'horizontal'); this.classList.add('loaded');">
+                        <div class="chk${isSel ? ' on' : ''}" id="chk-${i}">
+                            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <button class="dlb" type="button" onclick="triggerDownload(${i}, event)" title="Descargar">
+                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        </button>`;
                     
                     d.addEventListener('click', function(e) {
                         if (isPrintMode) { toggleSel(i); } else { openLB(i); }
                     });
-                    grid.appendChild(d);
+                    gridFrag.appendChild(d);
                 });
                 
-                section.appendChild(grid);
-                fragContent.appendChild(section);
+                grid.appendChild(gridFrag);
+                section.appendChild(grid); 
+                contentFrag.appendChild(section);
             });
-
-            navInner.appendChild(fragNav);
-            content.appendChild(fragContent);
+            
+            navInner.innerHTML = navHtml;
+            content.innerHTML = '';
+            content.appendChild(contentFrag);
         }
         
         function triggerDownload(i, e) {
@@ -1451,7 +1422,6 @@
             el.classList.add('active');
         }
 
-        /* MODAL ADVERTENCIA DESCARGA COMPLETA */
         function openDownloadModal() {
             var c = D.clients[curClient];
             if (!c.driveFolderUrl) { toast("El enlace de descarga completa no está configurado."); return; }
@@ -1480,6 +1450,7 @@
         }
         function toggleSelAll() { if (allSel) { selected = {}; allSel = false; } else { selected = {}; portalPhotos.forEach(function(_, i) { selected[i] = true; }); allSel = true; } renderPixiesetGallery(); updateOrderBar(); }
         function clearSel() { selected = {}; allSel = false; renderPixiesetGallery(); updateOrderBar(); closeOrder(); }
+        
         function updateOrderBar() {
             var cnt = Object.keys(selected).length, bar = document.getElementById('orderBar');
             if (cnt > 0 && isPrintMode) { 
@@ -1488,6 +1459,7 @@
                 document.getElementById('obTot').textContent = '$' + total; 
             } else { bar.classList.remove('vis'); }
         }
+        
         function openOrder() {
             var items = document.getElementById('omItems'); 
             var itemsHtml = ''; 
@@ -1515,7 +1487,6 @@
             togglePrintMode(); 
         }
 
-        /* ══════ LIGHTBOX CON VIDEO (V2.3) ══════ */
         function openLB(idx) { 
             isPublicPortfolioView = false; 
             lbIdx = idx; showLB(); 
@@ -1560,18 +1531,11 @@
         function closeLB() { 
             document.getElementById('lb').classList.remove('active'); 
             document.body.style.overflow = ''; 
-            document.getElementById('lbVid').src = '';
+            document.getElementById('lbVid').src = ''; 
         }
         function navLB(d) { lbIdx += d; if (lbIdx < 0) lbIdx = portalPhotos.length - 1; if (lbIdx >= portalPhotos.length) lbIdx = 0; showLB(); }
         document.getElementById('lb').addEventListener('click', function(e) { if (e.target === this) closeLB(); });
-        document.addEventListener('keydown', function(e) {
-            if (!document.getElementById('lb').classList.contains('active')) return;
-            if (e.key === 'Escape') closeLB();
-            else if (e.key === 'ArrowLeft') navLB(-1);
-            else if (e.key === 'ArrowRight') navLB(1);
-        });
 
-        /* ══════ CONTACTO A WHATSAPP ══════ */
         function handleContact(e) { 
             e.preventDefault(); 
             var f = e.target;
@@ -1586,10 +1550,6 @@
             toast('Abriendo WhatsApp...'); 
             f.reset(); 
         }
-
-        /* ═══════════════════════════════════════════════
-           ══════ VISOR DE FOTOLIBRO (AISLADO .pb-) ══════
-           ═══════════════════════════════════════════════ */
         
         function openPhotobookView() {
             document.getElementById('cpHdrMain').style.display = 'none';
@@ -1622,21 +1582,24 @@
 
         function getPBData() { return (D.clients[curClient] && D.clients[curClient].photobook) ? D.clients[curClient].photobook : { cover: null, spreads: [null], hasBackCover: false, back: null }; }
         function getMaxState() { const pb = getPBData(); return pb.hasBackCover ? pb.spreads.length + 1 : pb.spreads.length; }
-        function getImgTag(src, isPano, side) { if (!src) return ''; if (!isPano) return `<img src="${src}" class="pb-img-fit" alt="">`; return `<img src="${src}" class="pb-pano pb-pano-${side}" alt="">`; }
+        function getImgTag(src, isPano, side) { if (!src) return ''; if (!isPano) return `<img src="${src}" class="pb-img-fit" alt="" loading="lazy">`; return `<img src="${src}" class="pb-pano pb-pano-${side}" alt="" loading="lazy">`; }
         function getPlaceholder(text) { return `<div class="pb-placeholder-text">${text}</div>`; }
 
+        /* ══════ OPTIMIZACIÓN: Render Book String Batching ══════ */
         function renderBook() {
             const pb = getPBData(); if (!pb.spreads || pb.spreads.length === 0) pb.spreads = [null];
-            const book = document.getElementById('book'); book.innerHTML = '';
+            const book = document.getElementById('book');
             const numSpreads = pb.spreads.length, totalPapers = numSpreads + 1;
+            let bookHTML = '';
             for (let i = 0; i < totalPapers; i++) {
                 let frontContent = '', backContent = '', effectLayer = '';
                 if (i === 0) { frontContent = getImgTag(pb.cover, false) || getPlaceholder("Portada"); effectLayer = '<div class="pb-acrylic-led"></div><div class="pb-beveled"></div>'; } 
                 else { const s = pb.spreads[i - 1]; frontContent = getImgTag(s, true, 'right') || getPlaceholder(`Lienzo ${i}<br>Derecha`); }
                 if (i === totalPapers - 1) { backContent = pb.hasBackCover ? (getImgTag(pb.back, false) || getPlaceholder("Final")) : ''; } 
                 else { const s = pb.spreads[i]; backContent = getImgTag(s, true, 'left') || getPlaceholder(`Lienzo ${i + 1}<br>Izquierda`); }
-                book.innerHTML += `<div class="pb-paper" id="pb-paper-${i}"><div class="pb-front">${frontContent}${effectLayer}</div><div class="pb-back">${backContent}</div></div>`;
+                bookHTML += `<div class="pb-paper" id="pb-paper-${i}"><div class="pb-front">${frontContent}${effectLayer}</div><div class="pb-back">${backContent}</div></div>`;
             }
+            book.innerHTML = bookHTML;
             currentBookState = 0; updateBookTransform();
         }
 
@@ -1663,7 +1626,6 @@
         function prevPage() { if (currentBookState > 0) { currentBookState--; updateBookTransform(); } }
         function goToCover() { currentBookState = 0; updateBookTransform(); }
 
-        /* Gestos Simples (Sin Zoom) */
         function initSimpleBookGestures() {
             const bookEl = document.getElementById('book');
             let startX = 0, startY = 0, tracking = false;
@@ -1730,7 +1692,6 @@
         function renderAdmTabs() { document.querySelectorAll('#admTabs button').forEach(function(b) { b.classList.toggle('active', b.dataset.t === admState.tab); }); }
         function renderAdmBody() { var body = document.getElementById('admBody'); switch (admState.tab) { case 'services': renderAdmServices(body); break; case 'clients': renderAdmClients(body); break; case 'portfolio': renderAdmPortfolio(body); break; case 'testimonials': renderAdmTestimonials(body); break; case 'settings': renderAdmSettings(body); break; } }
 
-        /* ════ ADMIN: SERVICIOS ════ */
         function renderAdmServices(body) {
             if (admState.view === 'edit') {
                 var svc = admState.editId ? D.services.find(function(s) { return s.id === admState.editId; }) : null; var isEdit = !!svc;
@@ -1745,7 +1706,6 @@
         function saveService(oldId) { var icon = document.getElementById('ae_icon').value.trim(), title = document.getElementById('ae_title').value.trim(), desc = document.getElementById('ae_desc').value.trim(), price = document.getElementById('ae_price').value.trim(), feats = document.getElementById('ae_feats').value.trim().split('\n').filter(function(f) { return f.trim(); }); if (!title) { toast('El título es obligatorio'); return; } if (oldId) { var svc = D.services.find(function(s) { return s.id === oldId; }); if (svc) { svc.icon = icon; svc.title = title; svc.desc = desc; svc.price = price; svc.features = feats; } } else { D.services.push({ id: uid(), icon: icon, title: title, desc: desc, price: price, features: feats, order: D.services.length }); } saveData(); admState.view = 'list'; renderAdmBody(); renderPublic(); }
         function delService(id) { if (!confirm('¿Eliminar este paquete?')) return; D.services = D.services.filter(function(s) { return s.id !== id; }); saveData(); renderAdmBody(); renderPublic(); toast('Paquete eliminado'); }
 
-        /* ════ ADMIN: CLIENTES Y GALERÍA PIXIESET ════ */
         function renderAdmClients(body) {
             if (admState.view === 'edit') { renderClientForm(body); return; }
             if (admState.view === 'photobook') { renderPhotobookAdmin(body); return; }
@@ -1827,7 +1787,6 @@
         }
         function toggleClientSection(sec) { document.getElementById('ce_' + sec + 'Sec').style.display = document.getElementById('ce_has' + sec.charAt(0).toUpperCase() + sec.slice(1)).checked ? 'block' : 'none'; }
         
-        /* ════ ORDEN AUTOMÁTICO CON AUTO-GUARDADO ════ */
         function sortClientPhotosAsc() {
             if (!tempClientPhotos || tempClientPhotos.length === 0) {
                 toast('No hay fotos para ordenar.');
@@ -1843,7 +1802,6 @@
             toast('✅ Ordenado y guardado. Refresca la galería de tu cliente.');
         }
 
-        /* ════ DRAG & DROP FOTOS ════ */
         function dragPhotoStart(e, i) {
             draggedPhotoIdx = i;
             e.dataTransfer.effectAllowed = 'move';
@@ -1863,13 +1821,14 @@
             draggedPhotoIdx = -1;
         }
 
+        /* ══════ OPTIMIZACIÓN: Lazy Loading en Admin List ══════ */
         function renderClientPhotosList(photos) {
             var list = document.getElementById('ce_photosList'); if (!list) return; 
             var h = '';
             (photos || []).forEach(function(p, i) { 
                 h += `<div class="adm-photo-item" draggable="true" ondragstart="dragPhotoStart(event, ${i})" ondragover="dragPhotoOver(event)" ondrop="dropPhoto(event, ${i})" style="cursor:grab; flex-wrap:wrap">
                     <span style="color:#999; margin-right:5px; font-size:1.2rem;" title="Arrastrar para ordenar">↕</span>
-                    <img src="${esc(p.src)}" alt="">
+                    <img src="${esc(p.src)}" alt="" loading="lazy">
                     <input type="text" value="${esc(p.name || '')}" placeholder="Nombre / Etiqueta" onchange="updateClientPhotoName(${i},this.value)" style="flex:1; min-width:80px;">
                     <input type="text" value="${esc(p.set || 'General')}" placeholder="Categoría / Set" onchange="updateClientPhotoSet(${i},this.value)" style="flex:1; min-width:80px;">
                     <button type="button" onclick="removeClientPhoto(${i})" title="Quitar">×</button>
@@ -1878,7 +1837,6 @@
             list.innerHTML = h;
         }
         
-        /* EXTRACCIÓN CON SUBCARPETAS Y PAGINACIÓN TOTAL */
         async function fetchDriveGalleryForClient() {
             var apiKey = D.settings.driveApiKey;
             if (!apiKey) { toast('Configura tu Clave API en la pestaña General.'); return; }
@@ -1943,7 +1901,7 @@
 
         function addClientPhoto() {
             var list = document.getElementById('ce_photosList'); if (!list) return; var idx = list.children.length; var div = document.createElement('div'); div.className = 'adm-photo-item';
-            div.innerHTML = `<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" style="opacity:.3">
+            div.innerHTML = `<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" loading="lazy" style="opacity:.3">
                 <input type="text" value="" placeholder="URL de la imagen" onchange="updateClientPhotoSrc(${idx},this.value)" style="flex:1.5;">
                 <input type="text" value="" placeholder="Nombre" onchange="updateClientPhotoName(${idx},this.value)" style="flex:1;">
                 <input type="text" value="General" placeholder="Set" onchange="updateClientPhotoSet(${idx},this.value)" style="flex:1;">
@@ -1978,7 +1936,6 @@
         }
         function delClient(code) { if (!confirm('¿Eliminar el evento "' + D.clients[code].name + '"?')) return; delete D.clients[code]; saveData(); renderAdmBody(); toast('Evento eliminado'); }
 
-        /* ════ ADMIN: FOTOLIBRO (con Google Drive API + Drag & Drop + AutoBook) ════ */
         function editPhotobook(code) { admState.view = 'photobook'; admState.editId = code; renderAdmBody(); }
         function renderPhotobookAdmin(body) {
             var code = admState.editId; var c = D.clients[code]; if (!c) { admState.view = 'list'; renderAdmBody(); return; }
@@ -2017,7 +1974,6 @@
             container.innerHTML = h;
         }
         
-        /* Drag & Drop Lógica */
         function allowDropPB(e) { e.preventDefault(); e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--accent-subtle)'; }
         function leaveDropPB(e) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = '#fafafa'; }
         function dropOnPBSlot(e, type, idx) {
@@ -2038,7 +1994,6 @@
         }
         function savePBData() { saveData(); toast('Fotolibro guardado correctamente'); }
 
-        /* API Drive y Autollenado */
         async function fetchDriveFolderForPB() {
             var apiKey = D.settings.driveApiKey; if (!apiKey) { toast('Por favor configura tu Clave API en la pestaña General primero.'); return; }
             var folderInput = document.getElementById('pb_driveFolderId').value.trim(); var folderId = folderInput;
@@ -2052,18 +2007,24 @@
                 renderDriveGalleryForPB(files);
             }).catch(function(err) { toast('Error: ' + err.message); document.getElementById('pbDriveGallery').innerHTML = '<p class="adm-hint" style="color:#c0392b">Error al cargar. Verifica tu API Key y asegúrate de que la carpeta de Drive sea "Pública".</p>'; });
         }
+
+        /* ══════ OPTIMIZACIÓN: Lazy Loading Drive PB Admin Batching ══════ */
         function renderDriveGalleryForPB(files) {
-            currentDriveFiles = files;
+            currentDriveFiles = files; 
             var gal = document.getElementById('pbDriveGallery'); gal.innerHTML = '';
+            var frag = document.createDocumentFragment();
             files.forEach(function(f) {
                 var srcThumb = 'https://lh3.googleusercontent.com/d/' + f.id + '=s300', fullSrc = 'https://lh3.googleusercontent.com/d/' + f.id + '=s1600', img = document.createElement('img');
                 img.src = srcThumb; img.title = f.name + ' (Arrastra o haz clic para usar)'; img.style.height = '70px'; img.style.cursor = 'grab'; img.style.borderRadius = '4px'; img.style.border = '2px solid transparent'; img.style.transition = 'border-color 0.2s';
+                img.loading = "lazy";
                 img.draggable = true;
                 img.ondragstart = function(e) { e.dataTransfer.setData('text/plain', fullSrc); };
                 img.onmouseover = function() { this.style.borderColor = 'var(--accent)'; }; img.onmouseout = function() { this.style.borderColor = 'transparent'; };
-                img.onclick = function() { autoFillNextPBSlot(fullSrc); }; gal.appendChild(img);
+                img.onclick = function() { autoFillNextPBSlot(fullSrc); }; frag.appendChild(img);
             });
+            gal.appendChild(frag);
         }
+
         function autoFillNextPBSlot(src) {
             var code = admState.editId, pb = D.clients[code].photobook;
             if (!pb.cover) { updatePB('cover', src); toast('Foto asignada a la portada'); renderPhotobookAdmin(document.getElementById('admBody')); return; }
@@ -2072,7 +2033,6 @@
             toast('Todos los espacios están llenos. Añade más páginas para agregar más fotos.');
         }
 
-        /* Lógica de Autollenado Numérico */
         function autoFillDriveFiles() {
             if (!currentDriveFiles || currentDriveFiles.length === 0) { toast('Primero extrae las fotos de la carpeta.'); return; }
             if (!confirm('¿Autollenar fotolibro completo? Esto reemplazará las fotos actuales. Tus fotos en Drive deben estar enumeradas (1, 2, 3...) para acomodarse correctamente.')) return;
@@ -2108,7 +2068,6 @@
             toast('Fotolibro autollenado por orden numérico');
         }
 
-        /* ════ ADMIN: PORTAFOLIO PÚBLICO (V2.3 - SOPORTE DE VIDEO) ════ */
         function renderAdmPortfolio(body) {
             body.innerHTML = `
                 <div style="margin-bottom:1.5rem;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)">
@@ -2219,7 +2178,6 @@
         
         function delPortfolioImg(i) { D.portfolio.splice(i, 1); saveData(); renderAdmBody(); renderPublic(); }
 
-        /* ════ ADMIN: TESTIMONIOS ════ */
         function renderAdmTestimonials(body) {
             var h = '<button class="adm-add-btn" onclick="addTestimonial()">+ Agregar testimonio</button>';
             D.testimonials.forEach(function(t, i) { h += ('<div class="al-item" style="flex-wrap:wrap"><div class="al-item-info" style="flex-basis:100%"><div class="al-item-t" style="white-space:normal;font-weight:400;font-style:italic">' + esc(t.text) + '</div><div class="al-item-s" style="margin-top:.3rem">— ' + esc(t.author) + '</div></div><div class="al-acts"><button class="al-btn" onclick="editTestimonial(' + i + ')">Editar</button><button class="al-btn del" onclick="delTestimonial(' + i + ')">Eliminar</button></div></div>'); });
@@ -2229,7 +2187,6 @@
         function editTestimonial(i) { var t = D.testimonials[i]; var newText = prompt('Testimonio:', t.text.replace(/"/g, '')); if (newText === null) return; var newAuthor = prompt('Autor:', t.author); if (newAuthor === null) return; D.testimonials[i].text = newText; D.testimonials[i].author = newAuthor; saveData(); renderAdmBody(); renderPublic(); }
         function delTestimonial(i) { D.testimonials.splice(i, 1); saveData(); renderAdmBody(); renderPublic(); }
 
-        /* ════ ADMIN: GENERAL ════ */
         function renderAdmSettings(body) {
             var s = D.settings;
             body.innerHTML = '<h3 style="margin-bottom:1rem">Datos generales del sitio</h3>' +
@@ -2266,7 +2223,6 @@
             saveData(); renderPublic(); toast('Configuración guardada');
         }
 
-        /* ══════ INICIALIZACIÓN Y AUTO ROUTING DE LINKS ══════ */
         function checkUrlForClient() {
             var params = new URLSearchParams(window.location.search);
             var clientCodeParam = params.get('c') || params.get('cliente');
