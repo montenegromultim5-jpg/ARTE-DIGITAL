@@ -40,7 +40,7 @@
         .nav-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
         .nav-logo { font-family: var(--fh); font-size: 1.3rem; font-weight: 600; text-decoration: none; letter-spacing: -.03em; white-space: nowrap; cursor: default; user-select: none; display: flex; align-items: center; }
         .nav-logo span { color: var(--accent); }
-        .nav-logo img { max-height: 40px; width: auto; display: block; }
+        .nav-logo img { max-height: 65px; width: auto; display: block; object-fit: contain; }
         .nav-links { display: flex; gap: 1.4rem; list-style: none; align-items: center; }
         .nav-links a { text-decoration: none; color: var(--text-muted); font-size: .85rem; font-weight: 450; transition: var(--tr); position: relative; padding-bottom: 3px; white-space: nowrap; }
         .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1.5px; background: var(--accent); transition: var(--tr); border-radius: 1px; }
@@ -111,6 +111,9 @@
         .service-features { list-style: none; margin-top: .8rem; text-align: left; padding: 0; }
         .service-features li { font-size: .82rem; color: var(--text-muted); padding: .25rem 0; display: flex; align-items: center; gap: .4rem; }
         .service-features li::before { content: '✓'; color: var(--accent); font-weight: 700; font-size: .75rem; flex-shrink: 0; }
+        
+        .service-card.featured { border: 2px solid var(--accent); box-shadow: var(--shadow-md); position: relative; }
+        .service-card.featured::before { content: 'MÁS CONTRATADO'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 3px 12px; border-radius: 50px; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; white-space: nowrap; box-shadow: 0 2px 8px rgba(184, 147, 90, 0.3); }
         
         .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 2rem; text-align: left; }
         .testimonial-card { background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 1.5rem 1.2rem; }
@@ -549,8 +552,14 @@
         <section class="section" id="servicios">
             <p class="section-label">Servicios</p>
             <h2>Paquetes y precios</h2>
-            <div class="services-grid" id="servGrid"></div>
+            
+            <div class="services-grid" id="servGridDestacados"></div>
+            <div id="servMoreBtn" style="text-align: center; margin-top: 1.5rem; display: none;">
+                <button class="btn btn-outline" onclick="toggleAllServices()">Ver más paquetes</button>
+            </div>
+            <div class="services-grid" id="servGridAll" style="display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-light);"></div>
         </section>
+        
         <section class="section" id="testimonios">
             <p class="section-label">Testimonios</p>
             <h2>Clientes satisfechos</h2>
@@ -783,9 +792,9 @@
                     { size: '33x48', label: 'Póster', measure: '33 x 48 cm', price: 80 }
                 ],
                 services: [
-                    { id: 's1', icon: '💍', title: 'Boda Básico', desc: 'Cobertura de 4 horas en tu boda.', price: 'Desde $3,500', features: ['100 fotos editadas digitales', 'Video resumen de 3 minutos', 'Entrega en USB', 'Galería online para ver y descargar'], order: 0 },
-                    { id: 's2', icon: '💍', title: 'Boda Premium', desc: 'Cobertura completa de tu día especial.', price: 'Desde $6,000', features: ['200+ fotos editadas digitales', 'Video completo + resumen', 'Drone (si aplica)', 'Galería online privada', '10 impresiones de regalo'], order: 1 },
-                    { id: 's3', icon: '🎬', title: 'Video Profesional', desc: 'Producción de video para cualquier proyecto.', price: 'Desde $2,000', features: ['Grabación con equipo profesional', 'Edición completa', 'Subtítulos si se requiere', 'Entrega en formato digital'], order: 2 }
+                    { id: 's1', icon: '💍', title: 'Boda Premium', desc: 'Cobertura completa de tu día especial.', price: 'Desde $6,000', features: ['200+ fotos editadas digitales', 'Video completo + resumen', 'Drone (si aplica)', 'Galería online privada', '10 impresiones de regalo'], order: 1, isFeatured: true },
+                    { id: 's2', icon: '📷', title: 'Boda Básico', desc: 'Cobertura de 4 horas en tu boda.', price: 'Desde $3,500', features: ['100 fotos editadas digitales', 'Video resumen de 3 minutos', 'Entrega en USB', 'Galería online para ver y descargar'], order: 2, isFeatured: false },
+                    { id: 's3', icon: '🎬', title: 'Video Profesional', desc: 'Producción de video para cualquier proyecto.', price: 'Desde $2,000', features: ['Grabación con equipo profesional', 'Edición completa', 'Subtítulos si se requiere', 'Entrega en formato digital'], order: 3, isFeatured: false }
                 ],
                 portfolio: [
                     { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=650&fit=crop&auto=format', label: 'Bodas', type: 'image' },
@@ -797,7 +806,11 @@
                     { src: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&h=650&fit=crop&auto=format', label: 'Video Demo', type: 'video', videoUrl: 'https://www.youtube.com/watch?v=ScMzIvxBSi4' }
                 ],
                 testimonials: [
-                    { text: '"Excelente trabajo. Excelente servicio. Muy recomendado para cualquier evento."', author: 'Yessica Santana' }
+                    { text: '"Hola, la verdad me gusta ir a ese lugar para imprimir mis fotos, el chico es eficiente y da buen trato a la gente, además que no cobra caro, que más puede uno pedir!!!! La verdad lo recomiendo mucho 😊😚, gracias."', author: 'Roberto Alvarado' },
+                    { text: '"Muy buena calidad de las fotos, buen servicio y todo en tiempo y forma"', author: 'Hannia Neri' },
+                    { text: '"Excelente trabajo. Excelente servicio."', author: 'Yessica Marlen Santana Arellano' },
+                    { text: '"Exelente servicio"', author: 'Maritza Corona' },
+                    { text: '"El servicio es excelente."', author: 'Abril' }
                 ],
                 clients: {}
             };
@@ -929,7 +942,9 @@
                     var canvas = document.createElement('canvas'); var w = img.width, h = img.height; 
                     if (w > 1800) { h = Math.floor(h * (1800 / w)); w = 1800; } 
                     canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h); 
-                    document.getElementById(targetId).value = canvas.toDataURL('image/jpeg', .82); 
+                    var mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                    var q = mimeType === 'image/jpeg' ? 0.82 : undefined;
+                    document.getElementById(targetId).value = canvas.toDataURL(mimeType, q); 
                     toast('Imagen cargada. Haz clic en Guardar.'); 
                 }; 
                 img.src = e.target.result; 
@@ -990,6 +1005,18 @@
             }
         }
 
+        window.toggleAllServices = function() {
+            var all = document.getElementById('servGridAll');
+            var btn = document.querySelector('#servMoreBtn button');
+            if (all.style.display === 'none') {
+                all.style.display = 'grid';
+                btn.textContent = 'Ocultar paquetes';
+            } else {
+                all.style.display = 'none';
+                btn.textContent = 'Ver más paquetes';
+            }
+        };
+
         function renderPublic() {
             var s = D.settings;
             document.getElementById('heroDesc').textContent = s.heroDesc; document.getElementById('ftAddr').textContent = s.address;
@@ -1036,13 +1063,40 @@
             vg.innerHTML = vgHtml;
             document.getElementById('videos').style.display = vgHtml ? 'block' : 'none';
 
-            var sg = document.getElementById('servGrid');
-            var sgHtml = '';
-            D.services.sort(function(a, b) { return (a.order || 0) - (b.order || 0); }).forEach(function(svc) {
+            var sgDest = document.getElementById('servGridDestacados');
+            var sgAll = document.getElementById('servGridAll');
+            var sgDestHtml = '';
+            var sgAllHtml = '';
+            var hasHidden = false;
+
+            var sortedServices = D.services.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+            var featuredCount = sortedServices.filter(function(s) { return s.isFeatured; }).length;
+
+            if (featuredCount === 0 && sortedServices.length > 0) {
+                sortedServices[0].isFeatured = true;
+            }
+
+            sortedServices.forEach(function(svc) {
                 var feat = svc.features ? svc.features.map(function(f) { return '<li>' + esc(f) + '</li>'; }).join('') : '';
-                sgHtml += '<div class="service-card"><span class="service-icon">' + esc(svc.icon) + '</span><h3>' + esc(svc.title) + '</h3><p>' + esc(svc.desc) + '</p>' + (feat ? '<ul class="service-features">' + feat + '</ul>' : '') + '<span class="service-price">' + esc(svc.price) + '</span></div>';
+                var cardHtml = '<div class="service-card' + (svc.isFeatured ? ' featured' : '') + '"><span class="service-icon">' + esc(svc.icon) + '</span><h3>' + esc(svc.title) + '</h3><p>' + esc(svc.desc) + '</p>' + (feat ? '<ul class="service-features">' + feat + '</ul>' : '') + '<span class="service-price">' + esc(svc.price) + '</span></div>';
+                
+                if (svc.isFeatured) {
+                    sgDestHtml += cardHtml;
+                } else {
+                    sgAllHtml += cardHtml;
+                    hasHidden = true;
+                }
             });
-            sg.innerHTML = sgHtml;
+
+            sgDest.innerHTML = sgDestHtml;
+            sgAll.innerHTML = sgAllHtml;
+
+            var moreBtn = document.getElementById('servMoreBtn');
+            if (hasHidden) {
+                moreBtn.style.display = 'block';
+            } else {
+                moreBtn.style.display = 'none';
+            }
 
             var tg = document.getElementById('testGrid');
             var tgHtml = '';
@@ -1755,7 +1809,7 @@
         /* ═══════════════════════════════
            ══════ ADMIN PANEL Y EXPORT ═══
            ═══════════════════════════════ */
-        function openAdm() { admState = { tab: 'settings', view: 'list', editId: null }; document.getElementById('admPanel').classList.add('active'); document.body.style.overflow = 'hidden'; renderAdmTabs(); renderAdmBody(); }
+        function openAdm() { admState = { tab: 'services', view: 'list', editId: null }; document.getElementById('admPanel').classList.add('active'); document.body.style.overflow = 'hidden'; renderAdmTabs(); renderAdmBody(); }
         function closeAdm() { document.getElementById('admPanel').classList.remove('active'); document.body.style.overflow = ''; }
         document.getElementById('admTabs').addEventListener('click', function(e) { var btn = e.target.closest('button[data-t]'); if (!btn) return; admState.tab = btn.dataset.t; admState.view = 'list'; admState.editId = null; renderAdmTabs(); renderAdmBody(); });
         function renderAdmTabs() { document.querySelectorAll('#admTabs button').forEach(function(b) { b.classList.toggle('active', b.dataset.t === admState.tab); }); }
@@ -1764,15 +1818,23 @@
         function renderAdmServices(body) {
             if (admState.view === 'edit') {
                 var svc = admState.editId ? D.services.find(function(s) { return s.id === admState.editId; }) : null; var isEdit = !!svc;
-                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (isEdit ? 'Editar' : 'Nuevo') + ' paquete</h3><label class="af-l">Icono (emoji)</label><input class="af-i" id="ae_icon" value="' + esc(svc ? svc.icon : '') + '" placeholder="💍"><label class="af-l">Título</label><input class="af-i" id="ae_title" value="' + esc(svc ? svc.title : '') + '" placeholder="Boda Básico"><label class="af-l">Descripción</label><input class="af-i" id="ae_desc" value="' + esc(svc ? svc.desc : '') + '" placeholder="Cobertura de..."><label class="af-l">Precio</label><input class="af-i" id="ae_price" value="' + esc(svc ? svc.price : '') + '" placeholder="Desde $3,500"><label class="af-l">Características (una por línea)</label><textarea class="af-i af-ta" id="ae_feats" placeholder="100 fotos editadas\nVideo resumen">' + esc((svc && svc.features) ? svc.features.join('\n') : '') + '</textarea><div class="af-btns"><button class="af-btn af-btn-p" onclick="saveService(\'' + (svc ? svc.id : '') + '\')">Guardar</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\';renderAdmBody()">Cancelar</button></div>';
+                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (isEdit ? 'Editar' : 'Nuevo') + ' paquete</h3>' +
+                    '<div class="toggle-row" style="background:#f4ede4; padding:0.5rem 1rem; border-radius:8px; margin-bottom:1rem;">' +
+                    '<label><div class="toggle-sw"><input type="checkbox" id="ae_featured" ' + (svc && svc.isFeatured ? 'checked' : '') + '><div class="toggle-track"></div><div class="toggle-thumb"></div></div>Destacar como "Más contratado"</label></div>' +
+                    '<label class="af-l">Icono (emoji)</label><input class="af-i" id="ae_icon" value="' + esc(svc ? svc.icon : '') + '" placeholder="💍">' +
+                    '<label class="af-l">Título</label><input class="af-i" id="ae_title" value="' + esc(svc ? svc.title : '') + '" placeholder="Boda Básico">' +
+                    '<label class="af-l">Descripción</label><input class="af-i" id="ae_desc" value="' + esc(svc ? svc.desc : '') + '" placeholder="Cobertura de...">' +
+                    '<label class="af-l">Precio</label><input class="af-i" id="ae_price" value="' + esc(svc ? svc.price : '') + '" placeholder="Desde $3,500">' +
+                    '<label class="af-l">Características (una por línea)</label><textarea class="af-i af-ta" id="ae_feats" placeholder="100 fotos editadas\nVideo resumen">' + esc((svc && svc.features) ? svc.features.join('\n') : '') + '</textarea>' +
+                    '<div class="af-btns"><button class="af-btn af-btn-p" onclick="saveService(\'' + (svc ? svc.id : '') + '\')">Guardar</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\';renderAdmBody()">Cancelar</button></div>';
                 return;
             }
             var h = '<button class="adm-add-btn" onclick="admState.view=\'edit\';admState.editId=null;renderAdmBody()">+ Nuevo paquete</button>';
-            D.services.sort(function(a, b) { return (a.order || 0) - (b.order || 0); }).forEach(function(svc) { h += ('<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(svc.icon) + ' ' + esc(svc.title) + '</div><div class="al-item-s">' + esc(svc.price) + '</div></div><div class="al-acts"><button class="al-btn" onclick="editService(\'' + svc.id + '\')">Editar</button><button class="al-btn del" onclick="delService(\'' + svc.id + '\')">Eliminar</button></div></div>'); });
+            D.services.sort(function(a, b) { return (a.order || 0) - (b.order || 0); }).forEach(function(svc) { h += ('<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(svc.icon) + ' ' + esc(svc.title) + (svc.isFeatured ? ' <span style="font-size:0.6rem; background:var(--accent); color:#fff; padding:2px 6px; border-radius:4px; margin-left:4px;">DESTACADO</span>' : '') + '</div><div class="al-item-s">' + esc(svc.price) + '</div></div><div class="al-acts"><button class="al-btn" onclick="editService(\'' + svc.id + '\')">Editar</button><button class="al-btn del" onclick="delService(\'' + svc.id + '\')">Eliminar</button></div></div>'); });
             body.innerHTML = h;
         }
         function editService(id) { admState.view = 'edit'; admState.editId = id; renderAdmBody(); }
-        function saveService(oldId) { var icon = document.getElementById('ae_icon').value.trim(), title = document.getElementById('ae_title').value.trim(), desc = document.getElementById('ae_desc').value.trim(), price = document.getElementById('ae_price').value.trim(), feats = document.getElementById('ae_feats').value.trim().split('\n').filter(function(f) { return f.trim(); }); if (!title) { toast('El título es obligatorio'); return; } if (oldId) { var svc = D.services.find(function(s) { return s.id === oldId; }); if (svc) { svc.icon = icon; svc.title = title; svc.desc = desc; svc.price = price; svc.features = feats; } } else { D.services.push({ id: uid(), icon: icon, title: title, desc: desc, price: price, features: feats, order: D.services.length }); } saveData(); admState.view = 'list'; renderAdmBody(); renderPublic(); }
+        function saveService(oldId) { var icon = document.getElementById('ae_icon').value.trim(), title = document.getElementById('ae_title').value.trim(), desc = document.getElementById('ae_desc').value.trim(), price = document.getElementById('ae_price').value.trim(), feats = document.getElementById('ae_feats').value.trim().split('\n').filter(function(f) { return f.trim(); }); var isFeatured = document.getElementById('ae_featured').checked; if (!title) { toast('El título es obligatorio'); return; } if (oldId) { var svc = D.services.find(function(s) { return s.id === oldId; }); if (svc) { svc.icon = icon; svc.title = title; svc.desc = desc; svc.price = price; svc.features = feats; svc.isFeatured = isFeatured; } } else { D.services.push({ id: uid(), icon: icon, title: title, desc: desc, price: price, features: feats, order: D.services.length, isFeatured: isFeatured }); } saveData(); admState.view = 'list'; renderAdmBody(); renderPublic(); }
         function delService(id) { if (!confirm('¿Eliminar este paquete?')) return; D.services = D.services.filter(function(s) { return s.id !== id; }); saveData(); renderAdmBody(); renderPublic(); toast('Paquete eliminado'); }
 
         function renderAdmClients(body) {
@@ -2287,71 +2349,4 @@
                 '<h3 style="margin-bottom:1rem; color:var(--accent);">Sincronización de la Página</h3>' +
                 '<p class="adm-hint">Tus datos se guardan en Firebase de forma automática. Si la página no está reflejando lo último, utiliza estos controles.</p>' +
                 '<div style="display:flex; gap:10px; flex-wrap:wrap;">' +
-                '<button class="af-btn" style="background:#111; color:#fff;" onclick="saveData()">Subir (Guardar) a Firebase</button>' +
-                '<button class="af-btn af-btn-s" onclick="loadData(true)">Forzar Carga desde Firebase</button>' +
-                '</div>' +
-                '<button class="af-btn" style="background:#2b5797; color:#fff; width:100%; margin-top:10px;" onclick="downloadJSON()">📥 Descargar Respaldo JSON (Manual)</button>';
-        }
-        function saveSettings() {
-            var s = D.settings; s.phone = document.getElementById('se_phone').value.trim(); s.phoneRaw = document.getElementById('se_phoneRaw').value.trim(); s.address = document.getElementById('se_addr').value.trim(); s.hours = document.getElementById('se_hours').value.trim(); s.facebook = document.getElementById('se_fb').value.trim(); s.waNumber = document.getElementById('se_wa').value.trim(); s.heroDesc = document.getElementById('se_hero').value.trim(); s.heroImage = document.getElementById('se_heroImg').value.trim(); s.logoImage = document.getElementById('se_logoImg').value.trim(); s.mapEmbed = document.getElementById('se_map').value.trim(); s.driveApiKey = document.getElementById('se_driveApi').value.trim();
-            var newPass = document.getElementById('se_pass').value; if (newPass && newPass.length >= 4) { D.adminPass = newPass; toast('Contraseña actualizada'); }
-            saveData(); renderPublic(); toast('Configuración guardada');
-        }
-
-        function checkUrlForClient() {
-            var params = new URLSearchParams(window.location.search);
-            var clientCodeParam = params.get('c') || params.get('cliente');
-
-            if (!clientCodeParam && window.location.hash.includes('?')) {
-                var hashParams = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf('?')));
-                clientCodeParam = hashParams.get('c') || hashParams.get('cliente');
-            }
-            
-            if (!clientCodeParam && window.location.hash && window.location.hash.length > 1) {
-                var possibleCode = window.location.hash.substring(1).split('?')[0].replace(/\/+$/, '');
-                if(!['portafolio', 'videos', 'servicios', 'testimonios', 'contacto'].includes(possibleCode)) {
-                    clientCodeParam = possibleCode;
-                }
-            }
-            
-            if (clientCodeParam) {
-                clientCodeParam = decodeURIComponent(clientCodeParam).toLowerCase().replace(/\/+$/, '').replace(/\s+/g, '');
-                var targetView = null;
-                
-                if (clientCodeParam.endsWith('-galeria')) { 
-                    targetView = 'galeria'; 
-                    clientCodeParam = clientCodeParam.replace(/-galeria$/, ''); 
-                } else if (clientCodeParam.endsWith('-video')) { 
-                    targetView = 'video'; 
-                    clientCodeParam = clientCodeParam.replace(/-video$/, ''); 
-                } else if (clientCodeParam.endsWith('-fotolibro')) { 
-                    targetView = 'fotolibro'; 
-                    clientCodeParam = clientCodeParam.replace(/-fotolibro$/, ''); 
-                }
-                
-                if (D && D.clients && D.clients[clientCodeParam]) {
-                    document.getElementById('codeIn').value = clientCodeParam;
-                    curClient = clientCodeParam;
-                    selected = {}; allSel = false; isPrintMode = false;
-                    
-                    document.getElementById('cpVideoView').style.display = 'none';
-                    document.getElementById('cpGalleryView').style.display = 'none';
-                    document.getElementById('cpPhotobookView').style.display = 'none';
-                    
-                    enterPortal(targetView);
-                } else {
-                    console.warn("Enlace inválido o expirado:", clientCodeParam);
-                    toast("El enlace del evento no es válido o ha expirado.", 4000);
-                    forceExitPortal();
-                    pushUrlState(null);
-                }
-            } else {
-                forceExitPortal();
-            }
-        }
-        
-        loadData(); 
-        
-    </script>
-</body>
-</html>
+                '<button class="af-btn"
