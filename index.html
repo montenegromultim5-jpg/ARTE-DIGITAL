@@ -39,7 +39,7 @@
         .nav-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 100%; }
         .nav-logo { font-family: var(--fh); font-size: 1.3rem; font-weight: 600; text-decoration: none; letter-spacing: -.03em; white-space: nowrap; cursor: default; user-select: none; display: flex; align-items: center; }
         .nav-logo span { color: var(--accent); }
-        .nav-logo img { max-height: 65px; width: auto; display: block; object-fit: contain; background: transparent !important; }
+        .nav-logo img { max-height: 65px; width: auto; display: block; object-fit: contain; }
         .nav-links { display: flex; gap: 1.4rem; list-style: none; align-items: center; }
         .nav-links a { text-decoration: none; color: var(--text-muted); font-size: .85rem; font-weight: 450; transition: var(--tr); position: relative; padding-bottom: 3px; white-space: nowrap; }
         .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1.5px; background: var(--accent); transition: var(--tr); border-radius: 1px; }
@@ -718,7 +718,7 @@
                 <button data-t="clients">Clientes</button>
                 <button data-t="portfolio">Portafolio</button>
                 <button data-t="testimonials">Testimonios</button>
-                <button data-t="agenda">Agenda / Notas</button>
+                <button data-t="colaboradores">Agenda y Notas</button>
                 <button data-t="settings">General</button>
             </div>
             <div class="adm-body" id="admBody"></div>
@@ -741,47 +741,72 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script>
-        // --- CONFIGURACIÓN FIREBASE ---
-        // (Asegúrate de poner tus datos reales de Firebase aquí)
+        function getDefaults() {
+            var defaultExpire = Date.now() + 31536000000; 
+            return {
+                adminPass: 'admin123',
+                settings: {
+                    phone: '729 699 0786', phoneRaw: '7296990786',
+                    address: 'Porfirio Díaz 280, San Miguelito, 52700 Capulhuac de Mirafuentes, Méx.', hours: 'Lunes a Domingo · 10 a.m. – 7 p.m.',
+                    facebook: 'https://facebook.com', mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3765.12789114885!2d-99.5265!3d19.1386!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA4JzE5LjAiTiA5OcKwMzEnMzUuNCJX!5e0!3m2!1ses!2smx!4v1610000000000',
+                    waNumber: '527296990786',
+                    heroDesc: 'Desde Capulhuac de Mirafuentes, ofrecemos servicios de fotografía y video con calidad profesional. Bodas, eventos sociales, retratos, producción corporativa e impresión digital de alta calidad.',
+                    driveApiKey: '',
+                    heroImage: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=800&fit=crop&auto=format',
+                    logoImage: ''
+                },
+                printPrices: [
+                    { size: '10x15', label: '10 x 15 cm', measure: '10 x 15 cm', price: 10 },
+                    { size: '20x25', label: '20 x 25 cm', measure: '20 x 25 cm', price: 20 },
+                    { size: '13x18', label: '13 x 18 cm', measure: '13 x 18 cm', price: 15 },
+                    { size: '28x35', label: '28 x 35 cm', measure: '28 x 35 cm', price: 50 },
+                    { size: '33x48', label: 'Póster', measure: '33 x 48 cm', price: 80 }
+                ],
+                services: [
+                    { id: 's1', icon: '💍', title: 'Boda Premium', desc: 'Cobertura completa de tu día especial.', price: 'Desde $6,000', features: ['200+ fotos editadas digitales', 'Video completo + resumen', 'Drone (si aplica)', 'Galería online privada', '10 impresiones de regalo'], order: 1, isFeatured: true },
+                    { id: 's2', icon: '📷', title: 'Boda Básico', desc: 'Cobertura de 4 horas en tu boda.', price: 'Desde $3,500', features: ['100 fotos editadas digitales', 'Video resumen de 3 minutos', 'Entrega en USB', 'Galería online para ver y descargar'], order: 2, isFeatured: false },
+                    { id: 's3', icon: '🎬', title: 'Video Profesional', desc: 'Producción de video para cualquier proyecto.', price: 'Desde $2,000', features: ['Grabación con equipo profesional', 'Edición completa', 'Subtítulos si se requiere', 'Entrega en formato digital'], order: 3, isFeatured: false }
+                ],
+                portfolio: [
+                    { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=650&fit=crop&auto=format', label: 'Bodas', type: 'image' },
+                    { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=500&h=650&fit=crop&auto=format', label: 'Bodas', type: 'image' },
+                    { src: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&h=650&fit=crop&auto=format', label: 'XV Años', type: 'image' },
+                    { src: 'https://images.unsplash.com/photo-1518599904199-0ca897819ddb?w=500&h=650&fit=crop&auto=format', label: 'XV Años', type: 'image' },
+                    { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=650&fit=crop&auto=format', label: 'Infantil', type: 'image' },
+                    { src: 'https://images.unsplash.com/photo-1519238263530-99ad15516ea0?w=500&h=650&fit=crop&auto=format', label: 'Infantil', type: 'image' },
+                    { src: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&h=650&fit=crop&auto=format', label: 'Video Demo', type: 'video', videoUrl: 'https://www.youtube.com/watch?v=ScMzIvxBSi4' }
+                ],
+                testimonials: [
+                    { text: '"Hola, la verdad me gusta ir a ese lugar para imprimir mis fotos, el chico es eficiente y da buen trato a la gente, además que no cobra caro, que más puede uno pedir!!!! La verdad lo recomiendo mucho 😊😚, gracias."', author: 'Roberto Alvarado' },
+                    { text: '"Muy buena calidad de las fotos, buen servicio y todo en tiempo y forma"', author: 'Hannia Neri' },
+                    { text: '"Excelente trabajo. Excelente servicio."', author: 'Yessica Marlen Santana Arellano' },
+                    { text: '"Exelente servicio"', author: 'Maritza Corona' },
+                    { text: '"El servicio es excelente."', author: 'Abril' }
+                ],
+                clients: {}
+            };
+        }
+
         const firebaseConfig = {
-            apiKey: "AIzaSy_TU_API_KEY",
-            authDomain: "tu-proyecto.firebaseapp.com",
-            projectId: "tu-proyecto",
-            storageBucket: "tu-proyecto.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:12345:web:abcde"
+            apiKey: "AIzaSyAJSdiQtL0m7xFjlEyosh3Rfbt2JpMrTzs",
+            authDomain: "monte-eb262.firebaseapp.com",
+            databaseURL: "https://monte-eb262-default-rtdb.firebaseio.com",
+            projectId: "monte-eb262",
+            storageBucket: "monte-eb262.firebasestorage.app",
+            messagingSenderId: "812663532268",
+            appId: "1:812663532268:web:96392bf5f0475517c593c9",
+            measurementId: "G-5FTK1HF5L3"
         };
+
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
 
-        var D = null;
-        var printMode = false;
-        var selPhotos = new Set();
-        var portalPhotos = [];
-        var lbIdx = 0;
-        var admState = { tab: 'services', view: 'list', editId: null, pbSlots: [] };
-        var activeClientCode = null;
-        var isPublicPortfolioView = false;
-        var pbCurrentPage = 0;
-        var pbTotalPages = 0;
-        var isPbDragging = false;
-        var pbStartX = 0;
-        var pbStartPage = 0;
-
-        function getDefaults() {
-            return {
-                settings: { heroTitle: 'Momentos que merecen ser recordados', heroDesc: 'Inmortalizamos tus emociones con un estilo elegante, natural y atemporal.', heroImg: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=800&fit=crop&auto=format', logo: '', phone: '525555555555', waNumber: '5215555555555', email: 'contacto@fotovideo.com', address: 'Capulhuac de Mirafuentes, Méx.', fb: '', ig: '', admPass: 'admin123' },
-                services: [{ name: 'Boda Completa', desc: 'Cobertura total desde los preparativos hasta la fiesta.', price: 15000, features: ['2 Fotógrafos', 'Video 4K (Highlight y Documental)', 'Photobook 10x10"', 'Galería Online'], featured: true }, { name: 'Sesión XV Años', desc: 'Sesión casual y cobertura del evento.', price: 12000, features: ['1 Fotógrafo', 'Video Full HD', 'Photobook 8x8"', '15 Impresiones 6x8"'], featured: false }, { name: 'Retrato Familiar', desc: 'Sesión en locación o estudio.', price: 3500, features: ['1 Hora de sesión', '20 Fotos editadas digitales', '1 Ampliación 11x14"'], featured: false }],
-                portfolio: [{ url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=800&fit=crop', label: 'Boda Civil - M & J', cat: 'boda' }, { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop', label: 'XV Años - Valeria', cat: 'xv' }, { url: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&h=800&fit=crop', label: 'Retrato Casual', cat: 'retrato' }],
-                testimonials: [{ text: 'El mejor equipo, superaron nuestras expectativas.', author: 'María y Juan', stars: 5 }, { text: 'Fotos hermosas, los recomiendo ampliamente.', author: 'Familia Sánchez', stars: 5 }, { text: 'Profesionales y muy puntuales.', author: 'Valeria G.', stars: 5 }],
-                clients: {},
-                printPrices: { '4x6': 10, '6x8': 20, '8x10': 35, '11x14': 80, '16x20': 200, '20x24': 350 },
-                agenda: []
-            };
-        }
+        var D;
+        var isPublicPortfolioView = false; 
 
         async function loadData(forceServer = false) {
             const loader = document.getElementById('loader');
@@ -808,7 +833,6 @@
                 if (!D || !D.settings || !D.services || !D.portfolio) { D = getDefaults(); }
                 if (!D.testimonials) { D.testimonials = getDefaults().testimonials; }
                 if (!D.printPrices) { D.printPrices = getDefaults().printPrices; }
-                if (!D.agenda) { D.agenda = getDefaults().agenda; }
                 try {
                     renderPublic();
                     checkUrlForClient();
@@ -821,985 +845,70 @@
             }
         }
 
-        function saveData(cb) { 
+        function saveData() {
+            const loader = document.getElementById('loader');
+            const loaderText = document.querySelector('.loader-text');
+            if (loader && loaderText) { loaderText.innerText = "Guardando en la nube..."; loader.style.display = 'flex'; loader.style.opacity = '1'; }
+
+            try { localStorage.setItem('fvm_data', JSON.stringify(D)); } catch(e){} 
+            
             db.collection("web_data").doc("fvm_data").set(D)
-                .then(function() { 
-                    localStorage.setItem('fvm_data', JSON.stringify(D)); 
-                    if(cb) cb(); 
-                })
-                .catch(function(e) { console.error("Error al guardar:", e); alert("Error al guardar. Verifica tu conexión."); }); 
+                .then(() => { toast('✅ Datos guardados correctamente', 2500); })
+                .catch((error) => { toast('❌ Error al subir datos. Se guardó localmente.', 4000); })
+                .finally(() => {
+                    if (loader && loaderText) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => { loader.style.display = 'none'; loaderText.innerText = "Cargando contenido..."; }, 500);
+                    }
+                });
+        }
+        
+        function downloadJSON() {
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(D, null, 4));
+            var downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "montenegro_respaldo.json");
+            document.body.appendChild(downloadAnchorNode); 
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            toast('✅ Archivo JSON descargado', 3000);
         }
 
+        var curClient = null, selected = {}, allSel = false, lbIdx = 0, portalPhotos = [];
+        var admState = { tab: 'services', view: 'list', editId: null };
+        var logoClicks = 0, logoTimer = null;
+        var quantities = {};
+        var currentDriveFiles = []; 
+        var tempClientPhotos = []; 
+        var isPrintMode = false;
+        var draggedPhotoIdx = -1; 
+        
+        window.portfolioLimit = 6; 
+
+        function pSrc(p, s) { s = s || 800; if (p.driveId) return 'https://lh3.googleusercontent.com/d/' + p.driveId + '=s' + s; return (p.src || '').replace(/w=\d+/, 'w=' + s); }
+        function pDl(p) { if (p.driveId) return 'https://drive.google.com/uc?export=download&id=' + p.driveId; return (p.src || '').replace('w=800', 'w=1600'); }
+        function pFull(p) { return pSrc(p, 1600); }
+        function toast(m, d) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(function() { t.classList.remove('show'); }, d || 3000); }
         function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-        function pFull(item) { return item.fullUrl ? item.fullUrl : item.url; }
-
-        function renderPublic() {
-            var s = D.settings;
-            document.title = (s.heroTitle || 'Foto y Video Montenegro').substring(0, 40) + ' — Montenegro';
-            document.getElementById('heroDesc').innerHTML = esc(s.heroDesc);
-            document.getElementById('heroImgMain').src = s.heroImg || getDefaults().settings.heroImg;
-            if (s.logo) { document.getElementById('logoBtn').innerHTML = '<img src="' + esc(s.logo) + '" alt="Logo">'; } else { document.getElementById('logoBtn').innerHTML = 'Foto<span>&</span>Video Montenegro'; }
-            
-            var cats = new Set(); D.portfolio.forEach(function(i) { if (i.cat) cats.add(i.cat); });
-            var filtersHTML = '<button class="port-filter-btn active" onclick="filterPortfolio(\'all\', false, this)">Todos</button>';
-            cats.forEach(function(c) { filtersHTML += '<button class="port-filter-btn" onclick="filterPortfolio(\'' + esc(c) + '\', false, this)">' + esc(c.charAt(0).toUpperCase() + c.slice(1)) + '</button>'; });
-            document.getElementById('portFilters').innerHTML = filtersHTML;
-            filterPortfolio('all', false);
-
-            var vp = D.portfolio.filter(function(i) { return i.type === 'video'; });
-            if (vp.length > 0) {
-                document.getElementById('videos').style.display = 'block';
-                var vh = '';
-                vp.slice(0, 4).forEach(function(i) {
-                    var ifr = '';
-                    if (i.videoUrl) {
-                        var u = i.videoUrl;
-                        if (u.includes('youtube.com') || u.includes('youtu.be')) {
-                            var m = u.match(/(?:youtu\.be\/|v=|\/v\/|\/embed\/)([^&?\s]+)/);
-                            if (m) ifr = '<iframe src="https://www.youtube.com/embed/' + m[1] + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-                        } else if (u.includes('drive.google.com/file/d/')) {
-                            var md = u.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                            if (md) ifr = '<iframe src="https://drive.google.com/file/d/' + md[1] + '/preview" allow="autoplay; fullscreen" frameborder="0"></iframe>';
-                        } else { ifr = '<iframe src="' + esc(u) + '" frameborder="0" allowfullscreen></iframe>'; }
-                    }
-                    vh += '<div class="video-item">' + ifr + '</div>';
-                });
-                document.getElementById('vidGridPublic').innerHTML = vh;
-            } else { document.getElementById('videos').style.display = 'none'; }
-
-            var dest = D.services.filter(function(i) { return i.featured; });
-            var reg = D.services.filter(function(i) { return !i.featured; });
-            document.getElementById('servGridDestacados').innerHTML = dest.map(renderSrvCard).join('');
-            document.getElementById('servGridAll').innerHTML = reg.map(renderSrvCard).join('');
-            document.getElementById('servMoreBtn').style.display = reg.length > 0 ? 'block' : 'none';
-            document.getElementById('servGridAll').style.display = 'none';
-            
-            var so = '<option value="" disabled selected>Tipo de servicio</option>';
-            D.services.forEach(function(i) { so += '<option value="' + esc(i.name) + '">' + esc(i.name) + '</option>'; });
-            document.getElementById('servSelect').innerHTML = so;
-            document.getElementById('testGrid').innerHTML = (D.testimonials || []).map(function(i) { return '<div class="testimonial-card"><div class="stars">' + '★'.repeat(i.stars) + '</div><p class="testimonial-text">"' + esc(i.text) + '"</p><div class="testimonial-author">— ' + esc(i.author) + '</div></div>'; }).join('');
-            document.getElementById('contactInfo').innerHTML = '<div class="contact-detail"><div class="icon">📍</div><span>' + esc(s.address) + '</span></div><div class="contact-detail"><div class="icon">📞</div><span>' + esc(s.phone) + '</span></div><div class="contact-detail"><div class="icon">✉️</div><span>' + esc(s.email) + '</span></div><div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15065.111867123984!2d-99.46747535!3d19.1843238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cd8bd4fc57c6b5%3A0xc34b3e390c8a2b53!2sCapulhuac%20de%20Mirafuentes%2C%20M%C3%A9x.!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>';
-            document.getElementById('ftAddr').textContent = s.address;
-            document.getElementById('cpWaLink').href = 'https://wa.me/' + s.waNumber; document.getElementById('cpWaLink').textContent = s.phone;
-        }
-
-        function filterPortfolio(filter, showAll = false, btnEl = null) {
-            if (btnEl) {
-                var btns = document.querySelectorAll('.port-filter-btn');
-                btns.forEach(function(b) { b.classList.remove('active'); });
-                btnEl.classList.add('active');
-            } else if (!showAll) {
-                var firstBtn = document.querySelector('.port-filter-btn');
-                if (firstBtn) firstBtn.classList.add('active');
-            }
-            
-            var items = D.portfolio.filter(function(i) { return i.type !== 'video' && (filter === 'all' || i.cat === filter); });
-            var maxItems = showAll ? items.length : 6;
-            var visibleItems = items.slice(0, maxItems);
-            
-            var h = '';
-            visibleItems.forEach(function(item) {
-                h += '<div class="portfolio-item"><img src="' + esc(item.url) + '" loading="lazy"><div class="il">' + esc(item.label || '') + '</div></div>';
-            });
-            
-            document.getElementById('portGrid').innerHTML = h;
-            
-            var gridItems = document.getElementById('portGrid').querySelectorAll('.portfolio-item');
-            gridItems.forEach(function(d, idx) {
-                d.addEventListener('click', function() { 
-                    isPublicPortfolioView = true;
-                    portalPhotos = [{ src: pFull(visibleItems[idx]), name: visibleItems[idx].label || '', type: visibleItems[idx].type || 'image', videoUrl: visibleItems[idx].videoUrl || '' }];
-                    lbIdx = 0; 
-                    if (!document.getElementById('lb').classList.contains('active')) {
-                        window.history.pushState({ lightbox: true }, '');
-                    }
-                    showLB();
-                });
-            });
-
-            var moreBtn = document.getElementById('portMoreBtn');
-            if (!showAll && items.length > 6) {
-                moreBtn.innerHTML = '<button class="btn btn-outline" onclick="filterPortfolio(\'' + esc(filter) + '\', true)">Ver más fotos</button>';
-                moreBtn.style.display = 'block';
-            } else {
-                moreBtn.style.display = 'none';
-            }
-        }
-
-        function renderSrvCard(i) { return '<div class="service-card' + (i.featured ? ' featured' : '') + '"><span class="service-icon">✦</span><h3>' + esc(i.name) + '</h3><p>' + esc(i.desc) + '</p><div class="service-price">$' + esc(i.price) + '</div><ul class="service-features">' + i.features.map(function(f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul></div>'; }
+        function uid() { return 'id_' + Math.random().toString(36).substr(2, 8); }
         
-        function toggleAllServices() {
-            var el = document.getElementById('servGridAll');
-            var btn = document.querySelector('#servMoreBtn button');
-            if (el.style.display === 'none') { el.style.display = 'grid'; btn.textContent = 'Ocultar paquetes'; }
-            else { el.style.display = 'none'; btn.textContent = 'Ver más paquetes'; }
-        }
+        function toDateInput(ms) { if (!ms) return ''; let d = new Date(ms); let m = ('0' + (d.getMonth() + 1)).slice(-2); let day = ('0' + d.getDate()).slice(-2); return `${d.getFullYear()}-${m}-${day}`; }
+        function toDisplayDate(ms) { if (!ms) return ''; let d = new Date(ms); let m = ('0' + (d.getMonth() + 1)).slice(-2); let day = ('0' + d.getDate()).slice(-2); return `${day}/${m}/${d.getFullYear()}`; }
+        function addOneYear() { let el = document.getElementById('ce_expire'); if(!el.value) return; let d = new Date(el.value + 'T12:00:00'); d.setFullYear(d.getFullYear() + 1); el.value = toDateInput(d.getTime()); }
 
-        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); document.getElementById('hamburger').classList.toggle('active'); document.getElementById('mobOv').classList.toggle('active'); }
-        function closeMenu() { document.getElementById('navLinks').classList.remove('active'); document.getElementById('hamburger').classList.remove('active'); document.getElementById('mobOv').classList.remove('active'); }
-        function navTo(id, e) { e.preventDefault(); closeMenu(); var el = document.getElementById(id); if (el) { var y = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top: y, behavior: 'smooth' }); } }
-        window.addEventListener('scroll', function() { document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
-        function toast(m, d) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, d || 2500); }
-        function handleContact(e) { e.preventDefault(); toast('Mensaje enviado. Te contactaremos pronto.'); e.target.reset(); }
-
-        function openLogin() { document.getElementById('loginModal').classList.add('active'); document.getElementById('codeIn').value = ''; document.getElementById('loginErr').classList.remove('show'); document.getElementById('codeIn').focus(); }
-        function closeLogin() { document.getElementById('loginModal').classList.remove('active'); }
-        
-        function checkUrlForClient() {
-            var params = new URLSearchParams(window.location.search);
-            var code = params.get('c');
-            if (code && D.clients[code]) { openPortal(code); } 
-            else if (activeClientCode) { openPortal(activeClientCode); }
-        }
-        
-        function doLogin() {
-            var c = document.getElementById('codeIn').value.trim().toLowerCase();
-            if (D.clients[c]) { closeLogin(); openPortal(c); }
-            else { document.getElementById('loginErr').classList.add('show'); }
-        }
-
-        function isClientExpired(cData) {
-            if (!cData.expirationDate) return false;
-            var exp = new Date(cData.expirationDate);
-            var now = new Date();
-            return exp < now;
-        }
-
-        function openPortal(c) {
-            activeClientCode = c;
-            var cd = D.clients[c];
-            var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=' + encodeURIComponent(c);
-            window.history.pushState({ path: newUrl }, '', newUrl);
-
-            document.getElementById('mainSite').style.display = 'none';
-            document.getElementById('navbar').style.display = 'none';
-            document.getElementById('cpPortal').classList.add('active');
-            window.scrollTo(0, 0);
-
-            document.getElementById('cpName').textContent = cd.name;
-            document.getElementById('cpEvent').textContent = cd.eventName;
-
-            var expired = isClientExpired(cd);
-            
-            if (cd.expirationDate) {
-                var expDate = new Date(cd.expirationDate);
-                document.getElementById('cpExpireMsg').innerHTML = '<strong>Alojamiento:</strong> Tu galería estará disponible hasta el <strong>' + expDate.toLocaleDateString() + '</strong>.';
-                document.getElementById('cpExpireBanner').style.display = 'flex';
-            } else {
-                document.getElementById('cpExpireBanner').style.display = 'none';
+        function getEmbedUrl(url) {
+            if (!url) return '';
+            if (url.includes('drive.google.com/file/d/')) {
+                var m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (m) return 'https://drive.google.com/file/d/' + m[1] + '/preview';
+            } else if (url.includes('youtu.be/') || (url.includes('youtube.com/') && !url.includes('<iframe'))) {
+                var ytM = url.match(/(?:youtu\.be\/|v=|\/v\/|\/embed\/)([^&?\s]+)/);
+                if (ytM) return 'https://www.youtube.com/embed/' + ytM[1];
             }
-
-            if (expired) {
-                document.getElementById('cpExpiredLock').style.display = 'block';
-                document.getElementById('accessCardsContainer').style.display = 'none';
-                return;
-            }
-
-            document.getElementById('cpExpiredLock').style.display = 'none';
-            document.getElementById('accessCardsContainer').style.display = 'block';
-
-            var cards = '';
-            if (cd.photos && cd.photos.length > 0) {
-                cards += '<div class="access-card" onclick="initGallery(\'' + esc(c) + '\')" style="cursor:pointer"><div class="access-card-icon">📸</div><div class="access-card-info"><h3>Galería de Fotos</h3><p>' + cd.photos.length + ' fotografías en alta calidad</p></div><button class="btn btn-outline btn-sm">Ver Galería</button></div>';
-            }
-            if (cd.photobook && cd.photobook.length > 0) {
-                cards += '<div class="access-card" onclick="initPhotobook(\'' + esc(c) + '\')" style="cursor:pointer"><div class="access-card-icon">📖</div><div class="access-card-info"><h3>Fotolibro Digital</h3><p>Álbum interactivo 3D (' + cd.photobook.length + ' págs)</p></div><button class="btn btn-outline btn-sm">Abrir Fotolibro</button></div>';
-            }
-            if (cd.videoFrame) {
-                cards += '<div class="access-card" onclick="initVideo(\'' + esc(c) + '\')" style="cursor:pointer"><div class="access-card-icon">🎥</div><div class="access-card-info"><h3>Video del Evento</h3><p>Visualiza tu evento completo</p></div><button class="btn btn-outline btn-sm">Reproducir</button></div>';
-            }
-            
-            if (!cards) {
-                cards = '<p style="color:var(--c-muted); text-align:center; padding: 2rem;">Aún no se ha subido contenido para este evento.</p>';
-            }
-            
-            document.getElementById('accessCards').innerHTML = cards;
+            return url;
         }
 
-        function requestExtension() {
-            var s = D.settings;
-            var num = s.waNumber || s.phone;
-            var msg = encodeURIComponent('Hola Montenegro. Solicito información para extender el tiempo de alojamiento de mi galería (Cliente: ' + (activeClientCode ? activeClientCode : '') + ').');
-            window.open('https://wa.me/' + num + '?text=' + msg, '_blank');
-        }
-
-        function exitPortal() {
-            activeClientCode = null;
-            var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.pushState({ path: newUrl }, '', newUrl);
-            document.getElementById('cpPortal').classList.remove('active');
-            document.getElementById('mainSite').style.display = 'block';
-            document.getElementById('navbar').style.display = 'flex';
-            window.scrollTo(0, 0);
-        }
-
-        function initVideo(c) {
-            var cd = D.clients[c];
-            document.getElementById('cpMainView').style.display = 'none';
-            document.getElementById('cp-ft-main').style.display = 'none';
-            document.getElementById('cpHdrMain').style.display = 'none';
-            document.getElementById('cpVideoView').style.display = 'block';
-            document.getElementById('vidTitle').textContent = 'Video: ' + cd.eventName;
-            document.getElementById('vidWrap').innerHTML = cd.videoFrame;
-            window.scrollTo(0,0);
-        }
-        function closeVideoView() {
-            document.getElementById('cpVideoView').style.display = 'none';
-            document.getElementById('vidWrap').innerHTML = '';
-            document.getElementById('cpHdrMain').style.display = 'block';
-            document.getElementById('cpMainView').style.display = 'block';
-            document.getElementById('cp-ft-main').style.display = 'block';
-            window.scrollTo(0,0);
-        }
-
-        var observer = null;
-        function initGallery(c) {
-            var cd = D.clients[c];
-            portalPhotos = cd.photos;
-            printMode = false;
-            selPhotos.clear();
-            document.getElementById('cpMainView').style.display = 'none';
-            document.getElementById('cp-ft-main').style.display = 'none';
-            document.getElementById('cpHdrMain').style.display = 'none';
-            document.getElementById('cpGalleryView').style.display = 'block';
-            document.body.classList.remove('gallery-print-mode');
-            
-            document.getElementById('pxTitle').textContent = cd.eventName;
-            document.getElementById('pxSubtitle').textContent = cd.name;
-            var headerImg = cd.coverImg || (cd.photos.length > 0 ? pFull(cd.photos[0]) : '');
-            document.getElementById('pxHeader').style.backgroundImage = 'url("' + headerImg + '")';
-
-            document.getElementById('btnSelAll').style.display = 'none';
-            document.getElementById('fabPrintBtn').style.display = 'flex';
-            document.getElementById('orderBar').classList.remove('vis');
-            
-            var nav = '<div class="px-nav-item active" onclick="scrollToPxSet(0)">Toda la Galería</div>';
-            var setsHtml = '<div class="px-set-section" id="px-set-0"><div class="px-grid" id="pxGrid"></div></div>';
-            document.getElementById('pxNavInner').innerHTML = nav;
-            document.getElementById('pxContent').innerHTML = setsHtml;
-            
-            renderPxGrid();
-            window.scrollTo(0,0);
-        }
-
-        function renderPxGrid() {
-            var gh = '';
-            portalPhotos.forEach(function(p, i) {
-                var c = 'pc';
-                if ((i % 5 === 0) || (i % 7 === 0)) c += ' vertical';
-                else if (i % 8 === 0) c += ' horizontal';
-                gh += '<div class="' + c + '" onclick="clickPx(' + i + ')">' +
-                    '<img data-src="' + esc(p.url) + '" loading="lazy">' +
-                    '<div class="chk' + (selPhotos.has(i) ? ' on' : '') + '" id="chk' + i + '"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-                    '<button class="dlb" onclick="event.stopPropagation(); window.open(\'' + pFull(p) + '\', \'_blank\')" title="Descargar"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>' +
-                    '</div>';
-            });
-            document.getElementById('pxGrid').innerHTML = gh;
-            
-            if (observer) observer.disconnect();
-            observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        var img = entry.target;
-                        img.src = img.getAttribute('data-src');
-                        img.onload = () => img.classList.add('loaded');
-                        observer.unobserve(img);
-                    }
-                });
-            });
-            document.querySelectorAll('.pc img').forEach(img => observer.observe(img));
-        }
-
-        function scrollToPxSet(idx) {
-            var el = document.getElementById('px-set-' + idx);
-            if (el) { var y = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top: y, behavior: 'smooth' }); }
-        }
-
-        function closeGalleryView() {
-            document.getElementById('cpGalleryView').style.display = 'none';
-            document.getElementById('cpHdrMain').style.display = 'block';
-            document.getElementById('cpMainView').style.display = 'block';
-            document.getElementById('cp-ft-main').style.display = 'block';
-            document.getElementById('orderBar').classList.remove('vis');
-            printMode = false;
-            if (observer) observer.disconnect();
-            window.scrollTo(0,0);
-        }
-
-        function togglePrintMode() {
-            printMode = !printMode;
-            if (printMode) {
-                document.body.classList.add('gallery-print-mode');
-                document.getElementById('fabPrintBtn').style.display = 'none';
-                document.getElementById('btnSelAll').style.display = 'block';
-                updateOrderBar();
-                document.getElementById('orderBar').classList.add('vis');
-                toast('Modo Impresión: Selecciona las fotos que deseas.');
-            } else {
-                document.body.classList.remove('gallery-print-mode');
-                document.getElementById('fabPrintBtn').style.display = 'flex';
-                document.getElementById('btnSelAll').style.display = 'none';
-                document.getElementById('orderBar').classList.remove('vis');
-            }
-        }
-        
-        function toggleSelAll() {
-            if (selPhotos.size === portalPhotos.length) { selPhotos.clear(); }
-            else { portalPhotos.forEach(function(_, i) { selPhotos.add(i); }); }
-            renderPxGrid(); updateOrderBar();
-        }
-
-        function clickPx(i) {
-            if (printMode) {
-                if (selPhotos.has(i)) { selPhotos.delete(i); document.getElementById('chk' + i).classList.remove('on'); }
-                else { selPhotos.add(i); document.getElementById('chk' + i).classList.add('on'); }
-                updateOrderBar();
-            } else {
-                isPublicPortfolioView = false; lbIdx = i; 
-                if (!document.getElementById('lb').classList.contains('active')) {
-                    window.history.pushState({ lightbox: true }, '');
-                }
-                showLB();
-            }
-        }
-
-        function updateOrderBar() {
-            var c = selPhotos.size; document.getElementById('obCnt').textContent = c;
-            var bp = D.printPrices['6x8'] || 20; document.getElementById('obTot').textContent = '$' + (c * bp);
-        }
-
-        function openOrder() {
-            if (selPhotos.size === 0) { toast('Selecciona al menos una foto primero.'); return; }
-            var prices = D.printPrices || getDefaults().printPrices;
-            var sop = '<option value="4x6">4x6" ($' + (prices['4x6'] || 10) + ')</option><option value="6x8" selected>6x8" ($' + (prices['6x8'] || 20) + ')</option><option value="8x10">8x10" ($' + (prices['8x10'] || 35) + ')</option><option value="11x14">11x14" ($' + (prices['11x14'] || 80) + ')</option><option value="16x20">16x20" ($' + (prices['16x20'] || 200) + ')</option><option value="20x24">20x24" ($' + (prices['20x24'] || 350) + ')</option>';
-            var h = '';
-            selPhotos.forEach(function(i) {
-                var p = portalPhotos[i];
-                h += '<div class="oi" data-id="' + i + '"><img src="' + esc(p.url) + '" class="oi-img"><div class="oi-info"><div class="oi-nm">' + esc(p.name || 'Foto ' + (i + 1)) + '</div><div class="oi-ctrl"><select onchange="calcOrder()">' + sop + '</select><div class="qty-c"><button class="qty-b" onclick="chgQty(this,-1)">-</button><input type="text" class="qty-v" value="1" readonly><button class="qty-b" onclick="chgQty(this,1)">+</button></div></div><div class="oi-sub">$0</div></div></div>';
-            });
-            document.getElementById('omItems').innerHTML = h; document.getElementById('omSub').textContent = selPhotos.size + ' fotos seleccionadas';
-            document.getElementById('orderModal').classList.add('active'); calcOrder();
-        }
-        function closeOrder() { document.getElementById('orderModal').classList.remove('active'); }
-        function chgQty(b, d) { var v = parseInt(b.parentElement.querySelector('.qty-v').value) + d; if (v > 0) { b.parentElement.querySelector('.qty-v').value = v; calcOrder(); } }
-        function calcOrder() {
-            var t = 0; var prices = D.printPrices || getDefaults().printPrices;
-            document.querySelectorAll('.oi').forEach(function(oi) {
-                var sz = oi.querySelector('select').value; var q = parseInt(oi.querySelector('.qty-v').value);
-                var st = (prices[sz] || 0) * q; oi.querySelector('.oi-sub').textContent = '$' + st; t += st;
-            });
-            document.getElementById('omTotV').textContent = '$' + t;
-            document.getElementById('obTot').textContent = '$' + t;
-        }
-        function clearSel() { selPhotos.clear(); updateOrderBar(); renderPxGrid(); closeOrder(); togglePrintMode(); }
-        
-        function sendWA() {
-            var m = '¡Hola! Quiero hacer un pedido de impresión:\n\n';
-            var prices = D.printPrices || getDefaults().printPrices; var t = 0;
-            document.querySelectorAll('.oi').forEach(function(oi) {
-                var id = oi.getAttribute('data-id'); var p = portalPhotos[id];
-                var nm = p.name || 'Foto ' + (parseInt(id) + 1); var sz = oi.querySelector('select').value;
-                var q = parseInt(oi.querySelector('.qty-v').value); var st = (prices[sz] || 0) * q; t += st;
-                m += '- ' + q + 'x [' + nm + '] en ' + sz + ' ($' + st + ')\n';
-            });
-            m += '\nTotal estimado: $' + t + '\nCódigo de cliente: ' + (activeClientCode || 'N/A');
-            var s = D.settings; window.open('https://wa.me/' + s.waNumber + '?text=' + encodeURIComponent(m), '_blank');
-        }
-
-        function initPhotobook(c) {
-            var cd = D.clients[c];
-            var pbData = cd.photobook || [];
-            if (pbData.length === 0) { toast('El fotolibro está vacío.'); return; }
-            
-            document.getElementById('cpMainView').style.display = 'none';
-            document.getElementById('cp-ft-main').style.display = 'none';
-            document.getElementById('cpHdrMain').style.display = 'none';
-            document.getElementById('cpPhotobookView').style.display = 'flex';
-            
-            var book = document.getElementById('book');
-            var dotsContainer = document.getElementById('pb-page-dots');
-            book.innerHTML = '';
-            dotsContainer.innerHTML = '';
-            
-            pbTotalPages = pbData.length;
-            pbCurrentPage = 0;
-            
-            for (let i = 0; i < pbTotalPages; i++) {
-                var slot = pbData[i];
-                var paper = document.createElement('div');
-                paper.className = 'pb-paper';
-                paper.id = 'pb-page-' + i;
-                paper.style.zIndex = pbTotalPages - i;
-
-                var isCover = (i === 0);
-                var isBackCover = (i === pbTotalPages - 1);
-                var isPanoLeft = (slot.type === 'pano_left');
-                var isPanoRight = (slot.type === 'pano_right');
-                
-                var imgHtml = '';
-                if (isPanoLeft || isPanoRight) {
-                    var panoClass = isPanoLeft ? 'pb-pano-left' : 'pb-pano-right';
-                    if (slot.url) {
-                        imgHtml = '<img src="' + esc(slot.url) + '" class="pb-pano ' + panoClass + '">';
-                    } else {
-                        imgHtml = '<div class="pb-placeholder-text">Página Vacía</div>';
-                    }
-                } else {
-                    if (slot.url) {
-                        imgHtml = '<img src="' + esc(slot.url) + '" class="pb-img-fit">';
-                    } else {
-                        imgHtml = '<div class="pb-placeholder-text">Página Vacía</div>';
-                    }
-                }
-
-                var front = document.createElement('div');
-                front.className = 'pb-front';
-                front.innerHTML = imgHtml + ((isCover || isBackCover) ? '<div class="pb-acrylic-led"></div><div class="pb-beveled"></div>' : '');
-                
-                var back = document.createElement('div');
-                back.className = 'pb-back';
-                back.innerHTML = '<div style="width:100%; height:100%; background:#141416;"></div>' + ((isCover || isBackCover) ? '<div class="pb-beveled"></div>' : '');
-
-                paper.appendChild(front);
-                paper.appendChild(back);
-                book.appendChild(paper);
-
-                var dot = document.createElement('div');
-                dot.className = 'pb-page-dot';
-                dot.id = 'pb-dot-' + i;
-                dotsContainer.appendChild(dot);
-            }
-            
-            updateBookUI();
-
-            book.addEventListener('touchstart', pbTouchStart, {passive: false});
-            book.addEventListener('touchmove', pbTouchMove, {passive: false});
-            book.addEventListener('touchend', pbTouchEnd);
-        }
-
-        function closePhotobookView() {
-            document.getElementById('cpPhotobookView').style.display = 'none';
-            if (document.body.classList.contains('fullscreen-mode')) { toggleFullscreen(); }
-            document.getElementById('cpHdrMain').style.display = 'block';
-            document.getElementById('cpMainView').style.display = 'block';
-            document.getElementById('cp-ft-main').style.display = 'block';
-        }
-
-        function updateBookUI() {
-            var book = document.getElementById('book');
-            for (let i = 0; i < pbTotalPages; i++) {
-                var page = document.getElementById('pb-page-' + i);
-                var dot = document.getElementById('pb-dot-' + i);
-                
-                if (i < pbCurrentPage) {
-                    page.classList.add('pb-flipped');
-                    page.style.zIndex = i + 1;
-                    dot.classList.remove('active');
-                } else {
-                    page.classList.remove('pb-flipped');
-                    page.style.zIndex = pbTotalPages - i;
-                    dot.classList.remove('active');
-                }
-                
-                if (i === pbCurrentPage || (pbCurrentPage === pbTotalPages && i === pbTotalPages - 1)) {
-                    dot.classList.add('active');
-                }
-            }
-
-            var tx = 0;
-            if (pbCurrentPage > 0 && pbCurrentPage < pbTotalPages) { tx = 50; }
-            else if (pbCurrentPage === pbTotalPages) { tx = 100; }
-            book.style.transform = 'translateX(' + tx + '%)';
-
-            var label = "Pág " + pbCurrentPage + " / " + (pbTotalPages-1);
-            if (pbCurrentPage === 0) label = "Portada";
-            else if (pbCurrentPage === pbTotalPages) label = "Contraportada";
-            document.getElementById('pb-page-label').textContent = label;
-
-            document.getElementById('pb-btn-prev').disabled = (pbCurrentPage === 0);
-            document.getElementById('pb-btn-next').disabled = (pbCurrentPage === pbTotalPages);
-        }
-
-        function prevPage() { if (pbCurrentPage > 0) { pbCurrentPage--; updateBookUI(); } }
-        function nextPage() { if (pbCurrentPage < pbTotalPages) { pbCurrentPage++; updateBookUI(); } }
-        function goToCover() { pbCurrentPage = 0; updateBookUI(); }
-
-        function toggleFullscreen() {
-            var doc = window.document;
-            var docEl = doc.documentElement;
-            var fsBtn = document.getElementById('pb-fs-mobile-btn');
-            
-            var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-            var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-                if(requestFullScreen) { requestFullScreen.call(docEl); }
-                document.body.classList.add('fullscreen-mode');
-                if(fsBtn) fsBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
-                checkOrientation();
-            } else {
-                if(cancelFullScreen) { cancelFullScreen.call(doc); }
-                document.body.classList.remove('fullscreen-mode');
-                document.getElementById('pb-rotate-overlay').classList.remove('active');
-                if(fsBtn) fsBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
-            }
-        }
-
-        function checkOrientation() {
-            if (document.body.classList.contains('fullscreen-mode')) {
-                var isPortrait = window.innerHeight > window.innerWidth;
-                var rotateOverlay = document.getElementById('pb-rotate-overlay');
-                if (isPortrait) { rotateOverlay.classList.add('active'); } 
-                else { rotateOverlay.classList.remove('active'); }
-            }
-        }
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', function() { setTimeout(checkOrientation, 200); });
-
-        function pbTouchStart(e) {
-            isPbDragging = true;
-            pbStartX = e.touches[0].clientX;
-            pbStartPage = pbCurrentPage;
-        }
-        function pbTouchMove(e) {
-            if (!isPbDragging) return;
-            var currentX = e.touches[0].clientX;
-            var diff = pbStartX - currentX;
-            if (Math.abs(diff) > 20) { e.preventDefault(); }
-        }
-        function pbTouchEnd(e) {
-            if (!isPbDragging) return;
-            isPbDragging = false;
-            var endX = e.changedTouches[0].clientX;
-            var diff = pbStartX - endX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && pbCurrentPage < pbTotalPages) { nextPage(); } 
-                else if (diff < 0 && pbCurrentPage > 0) { prevPage(); }
-            }
-        }
-
-        let lbStartX = 0, lbStartY = 0, lbTracking = false;
-        document.getElementById('lb').addEventListener('touchstart', function(e) {
-            lbStartX = e.touches[0].clientX; lbStartY = e.touches[0].clientY; lbTracking = true;
-        }, { passive: true });
-        document.getElementById('lb').addEventListener('touchend', function(e) {
-            if (!lbTracking) return; lbTracking = false;
-            let dx = e.changedTouches[0].clientX - lbStartX, dy = e.changedTouches[0].clientY - lbStartY;
-            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) { if (dx < 0) navLB(1); else navLB(-1); }
-        }, { passive: true });
-
-        function showLB() {
-            var i = portalPhotos[lbIdx];
-            var im = document.getElementById('lbImg'), vd = document.getElementById('lbVid');
-            if (i.type === 'video') { im.style.display = 'none'; vd.style.display = 'block'; vd.src = i.videoUrl; document.getElementById('lbDl').style.display = 'none'; }
-            else { vd.style.display = 'none'; vd.src = ''; im.style.display = 'block'; im.src = pFull(i); document.getElementById('lbDl').style.display = 'flex'; document.getElementById('lbDl').href = pFull(i); document.getElementById('lbDl').setAttribute('download', i.name || 'foto'); }
-            document.getElementById('lbC').textContent = (lbIdx + 1) + ' / ' + portalPhotos.length;
-            document.getElementById('lb').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function navLB(d) { lbIdx += d; if (lbIdx < 0) lbIdx = portalPhotos.length - 1; if (lbIdx >= portalPhotos.length) lbIdx = 0; showLB(); }
-        
-        function openLB(idx) { 
-            isPublicPortfolioView = false; 
-            lbIdx = idx; 
-            if (!document.getElementById('lb').classList.contains('active')) {
-                window.history.pushState({ lightbox: true }, '');
-            }
-            showLB(); 
-        }
-        function closeLB(fromPopState) { 
-            if (document.getElementById('lb').classList.contains('active')) {
-                document.getElementById('lb').classList.remove('active'); 
-                document.body.style.overflow = ''; 
-                document.getElementById('lbVid').src = ''; 
-                if (fromPopState !== true) {
-                    window.history.back();
-                }
-            }
-        }
-        window.addEventListener('popstate', function(e) { 
-            if (document.getElementById('lb').classList.contains('active')) {
-                closeLB(true);
-            } else {
-                checkUrlForClient(); 
-            }
-        });
-        
-        function openDownloadModal() {
-            var sizeMB = portalPhotos.length * 4.5;
-            var sizeText = sizeMB > 1024 ? (sizeMB/1024).toFixed(1) + " GB" : sizeMB.toFixed(0) + " MB";
-            document.getElementById('dlWeight').textContent = sizeText;
-            document.getElementById('downloadModal').classList.add('active');
-            document.getElementById('btnConfirmDl').onclick = function() {
-                var s = D.settings;
-                var msg = encodeURIComponent('Hola Montenegro. Soy ' + D.clients[activeClientCode].name + ' (Código: ' + activeClientCode + '). Solicito el enlace de Google Drive para descargar mi galería completa en alta calidad.');
-                window.open('https://wa.me/' + s.waNumber + '?text=' + msg, '_blank');
-                closeDownloadModal();
-            };
-        }
-        function closeDownloadModal() { document.getElementById('downloadModal').classList.remove('active'); }
-        function reportProblem(e) {
-            e.preventDefault();
-            var s = D.settings;
-            var msg = encodeURIComponent('Hola Montenegro. Tengo un problema visualizando mi galería (Código: ' + (activeClientCode || 'N/A') + ').');
-            window.open('https://wa.me/' + s.waNumber + '?text=' + msg, '_blank');
-        }
-
-        function openAdmLogin() { document.getElementById('admLoginModal').classList.add('active'); document.getElementById('admPassIn').value = ''; document.getElementById('admLoginErr').classList.remove('show'); document.getElementById('admPassIn').focus(); }
-        function closeAdmLogin() { document.getElementById('admLoginModal').classList.remove('active'); }
-        function doAdmLogin() {
-            var p = document.getElementById('admPassIn').value;
-            if (p === (D.settings.admPass || 'admin123')) { closeAdmLogin(); openAdm(); }
-            else { document.getElementById('admLoginErr').classList.add('show'); }
-        }
-
-        function openAdm() { admState.view = 'list'; document.getElementById('admPanel').classList.add('active'); document.body.style.overflow = 'hidden'; setupAdmTabs(); renderAdmBody(); }
-        function closeAdm() { document.getElementById('admPanel').classList.remove('active'); document.body.style.overflow = ''; }
-        function setupAdmTabs() {
-            var btns = document.getElementById('admTabs').querySelectorAll('button');
-            btns.forEach(function(b) { b.onclick = function() { btns.forEach(function(x) { x.classList.remove('active'); }); b.classList.add('active'); admState.tab = b.getAttribute('data-t'); admState.view = 'list'; renderAdmBody(); }; });
-        }
-
-        function renderAdmBody() {
-            var body = document.getElementById('admBody');
-            switch (admState.tab) {
-                case 'services': renderAdmServices(body); break;
-                case 'clients': renderAdmClients(body); break;
-                case 'portfolio': renderAdmPortfolio(body); break;
-                case 'testimonials': renderAdmTestimonials(body); break;
-                case 'agenda': renderAdmAgenda(body); break;
-                case 'settings': renderAdmSettings(body); break;
-            }
-        }
-
-        function renderAdmAgenda(body) {
-            if (admState.view === 'edit') {
-                var idx = admState.editId;
-                var item = idx !== null ? D.agenda[idx] : { date: '', time: '', client: '', service: '', price: '', advance: '', notes: '' };
-                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (idx !== null ? 'Editar' : 'Nueva') + ' Cita</h3>' +
-                    '<div class="af-row"><div><label class="af-l">Fecha</label><input type="date" class="af-i" id="ag_date" value="' + esc(item.date) + '"></div>' +
-                    '<div><label class="af-l">Hora</label><input type="time" class="af-i" id="ag_time" value="' + esc(item.time) + '"></div></div>' +
-                    '<label class="af-l">Cliente</label><input type="text" class="af-i" id="ag_client" value="' + esc(item.client) + '" placeholder="Nombre del cliente">' +
-                    '<label class="af-l">Servicio</label><input type="text" class="af-i" id="ag_service" value="' + esc(item.service) + '" placeholder="Ej. Sesión de XV Años">' +
-                    '<div class="af-row"><div><label class="af-l">Precio Total ($)</label><input type="number" class="af-i" id="ag_price" value="' + esc(item.price || '') + '" placeholder="1500"></div>' +
-                    '<div><label class="af-l">Anticipo ($)</label><input type="number" class="af-i" id="ag_advance" value="' + esc(item.advance || '') + '" placeholder="500"></div></div>' +
-                    '<label class="af-l">Notas Adicionales</label><textarea class="af-i af-ta" id="ag_notes" placeholder="Ej. Locación, ropa, etc.">' + esc(item.notes) + '</textarea>' +
-                    '<div class="af-btns"><button class="af-btn af-btn-p" onclick="saveAgendaItem(' + idx + ')">Guardar Cita</button>' +
-                    '<button class="af-btn af-btn-s" onclick="admState.view=\'list\'; renderAdmBody()">Cancelar</button></div>';
-                return;
-            }
-            var h = '<button class="adm-add-btn" onclick="addAgendaItem()">+ Agendar Nueva Cita</button>';
-            if (!D.agenda || D.agenda.length === 0) h += '<div class="adm-empty">No hay citas programadas.</div>';
-            else {
-                var sorted = [...D.agenda].map((item, idx) => ({item, idx})).sort((a,b) => new Date(a.item.date) - new Date(b.item.date));
-                sorted.forEach(function(o) {
-                    var dateObj = new Date(o.item.date + 'T00:00:00');
-                    var dateStr = dateObj.toLocaleDateString('es-ES', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
-                    h += '<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(o.item.client) + ' - ' + esc(o.item.service) + '</div><div class="al-item-s">' + esc(dateStr) + ' a las ' + esc(o.item.time) + '</div></div>' +
-                        '<div class="al-acts"><button class="al-btn" onclick="generateRemissionNote(' + o.idx + ')" title="Generar Nota de Remisión">📄 Nota</button><button class="al-btn" onclick="editAgendaItem(' + o.idx + ')">✎</button><button class="al-btn del" onclick="delAgendaItem(' + o.idx + ')">×</button></div></div>';
-                });
-            }
-            body.innerHTML = h;
-        }
-
-        function addAgendaItem() { admState.view = 'edit'; admState.editId = null; renderAdmBody(); }
-        function editAgendaItem(idx) { admState.view = 'edit'; admState.editId = idx; renderAdmBody(); }
-        function delAgendaItem(idx) { if (confirm('¿Eliminar cita?')) { D.agenda.splice(idx, 1); saveData(function() { renderAdmBody(); toast('Cita eliminada'); }); } }
-        function saveAgendaItem(idx) {
-            var item = {
-                date: document.getElementById('ag_date').value,
-                time: document.getElementById('ag_time').value,
-                client: document.getElementById('ag_client').value,
-                service: document.getElementById('ag_service').value,
-                price: parseFloat(document.getElementById('ag_price').value) || 0,
-                advance: parseFloat(document.getElementById('ag_advance').value) || 0,
-                notes: document.getElementById('ag_notes').value
-            };
-            if (!item.date || !item.client) { alert('Fecha y Cliente son obligatorios'); return; }
-            if (idx !== null) D.agenda[idx] = item; else D.agenda.push(item);
-            saveData(function() { admState.view = 'list'; renderAdmBody(); toast('Cita guardada'); });
-        }
-
-        function generateRemissionNote(idx) {
-            var item = D.agenda[idx];
-            var canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 1000;
-            var ctx = canvas.getContext('2d');
-            
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 800, 1000);
-            
-            ctx.fillStyle = '#b8935a';
-            ctx.fillRect(0, 0, 800, 20);
-            
-            ctx.fillStyle = '#1a1a1a';
-            ctx.font = 'bold 36px Arial';
-            ctx.fillText('FOTO & VIDEO MONTENEGRO', 50, 80);
-            
-            ctx.fillStyle = '#b8935a';
-            ctx.font = 'bold 24px Arial';
-            ctx.fillText('NOTA DE REMISIÓN / CONTRATO', 50, 120);
-            
-            ctx.fillStyle = '#1a1a1a';
-            ctx.font = '20px Arial';
-            ctx.fillText('Fecha de emisión: ' + new Date().toLocaleDateString(), 500, 80);
-            
-            ctx.strokeStyle = '#e4e0d9';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(50, 150);
-            ctx.lineTo(750, 150);
-            ctx.stroke();
-            
-            ctx.font = 'bold 22px Arial';
-            ctx.fillText('DATOS DEL EVENTO', 50, 200);
-            
-            ctx.font = '20px Arial';
-            ctx.fillText('Cliente: ' + item.client, 50, 240);
-            ctx.fillText('Servicio: ' + item.service, 50, 280);
-            ctx.fillText('Fecha del Evento: ' + item.date, 50, 320);
-            ctx.fillText('Hora del Evento: ' + item.time, 50, 360);
-            
-            ctx.font = 'bold 22px Arial';
-            ctx.fillText('NOTAS Y REQUISITOS', 50, 420);
-            
-            ctx.font = '18px Arial';
-            var notesLines = (item.notes || 'Ninguna').split('\n');
-            var startY = 460;
-            notesLines.forEach(function(line) {
-                ctx.fillText(line.substring(0, 70), 50, startY);
-                startY += 25;
-            });
-            
-            startY = Math.max(startY + 40, 600);
-            ctx.beginPath();
-            ctx.moveTo(50, startY);
-            ctx.lineTo(750, startY);
-            ctx.stroke();
-            
-            ctx.font = 'bold 22px Arial';
-            ctx.fillText('DESGLOSE FINANCIERO', 50, startY + 50);
-            
-            ctx.font = '20px Arial';
-            ctx.fillText('Precio Total:', 500, startY + 90);
-            ctx.fillText('$' + item.price.toFixed(2), 650, startY + 90);
-            ctx.fillText('Anticipo:', 500, startY + 130);
-            ctx.fillText('$' + item.advance.toFixed(2), 650, startY + 130);
-            
-            ctx.fillStyle = '#b8935a';
-            ctx.fillText('Resta:', 500, startY + 170);
-            ctx.fillText('$' + (item.price - item.advance).toFixed(2), 650, startY + 170);
-            
-            ctx.fillStyle = '#1a1a1a';
-            ctx.font = '18px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('_________________________', 400, 900);
-            ctx.fillText('Firma del Cliente', 400, 930);
-            
-            var dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-            var a = document.createElement('a');
-            a.href = dataUrl;
-            a.download = 'Remision_' + item.client.replace(/\s+/g, '_') + '.jpg';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            toast('Nota descargada como JPG');
-        }
-
-        function renderAdmServices(body) {
-            if (admState.view === 'edit') {
-                var idx = admState.editId; var item = idx !== null ? D.services[idx] : { name: '', desc: '', price: '', features: [], featured: false };
-                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (idx !== null ? 'Editar' : 'Nuevo') + ' Paquete</h3><label class="af-l">Nombre</label><input type="text" class="af-i" id="es_name" value="' + esc(item.name) + '"><label class="af-l">Descripción corta</label><input type="text" class="af-i" id="es_desc" value="' + esc(item.desc) + '"><div class="af-row"><div><label class="af-l">Precio Base</label><input type="number" class="af-i" id="es_price" value="' + esc(item.price) + '"></div><div><label class="af-l">Destacado</label><select class="af-i" id="es_feat"><option value="0"' + (!item.featured ? ' selected' : '') + '>No</option><option value="1"' + (item.featured ? ' selected' : '') + '>Sí (Más contratado)</option></select></div></div><label class="af-l">Características (una por línea)</label><textarea class="af-i af-ta" id="es_feat_list">' + esc(item.features.join('\n')) + '</textarea><div class="af-btns"><button class="af-btn af-btn-p" onclick="saveService(' + idx + ')">Guardar</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\'; renderAdmBody()">Cancelar</button></div>';
-                return;
-            }
-            var h = '<button class="adm-add-btn" onclick="addService()">+ Nuevo Paquete</button>';
-            D.services.forEach(function(s, idx) { h += '<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(s.name) + (s.featured ? ' <span class="toggle-badge on">Destacado</span>' : '') + '</div><div class="al-item-s">$' + esc(s.price) + '</div></div><div class="al-acts"><button class="al-btn" onclick="editService(' + idx + ')">✎</button><button class="al-btn del" onclick="delService(' + idx + ')">×</button></div></div>'; });
-            body.innerHTML = h;
-        }
-        function addService() { admState.view = 'edit'; admState.editId = null; renderAdmBody(); }
-        function editService(idx) { admState.view = 'edit'; admState.editId = idx; renderAdmBody(); }
-        function delService(idx) { if (confirm('¿Eliminar?')) { D.services.splice(idx, 1); saveData(function() { renderAdmBody(); }); } }
-        function saveService(idx) { var item = { name: document.getElementById('es_name').value, desc: document.getElementById('es_desc').value, price: document.getElementById('es_price').value, featured: document.getElementById('es_feat').value == '1', features: document.getElementById('es_feat_list').value.split('\n').map(x => x.trim()).filter(x => x) }; if (idx !== null) D.services[idx] = item; else D.services.push(item); saveData(function() { admState.view = 'list'; renderAdmBody(); }); }
-
-        function renderAdmClients(body) {
-            if (admState.view === 'edit') {
-                var code = admState.editId; var item = code ? D.clients[code] : { name: '', eventName: '', expirationDate: '', photos: [], photobook: [], videoFrame: '' };
-                admState.pbSlots = item.photobook ? JSON.parse(JSON.stringify(item.photobook)) : [];
-                
-                var defaultExp = new Date(); defaultExp.setMonth(defaultExp.getMonth() + 1);
-                var expVal = item.expirationDate ? item.expirationDate : defaultExp.toISOString().split('T')[0];
-                
-                var h = '<h3 style="margin-bottom:.5rem">' + (code ? 'Editar' : 'Nuevo') + ' Cliente</h3><p class="adm-hint">Código de acceso único (sin espacios).</p><input type="text" class="af-i" id="ec_code" value="' + esc(code || '') + '" ' + (code ? 'readonly style="background:#f5f5f5"' : 'placeholder="Ej: xv-ana"') + '><div class="af-row"><div><label class="af-l">Nombre del cliente</label><input type="text" class="af-i" id="ec_name" value="' + esc(item.name) + '"></div><div><label class="af-l">Título del Evento</label><input type="text" class="af-i" id="ec_evt" value="' + esc(item.eventName) + '"></div></div>';
-                
-                h += '<label class="af-l">Fecha de Expiración</label><input type="date" class="af-i" id="ec_exp" value="' + esc(expVal) + '"><p class="adm-hint" style="margin-top:-.5rem">El cliente no podrá acceder después de esta fecha.</p>';
-                
-                h += '<label class="af-l">Video del evento (Código Iframe Youtube/Drive)</label><textarea class="af-i af-ta" id="ec_vid" style="min-height:70px" placeholder=\'<iframe src="..."></iframe>\'>' + esc(item.videoFrame || '') + '</textarea>';
-                
-                h += '<div style="margin: 1.5rem 0 1rem; border-top: 1px solid var(--border-light); padding-top: 1rem;"><h4 style="font-family:var(--fh); margin-bottom:.5rem;">Galería de Fotos (Opcional)</h4><p class="adm-hint">Carga las fotos desde tu computadora (se redimensionan automáticamente para carga rápida, pero conservan calidad visual).</p><input type="file" id="ec_files" multiple accept="image/*" class="af-i" style="padding:0.4rem" onchange="previewNewUploads(this)"><div id="ec_upload_preview" style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem;"></div>';
-                
-                h += '<div id="ec_photo_list" style="max-height: 250px; overflow-y:auto; border: 1px solid var(--border); padding:.5rem; border-radius:var(--radius); margin-bottom: 1rem;">';
-                if (item.photos && item.photos.length > 0) { item.photos.forEach(function(p, i) { h += '<div class="adm-photo-item" id="cphoto_' + i + '"><img src="' + esc(p.url) + '"><input type="text" value="' + esc(p.name || '') + '" onchange="updateCPhotoName(' + i + ', this.value)" placeholder="Nombre del archivo"><button type="button" onclick="delCPhoto(' + i + ')">×</button></div>'; }); } 
-                else { h += '<div class="adm-empty" style="padding:1rem;">No hay fotos cargadas.</div>'; }
-                h += '</div></div>';
-
-                h += '<div style="margin: 1.5rem 0 1rem; border-top: 1px solid var(--border-light); padding-top: 1rem;"><h4 style="font-family:var(--fh); margin-bottom:.5rem;">Fotolibro Digital (Opcional)</h4><p class="adm-hint">Agrega las hojas del fotolibro en orden (Portada, Hojas internas, Contraportada). Para portadas panorámicas usa tipo "Panorámica Izq/Der".</p><div style="display:flex; gap:8px; margin-bottom:10px;"><button class="btn btn-outline btn-sm" onclick="addPbSlot(\'normal\')">+ Hoja Normal</button><button class="btn btn-outline btn-sm" onclick="addPbSlot(\'pano_left\')">+ Panorámica (Mitad Izq)</button><button class="btn btn-outline btn-sm" onclick="addPbSlot(\'pano_right\')">+ Panorámica (Mitad Der)</button></div><div id="pb_slots_container" class="pb-slots"></div></div>';
-
-                h += '<div class="af-btns"><button class="af-btn af-btn-p" onclick="saveClient(\'' + (code || '') + '\')">Guardar Cliente</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\'; renderAdmBody()">Cancelar</button></div>';
-                body.innerHTML = h;
-                window.tempClientPhotos = item.photos ? JSON.parse(JSON.stringify(item.photos)) : [];
-                renderPbSlots();
-                return;
-            }
-            var h = '<button class="adm-add-btn" onclick="addClient()">+ Nuevo Cliente</button>';
-            Object.keys(D.clients).forEach(function(k) { var c = D.clients[k]; var exp = c.expirationDate ? new Date(c.expirationDate).toLocaleDateString() : 'Sin caducidad'; h += '<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(c.name) + ' <span style="font-weight:normal; color:#888;">(' + esc(k) + ')</span></div><div class="al-item-s">' + (c.photos ? c.photos.length : 0) + ' fotos | Vence: ' + exp + '</div></div><div class="al-acts"><button class="al-btn" onclick="copyClientLink(\'' + esc(k) + '\')" title="Copiar enlace">🔗</button><button class="al-btn" onclick="editClient(\'' + esc(k) + '\')">✎</button><button class="al-btn del" onclick="delClient(\'' + esc(k) + '\')">×</button></div></div>'; });
-            body.innerHTML = h;
-        }
-
-        function addPbSlot(type) { admState.pbSlots.push({ type: type, url: '' }); renderPbSlots(); }
-        function rmPbSlot(idx) { admState.pbSlots.splice(idx, 1); renderPbSlots(); }
-        function uploadPbImg(input, idx) {
-            var file = input.files[0]; if (!file) return; var reader = new FileReader();
-            reader.onload = function(e) { 
-                var img = new Image(); img.onload = function() { 
-                    var canvas = document.createElement('canvas'); var w = img.width, h = img.height; 
-                    if (w > 1600) { h = Math.floor(h * (1600 / w)); w = 1600; } 
-                    canvas.width = w; canvas.height = h; var ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h); 
-                    admState.pbSlots[idx].url = canvas.toDataURL('image/jpeg', 0.82); renderPbSlots(); 
-                }; img.src = e.target.result; 
-            }; reader.readAsDataURL(file);
-        }
-        function renderPbSlots() {
-            var c = document.getElementById('pb_slots_container'); if(!c) return;
-            var h = '';
-            admState.pbSlots.forEach(function(s, i) {
-                var lbl = 'Normal'; if(s.type==='pano_left') lbl = 'Pan. Izquierda'; else if(s.type==='pano_right') lbl = 'Pan. Derecha';
-                h += '<div class="pb-slot"><button class="rm-slot" onclick="rmPbSlot(' + i + ')">×</button><label>Pág ' + i + ' - ' + lbl + '</label><img src="' + esc(s.url || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') + '"><input type="text" placeholder="URL directa o pega B64" value="' + esc(s.url.substring(0,30)) + (s.url.length>30?'...':'') + '" onchange="admState.pbSlots[' + i + '].url = this.value"><input type="file" accept="image/*" onchange="uploadPbImg(this, ' + i + ')"></div>';
-            });
-            c.innerHTML = h;
-        }
-
-        function copyClientLink(c) {
-            var url = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=' + encodeURIComponent(c);
-            navigator.clipboard.writeText(url).then(function() { toast('Enlace de cliente copiado al portapapeles'); });
-        }
-
-        window.newUploadsData = [];
-        function previewNewUploads(input) {
-            var files = input.files; if (!files.length) return;
-            var p = document.getElementById('ec_upload_preview'); p.innerHTML = '<span style="font-size:.8rem; color:#888;">Procesando imágenes...</span>';
-            window.newUploadsData = []; var prm = [];
-            for (var i = 0; i < files.length; i++) {
-                (function(file) {
-                    prm.push(new Promise(function(resolve) {
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            var img = new Image();
-                            img.onload = function() {
-                                var canvas = document.createElement('canvas'); var w = img.width, h = img.height;
-                                if (w > 1800) { h = Math.floor(h * (1800 / w)); w = 1800; }
-                                canvas.width = w; canvas.height = h; var ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-                                var dUrl = canvas.toDataURL('image/jpeg', 0.85);
-                                window.newUploadsData.push({ name: file.name, url: dUrl, fullUrl: dUrl });
-                                resolve();
-                            }; img.src = e.target.result;
-                        }; reader.readAsDataURL(file);
-                    }));
-                })(files[i]);
-            }
-            Promise.all(prm).then(function() {
-                var h = '';
-                window.newUploadsData.forEach(function(d) { h += '<div style="background:#eee; padding:2px; border-radius:4px;"><img src="' + esc(d.url) + '" style="height:40px; width:auto;"></div>'; });
-                h += '<div style="width:100%; font-size:.8rem; color:var(--accent);">Listas para agregar al guardar. (' + window.newUploadsData.length + ' fotos)</div>';
-                p.innerHTML = h;
-            });
-        }
-        function updateCPhotoName(idx, val) { window.tempClientPhotos[idx].name = val; }
-        function delCPhoto(idx) { window.tempClientPhotos.splice(idx, 1); document.getElementById('cphoto_' + idx).style.display = 'none'; }
-
-        function addClient() { admState.view = 'edit'; admState.editId = null; renderAdmBody(); }
-        function editClient(code) { admState.view = 'edit'; admState.editId = code; renderAdmBody(); }
-        function delClient(code) { if (confirm('¿Eliminar cliente ' + code + '?')) { delete D.clients[code]; saveData(function() { renderAdmBody(); }); } }
-        
-        function saveClient(oldCode) {
-            var nc = document.getElementById('ec_code').value.trim().toLowerCase();
-            if (!nc) { alert('Ingresa un código de cliente.'); return; }
-            var item = {
-                name: document.getElementById('ec_name').value,
-                eventName: document.getElementById('ec_evt').value,
-                expirationDate: document.getElementById('ec_exp').value,
-                photos: window.tempClientPhotos || [],
-                photobook: admState.pbSlots,
-                videoFrame: ''
-            };
-            
-            var ytRaw = document.getElementById('ec_vid').value;
-            var finalIframe = ytRaw;
-            if (ytRaw.includes('drive.google.com/file/d/')) {
-                var m = ytRaw.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                if (m) finalIframe = '<iframe src="https://drive.google.com/file/d/' + m[1] + '/preview" allow="autoplay; fullscreen" width="100%" height="100%" frameborder="0"></iframe>';
-            } else if (ytRaw.includes('youtu.be/') || (ytRaw.includes('youtube.com/') && !ytRaw.includes('<iframe'))) {
-                var ytM = ytRaw.match(/(?:youtu\.be\/|v=|\/v\/|\/embed\/)([^&?\s]+)/);
-                if (ytM) finalIframe = '<iframe src="https://www.youtube.com/embed/' + ytM[1] + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen width="100%" height="100%" frameborder="0"></iframe>';
-            }
-            item.videoFrame = finalIframe;
-
-            if (window.newUploadsData && window.newUploadsData.length > 0) {
-                item.photos = item.photos.concat(window.newUploadsData);
-            }
-            if (item.photos.length > 0) { item.coverImg = item.photos[0].url; }
-
-            if (oldCode && oldCode !== nc) delete D.clients[oldCode];
-            D.clients[nc] = item;
-            
-            var btn = document.querySelector('.af-btn-p'); btn.textContent = 'Guardando...'; btn.disabled = true;
-            saveData(function() { admState.view = 'list'; renderAdmBody(); toast('Cliente guardado con éxito.'); });
-        }
-
-        function renderAdmPortfolio(body) {
-            if (admState.view === 'edit') {
-                var idx = admState.editId; var item = idx !== null ? D.portfolio[idx] : { url: '', label: '', cat: '', type: 'image', videoUrl: '' };
-                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (idx !== null ? 'Editar' : 'Nuevo') + ' Elemento de Portafolio</h3><div class="af-row"><div><label class="af-l">Tipo</label><select class="af-i" id="ep_type" onchange="document.getElementById(\'ep_vid_wrap\').style.display=this.value===\'video\'?\'block\':\'none\';document.getElementById(\'ep_img_wrap\').style.display=this.value===\'video\'?\'none\':\'block\';"><option value="image"' + (item.type !== 'video' ? ' selected' : '') + '>Imagen</option><option value="video"' + (item.type === 'video' ? ' selected' : '') + '>Video (Youtube/Drive)</option></select></div><div><label class="af-l">Etiqueta/Título</label><input type="text" class="af-i" id="ep_label" value="' + esc(item.label) + '"></div></div><div id="ep_vid_wrap" style="display:' + (item.type === 'video' ? 'block' : 'none') + '"><label class="af-l">URL del Video (Youtube o Drive)</label><input type="text" class="af-i" id="ep_video" value="' + esc(item.videoUrl || '') + '"></div><div id="ep_img_wrap" style="display:' + (item.type === 'video' ? 'none' : 'block') + '"><label class="af-l">Categoría</label><input type="text" class="af-i" id="ep_cat" value="' + esc(item.cat) + '" placeholder="Ej. boda, xv, retrato"><label class="af-l">Subir Imagen</label><input type="file" class="af-i" accept="image/*" onchange="uploadGeneralImg(this, \'ep_url\')" style="padding:.4rem"><input type="hidden" id="ep_url" value="' + esc(item.url) + '"></div><div class="af-btns"><button class="af-btn af-btn-p" onclick="savePortfolio(' + idx + ')">Guardar</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\'; renderAdmBody()">Cancelar</button></div>';
-                return;
-            }
-            var h = '<button class="adm-add-btn" onclick="addPortfolio()">+ Nuevo Elemento</button><div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">';
-            D.portfolio.forEach(function(s, idx) { h += '<div style="position:relative; background:#f5f5f5; border-radius:6px; overflow:hidden;"><img src="' + esc(s.url || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') + '" style="width:100%; height:120px; object-fit:cover;"><div style="padding:.5rem; font-size:.8rem; background:#fff;"><div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + esc(s.label || 'Sin título') + '</div><div style="color:#888; font-size:.7rem;">' + (s.type === 'video' ? 'Video' : esc(s.cat)) + '</div></div><div style="position:absolute; top:5px; right:5px; display:flex; gap:5px;"><button class="al-btn" style="min-height:30px; padding:0 8px" onclick="editPortfolio(' + idx + ')">✎</button><button class="al-btn del" style="min-height:30px; padding:0 8px" onclick="delPortfolio(' + idx + ')">×</button></div></div>'; });
-            h += '</div>'; body.innerHTML = h;
-        }
-        function addPortfolio() { admState.view = 'edit'; admState.editId = null; renderAdmBody(); }
-        function editPortfolio(idx) { admState.view = 'edit'; admState.editId = idx; renderAdmBody(); }
-        function delPortfolio(idx) { if (confirm('¿Eliminar?')) { D.portfolio.splice(idx, 1); saveData(function() { renderAdmBody(); }); } }
-        function savePortfolio(idx) {
-            var item = { type: document.getElementById('ep_type').value, label: document.getElementById('ep_label').value, cat: document.getElementById('ep_cat').value, url: document.getElementById('ep_url').value, videoUrl: document.getElementById('ep_video').value };
-            if (item.type === 'video' && !item.url) item.url = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; // Video thumb
-            if (idx !== null) D.portfolio[idx] = item; else D.portfolio.push(item); saveData(function() { admState.view = 'list'; renderAdmBody(); });
-        }
-
-        function renderAdmTestimonials(body) {
-            if (admState.view === 'edit') {
-                var idx = admState.editId; var item = idx !== null ? D.testimonials[idx] : { text: '', author: '', stars: 5 };
-                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (idx !== null ? 'Editar' : 'Nuevo') + ' Testimonio</h3><label class="af-l">Autor/Cliente</label><input type="text" class="af-i" id="et_author" value="' + esc(item.author) + '"><label class="af-l">Texto</label><textarea class="af-i af-ta" id="et_text">' + esc(item.text) + '</textarea><label class="af-l">Estrellas</label><input type="number" class="af-i" id="et_stars" value="' + esc(item.stars) + '" min="1" max="5"><div class="af-btns"><button class="af-btn af-btn-p" onclick="saveTestimonial(' + idx + ')">Guardar</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\'; renderAdmBody()">Cancelar</button></div>';
-                return;
-            }
-            var h = '<button class="adm-add-btn" onclick="addTestimonial()">+ Nuevo Testimonio</button>';
-            D.testimonials.forEach(function(s, idx) { h += '<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(s.author) + ' <span style="color:#f39c12">(' + s.stars + '★)</span></div><div class="al-item-s">' + esc(s.text.substring(0, 60)) + '...</div></div><div class="al-acts"><button class="al-btn" onclick="editTestimonial(' + idx + ')">✎</button><button class="al-btn del" onclick="delTestimonial(' + idx + ')">×</button></div></div>'; });
-            body.innerHTML = h;
-        }
-        function addTestimonial() { admState.view = 'edit'; admState.editId = null; renderAdmBody(); }
-        function editTestimonial(idx) { admState.view = 'edit'; admState.editId = idx; renderAdmBody(); }
-        function delTestimonial(idx) { if (confirm('¿Eliminar?')) { D.testimonials.splice(idx, 1); saveData(function() { renderAdmBody(); }); } }
-        function saveTestimonial(idx) { var item = { author: document.getElementById('et_author').value, text: document.getElementById('et_text').value, stars: parseInt(document.getElementById('et_stars').value) }; if (idx !== null) D.testimonials[idx] = item; else D.testimonials.push(item); saveData(function() { admState.view = 'list'; renderAdmBody(); }); }
-
-        function renderAdmSettings(body) {
-            var s = D.settings; var p = D.printPrices || getDefaults().printPrices;
-            var h = '<h3 style="margin-bottom:1rem">Configuración General</h3><div class="af-row"><div><label class="af-l">Título Hero</label><input type="text" class="af-i" id="sg_h_title" value="' + esc(s.heroTitle) + '"></div><div><label class="af-l">Logo (Opcional, PNG con transparencia)</label><input type="file" class="af-i" accept="image/png, image/jpeg" onchange="uploadGeneralImg(this, \'sg_logo\')" style="padding:.4rem"><input type="hidden" id="sg_logo" value="' + esc(s.logo || '') + '"></div></div><label class="af-l">Descripción Hero</label><textarea class="af-i af-ta" id="sg_h_desc">' + esc(s.heroDesc) + '</textarea><label class="af-l">Imagen Hero</label><div style="display:flex;gap:.5rem"><input type="hidden" id="sg_h_img" value="' + esc(s.heroImg) + '"><input type="file" class="af-i" accept="image/*" onchange="uploadGeneralImg(this, \'sg_h_img\')" style="padding:.4rem"></div>';
-            h += '<h4 style="margin:1.5rem 0 .5rem; font-family:var(--fh)">Contacto</h4><div class="af-row"><div><label class="af-l">Teléfono Móvil (Llamadas)</label><input type="text" class="af-i" id="sg_phone" value="' + esc(s.phone) + '"></div><div><label class="af-l">WhatsApp (con código de país, ej 52...)</label><input type="text" class="af-i" id="sg_wa" value="' + esc(s.waNumber) + '"></div></div><div class="af-row"><div><label class="af-l">Email</label><input type="email" class="af-i" id="sg_email" value="' + esc(s.email) + '"></div><div><label class="af-l">Dirección</label><input type="text" class="af-i" id="sg_addr" value="' + esc(s.address) + '"></div></div><div class="af-row"><div><label class="af-l">Instagram URL</label><input type="text" class="af-i" id="sg_ig" value="' + esc(s.ig || '') + '"></div><div><label class="af-l">Facebook URL</label><input type="text" class="af-i" id="sg_fb" value="' + esc(s.fb || '') + '"></div></div>';
-            h += '<h4 style="margin:1.5rem 0 .5rem; font-family:var(--fh)">Precios de Impresión ($)</h4><div class="af-row"><div><label class="af-l">4x6"</label><input type="number" class="af-i" id="sp_4x6" value="' + esc(p['4x6']||10) + '"></div><div><label class="af-l">6x8"</label><input type="number" class="af-i" id="sp_6x8" value="' + esc(p['6x8']||20) + '"></div><div><label class="af-l">8x10"</label><input type="number" class="af-i" id="sp_8x10" value="' + esc(p['8x10']||35) + '"></div><div><label class="af-l">11x14"</label><input type="number" class="af-i" id="sp_11x14" value="' + esc(p['11x14']||80) + '"></div><div><label class="af-l">16x20"</label><input type="number" class="af-i" id="sp_16x20" value="' + esc(p['16x20']||200) + '"></div><div><label class="af-l">20x24"</label><input type="number" class="af-i" id="sp_20x24" value="' + esc(p['20x24']||350) + '"></div></div>';
-            h += '<h4 style="margin:1.5rem 0 .5rem; font-family:var(--fh)">Seguridad</h4><label class="af-l">Contraseña Panel Admin</label><input type="text" class="af-i" id="sg_pass" value="' + esc(s.admPass || 'admin123') + '">';
-            h += '<button class="af-btn af-btn-p" onclick="saveSettings()" style="width:100%; margin-top:1rem; justify-content:center;">Guardar Configuración</button>';
-            body.innerHTML = h;
-        }
-
+        // --- Modificación 1: Conservar transparencia del logo al cargarlo ---
         function uploadGeneralImg(input, targetId) {
             var file = input.files[0]; if (!file) return; var reader = new FileReader();
             reader.onload = function(e) { 
@@ -1807,12 +916,15 @@
                     var canvas = document.createElement('canvas'); var w = img.width, h = img.height; 
                     if (w > 1800) { h = Math.floor(h * (1800 / w)); w = 1800; } 
                     canvas.width = w; canvas.height = h; 
+                    
                     var ctx = canvas.getContext('2d');
-                    ctx.clearRect(0, 0, w, h);
+                    ctx.clearRect(0, 0, w, h); // Limpiar para mantener fondo transparente
                     ctx.drawImage(img, 0, 0, w, h); 
-                    var isPng = file.name.toLowerCase().endsWith('.png') || file.type.includes('png');
-                    var mimeType = isPng ? 'image/png' : 'image/jpeg';
-                    var q = isPng ? undefined : 0.82;
+                    
+                    var isLogo = (targetId === 'se_logoImg');
+                    var mimeType = (file.type === 'image/png' || isLogo) ? 'image/png' : 'image/jpeg';
+                    var q = mimeType === 'image/jpeg' ? 0.82 : undefined;
+                    
                     document.getElementById(targetId).value = canvas.toDataURL(mimeType, q); 
                     toast('Imagen cargada. Haz clic en Guardar.'); 
                 }; 
@@ -1821,30 +933,1408 @@
             reader.readAsDataURL(file); input.value = '';
         }
 
-        function saveSettings() {
-            D.settings.heroTitle = document.getElementById('sg_h_title').value;
-            D.settings.heroDesc = document.getElementById('sg_h_desc').value;
-            D.settings.heroImg = document.getElementById('sg_h_img').value;
-            D.settings.logo = document.getElementById('sg_logo').value;
-            D.settings.phone = document.getElementById('sg_phone').value;
-            D.settings.waNumber = document.getElementById('sg_wa').value;
-            D.settings.email = document.getElementById('sg_email').value;
-            D.settings.address = document.getElementById('sg_addr').value;
-            D.settings.ig = document.getElementById('sg_ig').value;
-            D.settings.fb = document.getElementById('sg_fb').value;
-            D.settings.admPass = document.getElementById('sg_pass').value;
-            D.printPrices = { '4x6': parseInt(document.getElementById('sp_4x6').value), '6x8': parseInt(document.getElementById('sp_6x8').value), '8x10': parseInt(document.getElementById('sp_8x10').value), '11x14': parseInt(document.getElementById('sp_11x14').value), '16x20': parseInt(document.getElementById('sp_16x20').value), '20x24': parseInt(document.getElementById('sp_20x24').value) };
-            var btn = document.querySelector('.af-btn-p'); btn.textContent = 'Guardando...'; btn.disabled = true;
-            saveData(function() { toast('Configuración guardada'); renderPublic(); setTimeout(function(){ btn.textContent = 'Guardar Configuración'; btn.disabled = false; }, 500); });
+        function pushUrlState(client, view) {
+            var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            if (!client) {
+                if(window.location.search.includes('c=')) window.history.pushState({ path: cleanUrl }, '', cleanUrl);
+                return;
+            }
+            var newUrl = cleanUrl + "?c=" + encodeURIComponent(client) + (view ? "-" + view : "");
+            if(window.location.search !== ("?c=" + encodeURIComponent(client) + (view ? "-" + view : ""))) {
+                window.history.pushState({ path: newUrl }, '', newUrl);
+            }
+        }
+        
+        // --- Modificación 3a: Manejar popstate para cerrar fotos con botón de regreso ---
+        window.addEventListener('popstate', function(e) { 
+            var lb = document.getElementById('lb');
+            if (lb.classList.contains('active')) {
+                lb.classList.remove('active');
+                document.body.style.overflow = '';
+                document.getElementById('lbVid').src = '';
+            } else {
+                checkUrlForClient(); 
+            }
+        });
+        
+        function copyClientUrl(code) {
+            var base = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            base = base.replace(/\/index\.html$/i, '/');
+            var url = base + "?c=" + encodeURIComponent(code);
+            
+            if(navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url).then(function() { toast('Enlace copiado al portapapeles'); });
+            } else {
+                var textArea = document.createElement("textarea"); textArea.value = url; textArea.style.position = "fixed"; document.body.appendChild(textArea); textArea.focus(); textArea.select();
+                try { document.execCommand('copy'); toast('Enlace copiado al portapapeles'); } catch (err) { toast('No se pudo copiar el enlace'); } document.body.removeChild(textArea);
+            }
         }
 
-        window.onload = function() { 
-            loadData().then(function() {
-                if (window.location.search.includes('admin')) {
-                    openAdmLogin();
+        function downloadPhoto(src, name, e) {
+            if(e) { e.preventDefault(); e.stopPropagation(); }
+            var dId = null;
+            if (src.includes('/d/')) {
+                var m = src.match(/\/d\/([^=]+)/);
+                if (m) dId = m[1];
+            } else if (src.includes('id=')) {
+                var m = src.match(/id=([a-zA-Z0-9_-]+)/);
+                if (m) dId = m[1];
+            }
+            
+            if (dId) {
+                window.location.href = 'https://drive.google.com/uc?export=download&id=' + dId;
+                toast('Descargando foto directamente...');
+            } else {
+                var a = document.createElement('a');
+                a.href = src.replace('w=800','w=1600');
+                a.download = name || 'fotografia.jpg';
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                toast('Iniciando descarga...');
+            }
+        }
+
+        window.toggleAllServices = function() {
+            var all = document.getElementById('servGridAll');
+            var btn = document.querySelector('#servMoreBtn button');
+            if (all.style.display === 'none') {
+                all.style.display = 'grid';
+                btn.textContent = 'Ocultar paquetes';
+            } else {
+                all.style.display = 'none';
+                btn.textContent = 'Ver más paquetes';
+            }
+        };
+
+        function renderPublic() {
+            var s = D.settings;
+            document.getElementById('heroDesc').textContent = s.heroDesc; document.getElementById('ftAddr').textContent = s.address;
+            
+            var logoBtn = document.getElementById('logoBtn');
+            if (s.logoImage) {
+                logoBtn.innerHTML = '<img src="' + esc(s.logoImage) + '" alt="Logotipo">';
+            } else {
+                logoBtn.innerHTML = 'Foto<span>&</span>Video Montenegro';
+            }
+            
+            if (document.getElementById('heroImgMain')) {
+                document.getElementById('heroImgMain').src = s.heroImage || 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=800&fit=crop&auto=format';
+            }
+            
+            var photosOnly = D.portfolio.filter(function(p) { return p.type !== 'video'; });
+            var videosOnly = D.portfolio.filter(function(p) { return p.type === 'video'; });
+
+            var pf = document.getElementById('portFilters'); 
+            var labels = ['Todos'];
+            photosOnly.forEach(function(img) { var l = img.label || 'General'; if (!labels.includes(l)) labels.push(l); });
+            
+            window.currentPortFilter = window.currentPortFilter || 'Todos';
+            if (!labels.includes(window.currentPortFilter)) window.currentPortFilter = 'Todos';
+            
+            var pfHtml = '';
+            if (labels.length > 1) {
+                labels.forEach(function(l) {
+                    var cls = 'port-filter-btn' + (l === window.currentPortFilter ? ' active' : '');
+                    pfHtml += '<button class="' + cls + '" onclick="document.querySelectorAll(\'.port-filter-btn\').forEach(btn => btn.classList.remove(\'active\')); this.classList.add(\'active\'); filterPortfolio(\'' + esc(l) + '\');">' + esc(l) + '</button>';
+                });
+            }
+            pf.innerHTML = pfHtml;
+            filterPortfolio(window.currentPortFilter); 
+
+            var vg = document.getElementById('vidGridPublic');
+            var vgHtml = '';
+            videosOnly.forEach(function(vid) {
+                var embedUrl = getEmbedUrl(vid.videoUrl);
+                if(embedUrl) {
+                    vgHtml += '<div class="video-item"><iframe src="' + embedUrl + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>';
                 }
             });
-        };
+            vg.innerHTML = vgHtml;
+            document.getElementById('videos').style.display = vgHtml ? 'block' : 'none';
+
+            var sgDest = document.getElementById('servGridDestacados');
+            var sgAll = document.getElementById('servGridAll');
+            var sgDestHtml = '';
+            var sgAllHtml = '';
+            var hasHidden = false;
+
+            var sortedServices = D.services.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+            var featuredCount = sortedServices.filter(function(s) { return s.isFeatured; }).length;
+
+            if (featuredCount === 0 && sortedServices.length > 0) {
+                sortedServices[0].isFeatured = true;
+            }
+
+            sortedServices.forEach(function(svc) {
+                var feat = svc.features ? svc.features.map(function(f) { return '<li>' + esc(f) + '</li>'; }).join('') : '';
+                var cardHtml = '<div class="service-card' + (svc.isFeatured ? ' featured' : '') + '"><span class="service-icon">' + esc(svc.icon) + '</span><h3>' + esc(svc.title) + '</h3><p>' + esc(svc.desc) + '</p>' + (feat ? '<ul class="service-features">' + feat + '</ul>' : '') + '<span class="service-price">' + esc(svc.price) + '</span></div>';
+                
+                if (svc.isFeatured) {
+                    sgDestHtml += cardHtml;
+                } else {
+                    sgAllHtml += cardHtml;
+                    hasHidden = true;
+                }
+            });
+
+            sgDest.innerHTML = sgDestHtml;
+            sgAll.innerHTML = sgAllHtml;
+
+            var moreBtn = document.getElementById('servMoreBtn');
+            if (hasHidden) {
+                moreBtn.style.display = 'block';
+            } else {
+                moreBtn.style.display = 'none';
+            }
+
+            var tg = document.getElementById('testGrid');
+            var tgHtml = '';
+            D.testimonials.forEach(function(t) { 
+                tgHtml += '<div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">' + esc(t.text) + '</p><p class="testimonial-author">' + esc(t.author) + '</p></div>'; 
+            });
+            tg.innerHTML = tgHtml;
+
+            var ci = document.getElementById('contactInfo');
+            ci.innerHTML = '<p class="section-desc" style="margin-bottom:1.2rem">Estamos en Capulhuac de Mirafuentes. Llámanos o ven directamente a la tienda.</p>' +
+                '<div class="contact-detail"><span class="icon">📞</span> <a href="tel:' + s.phoneRaw + '" style="color:var(--text-muted);text-decoration:none">' + esc(s.phone) + '</a></div>' +
+                '<div class="contact-detail"><span class="icon">📍</span> ' + esc(s.address) + '</div>' +
+                '<div class="contact-detail"><span class="icon">🕒</span> ' + esc(s.hours) + '</div>' +
+                '<div class="contact-detail"><span class="icon">🔗</span> <a href="' + esc(s.facebook) + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">facebook.com</a></div>' +
+                '<div class="map-container"><iframe src="' + esc(s.mapEmbed) + '" title="Ubicación" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>';
+            
+            var sel = document.getElementById('servSelect'); 
+            var selHtml = '<option value="" disabled selected>Tipo de servicio</option>';
+            D.services.forEach(function(svc) { selHtml += '<option>' + esc(svc.title) + '</option>'; }); 
+            selHtml += '<option>Otro</option>';
+            sel.innerHTML = selHtml;
+            
+            var pp = document.getElementById('printPrices'); 
+            if (pp && D.printPrices) {
+                var ppHtml = '';
+                D.printPrices.forEach(function(p) { ppHtml += '<tr><td>' + esc(p.label) + '</td><td>' + esc(p.measure) + '</td><td>$' + p.price + '</td></tr>'; });
+                pp.innerHTML = ppHtml;
+            }
+            
+            document.getElementById('cpWaLink').href = 'https://wa.me/' + s.waNumber; document.getElementById('cpWaLink').textContent = s.phone;
+        }
+
+        function filterPortfolio(filter, showAll = false) {
+            window.currentPortFilter = filter;
+            var grid = document.getElementById('portGrid'); grid.innerHTML = '';
+            
+            var photosOnly = D.portfolio.filter(function(p) { return p.type !== 'video'; });
+            var filtered = [];
+            
+            if (filter === 'Todos' && !showAll) {
+                var countMap = {};
+                photosOnly.forEach(function(item) {
+                    var l = item.label || 'General';
+                    if (!countMap[l]) countMap[l] = 0;
+                    if (countMap[l] < 2) {
+                        filtered.push(item);
+                        countMap[l]++;
+                    }
+                });
+            } else {
+                filtered = photosOnly.filter(function(item) {
+                    var l = item.label || 'General';
+                    return filter === 'Todos' || l === filter;
+                });
+            }
+
+            var limit = showAll ? filtered.length : (filter === 'Todos' ? filtered.length : window.portfolioLimit);
+            var toShow = filtered.slice(0, limit);
+            var frag = document.createDocumentFragment();
+
+            toShow.forEach(function(item) {
+                var d = document.createElement('div'); d.className = 'portfolio-item';
+                d.innerHTML = '<img src="' + esc(item.src) + '" alt="' + esc(item.label || '') + '" loading="lazy"><span class="il">' + esc(item.label || '') + '</span>';
+                
+                d.addEventListener('click', function() { 
+                    isPublicPortfolioView = true;
+                    portalPhotos = [{ src: pFull(item), name: item.label || '', type: item.type || 'image', videoUrl: item.videoUrl || '' }];
+                    lbIdx = 0; showLB();
+                });
+                frag.appendChild(d);
+            });
+            grid.appendChild(frag);
+
+            var btnContainer = document.getElementById('portMoreBtn');
+            if (!btnContainer) {
+                btnContainer = document.createElement('div');
+                btnContainer.id = 'portMoreBtn';
+                btnContainer.style.textAlign = 'center';
+                btnContainer.style.marginTop = '2rem';
+                grid.parentNode.insertBefore(btnContainer, grid.nextSibling);
+            }
+            
+            if (filter === 'Todos' && !showAll && photosOnly.length > filtered.length) {
+                btnContainer.innerHTML = '<button class="btn btn-outline" onclick="filterPortfolio(\'Todos\', true)">Ver portafolio completo</button>';
+            } 
+            else if (filter !== 'Todos' && !showAll && filtered.length > limit) {
+                btnContainer.innerHTML = '<button class="btn btn-outline" onclick="filterPortfolio(\'' + esc(filter) + '\', true)">Ver más de ' + esc(filter) + ' (' + (filtered.length - limit) + ' restantes)</button>';
+            } else {
+                btnContainer.innerHTML = '';
+            }
+        }
+
+        function navTo(id, e) {
+            if(e) e.preventDefault();
+            closeMenu();
+            if (document.getElementById('cpPortal').classList.contains('active')) {
+                forceExitPortal();
+                pushUrlState(null);
+            }
+            setTimeout(function() {
+                var el = document.getElementById(id);
+                if(el) {
+                    var y = el.getBoundingClientRect().top + window.pageYOffset - 70;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                }
+            }, 50);
+        }
+
+        function toggleMenu() { var n = document.getElementById('navLinks'), h = document.getElementById('hamburger'), o = document.getElementById('mobOv'); if (n.classList.contains('active')) closeMenu(); else { n.classList.add('active'); h.classList.add('active'); o.classList.add('active'); document.body.style.overflow = 'hidden'; } }
+        function closeMenu() { document.getElementById('navLinks').classList.remove('active'); document.getElementById('hamburger').classList.remove('active'); document.getElementById('mobOv').classList.remove('active'); document.body.style.overflow = ''; }
+        
+        let scrollTicking = false;
+        window.addEventListener('scroll', function() {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(function() {
+                    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
+            }
+        }, { passive: true });
+
+        document.getElementById('logoBtn').addEventListener('click', function(e) {
+            e.preventDefault(); logoClicks++; clearTimeout(logoTimer); logoTimer = setTimeout(function() { logoClicks = 0; }, 800);
+            if (logoClicks >= 3) { logoClicks = 0; openAdmLogin(); }
+        });
+        function openAdmLogin() {
+            var isFirst = !D.adminPass || D.adminPass === 'admin123';
+            document.getElementById('admLoginTitle').textContent = isFirst ? 'Crear contraseña' : 'Administración';
+            document.getElementById('admLoginDesc').textContent = isFirst ? 'Primera vez. Crea una contraseña segura.' : 'Ingresa tu contraseña de administrador.';
+            document.getElementById('admPassIn').value = ''; document.getElementById('admLoginErr').classList.remove('show');
+            document.getElementById('admLoginModal').classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(function() { document.getElementById('admPassIn').focus(); }, 100);
+        }
+        function closeAdmLogin() { document.getElementById('admLoginModal').classList.remove('active'); document.body.style.overflow = ''; }
+        function doAdmLogin() {
+            var pw = document.getElementById('admPassIn').value; var isFirst = !D.adminPass || D.adminPass === 'admin123';
+            if (isFirst) { if (!pw || pw.length < 4) { document.getElementById('admLoginErr').textContent = 'Mínimo 4 caracteres.'; document.getElementById('admLoginErr').classList.add('show'); return; }
+                D.adminPass = pw; saveData(); closeAdmLogin(); openAdm(); toast('Contraseña creada'); } 
+            else { if (pw !== D.adminPass) { document.getElementById('admLoginErr').textContent = 'Contraseña incorrecta.'; document.getElementById('admLoginErr').classList.add('show'); return; }
+                closeAdmLogin(); openAdm(); }
+        }
+        document.getElementById('admPassIn').addEventListener('keydown', function(e) { if (e.key === 'Enter') doAdmLogin(); });
+
+        function openLogin() { document.getElementById('codeIn').value = ''; document.getElementById('loginErr').classList.remove('show'); document.getElementById('loginModal').classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(function() { document.getElementById('codeIn').focus(); }, 100); }
+        function closeLogin() { document.getElementById('loginModal').classList.remove('active'); document.body.style.overflow = ''; }
+        function doLogin() {
+            var code = document.getElementById('codeIn').value.trim().toLowerCase();
+            if (!D.clients[code]) { document.getElementById('loginErr').classList.add('show'); return; }
+            curClient = code; selected = {}; allSel = false; isPrintMode = false; closeLogin(); enterPortal();
+        }
+        document.getElementById('codeIn').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+
+        function getActiveItemsCount(c) {
+            var count = 0;
+            if (c.hasVideo && c.video && c.video.youtubeId) count++;
+            if (c.hasPhotos && c.photos && c.photos.length) count++;
+            if (c.hasPhotobook) {
+                var pb = c.photobook;
+                var filledCount = pb ? ((pb.cover ? 1 : 0) + (pb.spreads ? pb.spreads.filter(s=>!!s).length : 0)) : 0;
+                if (filledCount > 0) count++;
+            }
+            return count;
+        }
+
+        function enterPortal(targetView) {
+            var c = D.clients[curClient];
+            document.getElementById('mainSite').style.display = 'none'; document.getElementById('cpPortal').classList.add('active');
+            document.getElementById('cpName').textContent = c.name; document.getElementById('cpEvent').textContent = c.event;
+            document.body.style.overflow = 'auto'; window.scrollTo(0, 0); 
+            
+            var count = getActiveItemsCount(c);
+
+            if (targetView === 'galeria' && c.hasPhotos) { openGalleryView(); } 
+            else if (targetView === 'video' && c.hasVideo) { openVideoView(); } 
+            else if (targetView === 'fotolibro' && c.hasPhotobook) { openPhotobookView(); } 
+            else if (count === 1 && !targetView) {
+                if (c.hasPhotos && c.photos && c.photos.length) openGalleryView();
+                else if (c.hasVideo && c.video && c.video.youtubeId) openVideoView();
+                else if (c.hasPhotobook) openPhotobookView();
+                else showMainView();
+            } else {
+                showMainView();
+            }
+        }
+        
+        function forceExitPortal() {
+            document.getElementById('cpPortal').classList.remove('active');
+            document.getElementById('mainSite').style.display = '';
+            curClient = null; selected = {}; isPrintMode = false;
+            document.getElementById('vidWrap').innerHTML = '';
+            try { exitFullscreenMode(); } catch(e) {}
+            document.getElementById('cpMainView').style.display = '';
+            document.getElementById('cpVideoView').style.display = 'none';
+            document.getElementById('cpGalleryView').style.display = 'none';
+            document.getElementById('cpPhotobookView').style.display = 'none';
+            closeLB(); 
+        }
+
+        function exitPortal() {
+            forceExitPortal();
+            pushUrlState(null);
+            window.scrollTo(0, 0);
+        }
+
+        function requestExtension() {
+            var c = D.clients[curClient];
+            var msg = "Hola, me gustaría solicitar una extensión de almacenamiento para mi galería web.\n\n*Evento:* " + c.name + " (" + c.event + ")\n*Código:* " + curClient;
+            window.open('https://wa.me/' + D.settings.waNumber + '?text=' + encodeURIComponent(msg), '_blank');
+        }
+
+        function reportProblem(e) {
+            if(e) e.preventDefault();
+            var c = D.clients[curClient];
+            var evtName = c ? c.name : 'Desconocido';
+            var msg = "Hola, necesito ayuda con mi galería.\n\n*Evento:* " + evtName + "\n*Código:* " + curClient + "\n\n*El problema es:* ";
+            window.open('https://wa.me/' + D.settings.waNumber + '?text=' + encodeURIComponent(msg), '_blank');
+        }
+
+        function showMainView() {
+            document.getElementById('cpHdrMain').style.display = 'block';
+            document.getElementById('cp-ft-main').style.display = 'block';
+            document.getElementById('cpMainView').style.display = ''; 
+            document.getElementById('cpVideoView').style.display = 'none';
+            document.getElementById('cpGalleryView').style.display = 'none'; 
+            document.getElementById('cpPhotobookView').style.display = 'none';
+            document.getElementById('cpGalleryView').classList.remove('gallery-print-mode');
+            renderAccessCards(); updateOrderBar();
+            pushUrlState(curClient, null);
+        }
+
+        function renderAccessCards() {
+            var c = D.clients[curClient];
+            var banner = document.getElementById('cpExpireBanner');
+            var lock = document.getElementById('cpExpiredLock');
+            var container = document.getElementById('accessCardsContainer');
+            var cards = document.getElementById('accessCards'); 
+            
+            var cardsHtml = '';
+            
+            if (c.expireAt) {
+                var daysLeft = Math.ceil((c.expireAt - Date.now()) / 86400000);
+                var isExpired = daysLeft < 0;
+                if (isExpired) {
+                    document.getElementById('cpExpireMsg').innerHTML = '<b>Tu acceso expiró el ' + toDisplayDate(c.expireAt) + '</b>';
+                    banner.style.borderColor = 'rgba(192,57,43,0.3)'; banner.style.background = 'rgba(192,57,43,0.05)';
+                    container.style.display = 'none'; lock.style.display = 'block';
+                    return; 
+                } else {
+                    var msg = daysLeft <= 30 ? '⏳ Tu acceso expira en ' + daysLeft + ' días' : 'Acceso disponible hasta: ' + toDisplayDate(c.expireAt);
+                    document.getElementById('cpExpireMsg').innerHTML = msg;
+                    banner.style.borderColor = 'var(--c-border)'; banner.style.background = 'rgba(255,255,255,0.02)';
+                    container.style.display = 'block'; lock.style.display = 'none';
+                }
+            } else {
+                banner.style.display = 'none'; lock.style.display = 'none'; container.style.display = 'block';
+            }
+
+            if (c.hasVideo && c.video && c.video.youtubeId) { cardsHtml += ('<div class="access-card"><div class="access-card-icon">🎬</div><div class="access-card-info"><h3>Video</h3><p>' + esc(c.video.title || 'Tu video del evento') + '</p></div><button class="btn btn-accent btn-sm" onclick="openVideoView()">Ver video</button></div>'); }
+            if (c.hasPhotos && c.photos && c.photos.length) { cardsHtml += ('<div class="access-card"><div class="access-card-icon">📸</div><div class="access-card-info"><h3>Fotos</h3><p>' + c.photos.length + ' fotos disponibles</p></div><button class="btn btn-accent btn-sm" onclick="openGalleryView()">Ver galería</button></div>'); }
+            if (c.hasPhotobook) {
+                var pb = c.photobook || { cover: null, spreads: [null], hasBackCover: false, back: null };
+                var filledCount = (pb.cover ? 1 : 0) + pb.spreads.filter(function(s) { return !!s; }).length + (pb.hasBackCover && pb.back ? 1 : 0);
+                cardsHtml += ('<div class="access-card"><div class="access-card-icon">📖</div><div class="access-card-info"><h3>Fotolibro Digital</h3><p>' + (filledCount > 0 ? filledCount + ' páginas con contenido' : 'Próximamente disponible') + '</p></div><button class="btn btn-accent btn-sm" onclick="openPhotobookView()"' + (filledCount === 0 ? ' disabled style="opacity:.4;cursor:default"' : '') + '>Ver fotolibro</button></div>');
+            }
+            if (!cardsHtml) { cardsHtml = '<div class="adm-empty">Aún no hay contenido disponible para este evento.</div>'; }
+            
+            cards.innerHTML = cardsHtml;
+        }
+
+        function openVideoView() {
+            var c = D.clients[curClient];
+            document.getElementById('cpMainView').style.display = 'none'; document.getElementById('cpVideoView').style.display = 'block';
+            document.getElementById('cpGalleryView').style.display = 'none'; document.getElementById('cpPhotobookView').style.display = 'none';
+            document.getElementById('cp-ft-main').style.display = 'none';
+            document.getElementById('cpHdrMain').style.display = 'none'; 
+            var vid = c.video || {};
+            document.getElementById('vidTitle').textContent = vid.title || 'Tu video';
+            document.getElementById('vidWrap').innerHTML = vid.youtubeId || '<p style="color:#fff; text-align:center; padding: 2rem;">No hay video disponible.</p>';
+            window.scrollTo(0, 0);
+            
+            var count = getActiveItemsCount(c);
+            var btn2 = document.getElementById('btnBackVideo');
+            if (count === 1) { btn2.innerHTML = '← Salir del Portal'; btn2.onclick = exitPortal; }
+            else { btn2.innerHTML = '← Regresar al menú'; btn2.onclick = closeVideoView; }
+            
+            pushUrlState(curClient, 'video');
+        }
+        function closeVideoView() { document.getElementById('vidWrap').innerHTML = ''; document.getElementById('cpVideoView').style.display = 'none'; showMainView(); }
+
+        function openGalleryView() {
+            var c = D.clients[curClient];
+            document.getElementById('cpHdrMain').style.display = 'none'; 
+            document.getElementById('cpMainView').style.display = 'none'; document.getElementById('cpVideoView').style.display = 'none';
+            document.getElementById('cpPhotobookView').style.display = 'none'; document.getElementById('cpGalleryView').style.display = 'block';
+            
+            portalPhotos = c.photos || [];
+            var coverImg = c.galleryCover ? c.galleryCover : (portalPhotos.length > 0 ? pSrc(portalPhotos[0], 1600) : 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&fit=crop');
+            
+            if (coverImg.includes('/d/')) {
+                var m = coverImg.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (m) coverImg = 'https://lh3.googleusercontent.com/d/' + m[1] + '=s1600';
+            } else if (coverImg.includes('id=')) {
+                var m = coverImg.match(/id=([a-zA-Z0-9_-]+)/);
+                if (m) coverImg = 'https://lh3.googleusercontent.com/d/' + m[1] + '=s1600';
+            }
+            
+            document.getElementById('pxHeader').style.backgroundImage = `url('${coverImg}')`;
+            document.getElementById('pxTitle').textContent = c.name;
+            document.getElementById('pxSubtitle').textContent = c.event;
+
+            isPrintMode = false;
+            isPublicPortfolioView = false; 
+            document.getElementById('cpGalleryView').classList.remove('gallery-print-mode');
+            updateFabIcon();
+
+            renderPixiesetGallery();
+            updateOrderBar(); window.scrollTo(0, 0);
+            
+            var count = getActiveItemsCount(c);
+            var btn = document.getElementById('btnBackGallery');
+            if (count === 1) { btn.innerHTML = '← Salir del Portal'; btn.onclick = exitPortal; }
+            else { btn.innerHTML = '← Regresar al menú'; btn.onclick = closeGalleryView; }
+            
+            pushUrlState(curClient, 'galeria');
+        }
+        function closeGalleryView() { document.getElementById('cpGalleryView').style.display = 'none'; isPrintMode = false; clearSel(); showMainView(); }
+
+        function togglePrintMode() {
+            isPrintMode = !isPrintMode;
+            var galleryView = document.getElementById('cpGalleryView');
+            var btnSelAll = document.getElementById('btnSelAll');
+            
+            if (isPrintMode) {
+                galleryView.classList.add('gallery-print-mode');
+                btnSelAll.style.display = 'block';
+                toast('Modo Impresión Activo. Toca las fotos que deseas imprimir.');
+            } else {
+                galleryView.classList.remove('gallery-print-mode');
+                btnSelAll.style.display = 'none';
+                clearSel();
+            }
+            updateFabIcon();
+        }
+
+        function updateFabIcon() {
+            var fabText = document.getElementById('fabPrintText');
+            var fabBtn = document.getElementById('fabPrintBtn');
+            if(isPrintMode) {
+                fabText.textContent = 'Cancelar Impresión';
+                fabBtn.style.background = '#c0392b';
+                fabBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg><span id="fabPrintText">Cancelar</span>';
+            } else {
+                fabText.textContent = 'Imprimir Fotos';
+                fabBtn.style.background = 'var(--c-accent)';
+                fabBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg><span id="fabPrintText" style="display:none;">Imprimir Fotos</span>';
+            }
+        }
+
+        function renderPixiesetGallery() {
+            var photos = portalPhotos;
+            var sets = {};
+            
+            photos.forEach((p, i) => {
+                var setName = p.set || 'General';
+                if (!sets[setName]) sets[setName] = [];
+                sets[setName].push({ photo: p, index: i });
+            });
+
+            var navInner = document.getElementById('pxNavInner');
+            var content = document.getElementById('pxContent');
+            var setNames = Object.keys(sets).sort((a,b) => a === 'General' ? -1 : a.localeCompare(b));
+
+            var navHtml = '';
+            var contentFrag = document.createDocumentFragment();
+
+            setNames.forEach((setName, idx) => {
+                var safeId = 'set-' + setName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                navHtml += `<div class="px-nav-item ${idx===0?'active':''}" onclick="scrollToSet('${safeId}', this)">${esc(setName)}</div>`;
+                
+                var section = document.createElement('div');
+                section.className = 'px-set-section';
+                section.id = safeId;
+                section.innerHTML = `<h3 class="px-set-title">${esc(setName)}</h3>`;
+                
+                var grid = document.createElement('div');
+                grid.className = 'px-grid';
+                var gridFrag = document.createDocumentFragment();
+
+                sets[setName].forEach(item => {
+                    var i = item.index; var p = item.photo; var isSel = selected[i];
+                    var d = document.createElement('div');
+                    d.className = 'pc';
+                    
+                    d.innerHTML = `
+                        <img src="${pSrc(p, 600)}" alt="${esc(p.name || '')}" loading="lazy" onload="this.parentElement.classList.add(this.naturalHeight > this.naturalWidth ? 'vertical' : 'horizontal'); this.classList.add('loaded');">
+                        <div class="chk${isSel ? ' on' : ''}" id="chk-${i}">
+                            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <button class="dlb" type="button" onclick="triggerDownload(${i}, event)" title="Descargar">
+                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        </button>`;
+                    
+                    d.addEventListener('click', function(e) {
+                        if (isPrintMode) { toggleSel(i); } else { openLB(i); }
+                    });
+                    gridFrag.appendChild(d);
+                });
+                
+                grid.appendChild(gridFrag);
+                section.appendChild(grid); 
+                contentFrag.appendChild(section);
+            });
+            
+            navInner.innerHTML = navHtml;
+            content.innerHTML = '';
+            content.appendChild(contentFrag);
+        }
+        
+        function triggerDownload(i, e) {
+            var p = portalPhotos[i];
+            if(!p) return;
+            downloadPhoto(p.src || pSrc(p, 1600), p.name, e);
+        }
+
+        function scrollToSet(id, el) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.px-nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function openDownloadModal() {
+            var c = D.clients[curClient];
+            if (!c.driveFolderUrl) { toast("El enlace de descarga completa no está configurado."); return; }
+            var numPhotos = (c.photos || []).length;
+            var approxMB = numPhotos * 8; 
+            var weightText = "";
+            if (approxMB > 1000) { weightText = (approxMB / 1024).toFixed(1) + " GB"; } else { weightText = approxMB + " MB"; }
+            
+            document.getElementById('dlWeight').textContent = weightText;
+            document.getElementById('downloadModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            document.getElementById('btnConfirmDl').onclick = function() {
+                window.open(c.driveFolderUrl, '_blank');
+                closeDownloadModal();
+            };
+        }
+        function closeDownloadModal() { document.getElementById('downloadModal').classList.remove('active'); document.body.style.overflow = ''; }
+
+        function toggleSel(i) {
+            if (selected[i]) delete selected[i]; else selected[i] = true;
+            allSel = Object.keys(selected).length === portalPhotos.length;
+            var chk = document.getElementById('chk-' + i);
+            if (chk) { if (selected[i]) chk.classList.add('on'); else chk.classList.remove('on'); } else { renderPixiesetGallery(); }
+            updateOrderBar();
+        }
+        function toggleSelAll() { if (allSel) { selected = {}; allSel = false; } else { selected = {}; portalPhotos.forEach(function(_, i) { selected[i] = true; }); allSel = true; } renderPixiesetGallery(); updateOrderBar(); }
+        function clearSel() { selected = {}; allSel = false; renderPixiesetGallery(); updateOrderBar(); closeOrder(); }
+        
+        function updateOrderBar() {
+            var cnt = Object.keys(selected).length, bar = document.getElementById('orderBar');
+            if (cnt > 0 && isPrintMode) { 
+                bar.classList.add('vis'); document.getElementById('obCnt').textContent = cnt; var total = 0; 
+                Object.keys(selected).forEach(function(i) { var sz = selected[i] || '10x15'; var pr = D.printPrices.find(function(p) { return p.size === sz; }); total += (pr ? pr.price : 10); }); 
+                document.getElementById('obTot').textContent = '$' + total; 
+            } else { bar.classList.remove('vis'); }
+        }
+        
+        function openOrder() {
+            var items = document.getElementById('omItems'); 
+            var itemsHtml = ''; 
+            var c = D.clients[curClient]; 
+            document.getElementById('omSub').textContent = c.name + ' — ' + c.event; 
+            var total = 0;
+            
+            Object.keys(selected).forEach(function(i) {
+                i = parseInt(i); var p = portalPhotos[i]; if (!p) return; var sz = selected[i] || '10x15'; var pr = D.printPrices.find(function(x) { return x.size === sz; }); var price = pr ? pr.price : 10; total += price; var opts = '';
+                D.printPrices.forEach(function(ps) { opts += '<option value="' + ps.size + '"' + (ps.size === sz ? ' selected' : '') + '>' + ps.label + ' ($' + ps.price + ')</option>'; });
+                itemsHtml += ('<div class="oi"><img class="oi-img" src="' + pSrc(p, 200) + '" alt=""><div class="oi-info"><div class="oi-nm">' + esc(p.name || 'Foto ' + (i + 1)) + '</div><div class="oi-ctrl"><select onchange="changeSize(' + i + ',this.value)">' + opts + '</select><div class="qty-c"><button class="qty-b" onclick="changeQty(\'' + i + '\',-1)">−</button><span class="qty-v" id="qty_' + i + '">1</span><button class="qty-b" onclick="changeQty(\'' + i + '\',1)">+</button></div></div><div class="oi-sub" id="sub_' + i + '">$' + price + '</div></div></div>');
+            });
+            items.innerHTML = itemsHtml;
+            document.getElementById('omTotV').textContent = '$' + total; document.getElementById('orderModal').classList.add('active'); document.body.style.overflow = 'hidden';
+        }
+        function closeOrder() { document.getElementById('orderModal').classList.remove('active'); document.body.style.overflow = ''; }
+        function changeSize(i, sz) { selected[i] = sz; openOrder(); }
+        function changeQty(i, d) { var k = '' + i; if (!quantities[k]) quantities[k] = 1; quantities[k] = Math.max(1, quantities[k] + d); var el = document.getElementById('qty_' + i); if (el) el.textContent = quantities[k]; var pr = D.printPrices.find(function(x) { return x.size === selected[i]; }); var price = (pr ? pr.price : 10) * quantities[k]; var sub = document.getElementById('sub_' + i); if (sub) sub.textContent = '$' + price; var total = 0; Object.keys(selected).forEach(function(idx) { var p2 = D.printPrices.find(function(x) { return x.size === selected[idx]; }); total += (p2 ? p2.price : 10) * (quantities[idx] || 1); }); document.getElementById('omTotV').textContent = '$' + total; }
+        function sendWA() {
+            var c = D.clients[curClient], msg = '*Pedido de impresión*\nCliente: ' + c.name + '\nEvento: ' + c.event + '\n\n';
+            Object.keys(selected).forEach(function(i) { i = parseInt(i); var p = portalPhotos[i]; var sz = selected[i] || '10x15'; var pr = D.printPrices.find(function(x) { return x.size === sz; }); var qty = quantities['' + i] || 1; msg += '• ' + esc(p.name || 'Foto ' + (i + 1)) + ' — ' + pr.label + ' x' + qty + ' — $' + (pr.price * qty) + '\n'; });
+            var total = 0; Object.keys(selected).forEach(function(idx) { var p2 = D.printPrices.find(function(x) { return x.size === selected[idx]; }); total += (p2 ? p2.price : 10) * (quantities[idx] || 1); }); msg += '\n*Total: $' + total + '*';
+            window.open('https://wa.me/' + D.settings.waNumber + '?text=' + encodeURIComponent(msg), '_blank');
+            closeOrder();
+            togglePrintMode(); 
+        }
+
+        function openLB(idx) { 
+            isPublicPortfolioView = false; 
+            lbIdx = idx; showLB(); 
+        }
+        
+        // --- Modificación 3b: Añadir historial y funcionalidad de cierre en Lightbox ---
+        function showLB() {
+            var p = portalPhotos[lbIdx]; if (!p) return; 
+            document.getElementById('lbC').textContent = p.name || ''; 
+            
+            var imgEl = document.getElementById('lbImg');
+            var vidEl = document.getElementById('lbVid');
+            var dlBtn = document.getElementById('lbDl');
+
+            if (p.type === 'video') {
+                imgEl.style.display = 'none';
+                vidEl.style.display = 'block';
+                vidEl.src = getEmbedUrl(p.videoUrl) + '?autoplay=1';
+                dlBtn.style.display = 'none';
+            } else {
+                vidEl.style.display = 'none';
+                vidEl.src = '';
+                imgEl.style.display = 'block';
+                imgEl.src = pFull(p);
+                
+                if (isPublicPortfolioView) {
+                    dlBtn.style.display = 'none'; 
+                } else {
+                    dlBtn.style.display = '';     
+                    dlBtn.onclick = function(e) { downloadPhoto(p.src || pFull(p), p.name, e); };
+                    dlBtn.removeAttribute('href');
+                }
+            }
+
+            document.querySelector('.lb-p').style.display = portalPhotos.length > 1 ? '' : 'none'; 
+            document.querySelector('.lb-nx').style.display = portalPhotos.length > 1 ? '' : 'none';
+            document.getElementById('lb').classList.add('active'); document.body.style.overflow = 'hidden';
+            
+            // Crear un estado temporal en el historial para interceptar el botón "Atrás"
+            if (!history.state || !history.state.lightbox) {
+                window.history.pushState({ lightbox: true }, '', window.location.href);
+            }
+        }
+        
+        function closeLB() { 
+            document.getElementById('lb').classList.remove('active'); 
+            document.body.style.overflow = ''; 
+            document.getElementById('lbVid').src = ''; 
+            
+            // Si cerramos manualmente mediante la "X", retrocedemos el historial para limpiarlo
+            if (history.state && history.state.lightbox) {
+                window.history.back(); 
+            }
+        }
+        
+        function navLB(d) { lbIdx += d; if (lbIdx < 0) lbIdx = portalPhotos.length - 1; if (lbIdx >= portalPhotos.length) lbIdx = 0; showLB(); }
+        document.getElementById('lb').addEventListener('click', function(e) { if (e.target === this) closeLB(); });
+        
+        // --- Modificación 2: Deslizar con el dedo en Lightbox ---
+        var lbEl = document.getElementById('lb');
+        var touchStartX = 0;
+
+        lbEl.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        lbEl.addEventListener('touchend', function(e) {
+            var touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) navLB(1); // Deslizar izquierda -> Foto siguiente
+            if (touchEndX > touchStartX + 50) navLB(-1); // Deslizar derecha -> Foto anterior
+        }, {passive: true});
+
+        function handleContact(e) { 
+            e.preventDefault(); 
+            var f = e.target;
+            var nom = f.querySelector('input[type="text"]').value.trim();
+            var tel = f.querySelector('input[type="tel"]').value.trim();
+            var serv = f.querySelector('select').value;
+            var txt = f.querySelector('textarea').value.trim();
+            
+            var msg = "Hola, me gustaría solicitar un presupuesto.\n\n*Nombre:* " + nom + "\n*Teléfono:* " + tel + "\n*Servicio de interés:* " + serv + "\n*Mensaje:* " + txt;
+            
+            window.open('https://wa.me/' + D.settings.waNumber + '?text=' + encodeURIComponent(msg), '_blank');
+            toast('Abriendo WhatsApp...'); 
+            f.reset(); 
+        }
+        
+        function openPhotobookView() {
+            document.getElementById('cpHdrMain').style.display = 'none';
+            document.getElementById('cp-ft-main').style.display = 'none';
+            document.getElementById('cpMainView').style.display = 'none'; document.getElementById('cpVideoView').style.display = 'none';
+            document.getElementById('cpGalleryView').style.display = 'none'; 
+            
+            let pbView = document.getElementById('cpPhotobookView');
+            pbView.style.display = 'flex'; 
+            renderBook();
+            window.scrollTo(0,0);
+            
+            var c = D.clients[curClient];
+            var count = getActiveItemsCount(c);
+            var btn3 = document.getElementById('btnBackPB');
+            if (count === 1) { btn3.innerHTML = '← Salir del Portal'; btn3.onclick = exitPortal; } 
+            else { btn3.innerHTML = '← Regresar al menú'; btn3.onclick = closePhotobookView; }
+
+            pushUrlState(curClient, 'fotolibro');
+        }
+        
+        function closePhotobookView() { 
+            try { exitFullscreenMode(); } catch(e) {}
+            document.getElementById('cpPhotobookView').style.display = 'none'; 
+            showMainView(); 
+        }
+
+        let currentBookState = 0; 
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0); let rotateHintTimer = null;
+
+        function getPBData() { return (D.clients[curClient] && D.clients[curClient].photobook) ? D.clients[curClient].photobook : { cover: null, spreads: [null], hasBackCover: false, back: null }; }
+        function getMaxState() { const pb = getPBData(); return pb.hasBackCover ? pb.spreads.length + 1 : pb.spreads.length; }
+        function getImgTag(src, isPano, side) { if (!src) return ''; if (!isPano) return `<img src="${src}" class="pb-img-fit" alt="" loading="lazy">`; return `<img src="${src}" class="pb-pano pb-pano-${side}" alt="" loading="lazy">`; }
+        function getPlaceholder(text) { return `<div class="pb-placeholder-text">${text}</div>`; }
+
+        function renderBook() {
+            const pb = getPBData(); if (!pb.spreads || pb.spreads.length === 0) pb.spreads = [null];
+            const book = document.getElementById('book');
+            const numSpreads = pb.spreads.length, totalPapers = numSpreads + 1;
+            let bookHTML = '';
+            for (let i = 0; i < totalPapers; i++) {
+                let frontContent = '', backContent = '', effectLayer = '';
+                if (i === 0) { frontContent = getImgTag(pb.cover, false) || getPlaceholder("Portada"); effectLayer = '<div class="pb-acrylic-led"></div><div class="pb-beveled"></div>'; } 
+                else { const s = pb.spreads[i - 1]; frontContent = getImgTag(s, true, 'right') || getPlaceholder(`Lienzo ${i}<br>Derecha`); }
+                if (i === totalPapers - 1) { backContent = pb.hasBackCover ? (getImgTag(pb.back, false) || getPlaceholder("Final")) : ''; } 
+                else { const s = pb.spreads[i]; backContent = getImgTag(s, true, 'left') || getPlaceholder(`Lienzo ${i + 1}<br>Izquierda`); }
+                bookHTML += `<div class="pb-paper" id="pb-paper-${i}"><div class="pb-front">${frontContent}${effectLayer}</div><div class="pb-back">${backContent}</div></div>`;
+            }
+            book.innerHTML = bookHTML;
+            currentBookState = 0; updateBookTransform();
+        }
+
+        function updateBookTransform() {
+            const papers = document.querySelectorAll('.pb-paper'), book = document.getElementById('book'), total = papers.length, maxS = getMaxState();
+            papers.forEach((paper, i) => { if (i < currentBookState) { paper.classList.add('pb-flipped'); paper.style.zIndex = i + 1; } else { paper.classList.remove('pb-flipped'); paper.style.zIndex = total - i; } });
+            if (currentBookState === 0) book.style.transform = "translateX(0%)"; else if (currentBookState >= total) book.style.transform = "translateX(100%)"; else book.style.transform = "translateX(50%)";
+            updatePageIndicator(); updateNavButtons(maxS);
+        }
+
+        function updatePageIndicator() {
+            const pb = getPBData(), dotsEl = document.getElementById('pb-page-dots'), labelEl = document.getElementById('pb-page-label'), total = getMaxState() + 1, numSpreads = pb.spreads.length;
+            let dotsHTML = ''; for (let i = 0; i < total; i++) { dotsHTML += `<div class="pb-page-dot${i === currentBookState ? ' active' : ''}"></div>`; }
+            dotsEl.innerHTML = dotsHTML;
+            if (currentBookState === 0) labelEl.textContent = 'Portada'; else if (currentBookState >= getMaxState()) labelEl.textContent = 'Final'; else labelEl.textContent = `Lienzo ${currentBookState} de ${numSpreads}`;
+        }
+
+        function updateNavButtons(maxS) {
+            document.getElementById('pb-btn-prev').disabled = currentBookState <= 0; document.getElementById('pb-btn-next').disabled = currentBookState >= maxS; document.getElementById('pb-btn-home').disabled = currentBookState <= 0;
+            document.getElementById('pb-arrow-left').style.opacity = currentBookState <= 0 ? '0.2' : '1'; document.getElementById('pb-arrow-right').style.opacity = currentBookState >= maxS ? '0.2' : '1';
+        }
+
+        function nextPage() { if (currentBookState < getMaxState()) { currentBookState++; updateBookTransform(); } }
+        function prevPage() { if (currentBookState > 0) { currentBookState--; updateBookTransform(); } }
+        function goToCover() { currentBookState = 0; updateBookTransform(); }
+
+        function initSimpleBookGestures() {
+            const bookEl = document.getElementById('book');
+            let startX = 0, startY = 0, tracking = false;
+
+            bookEl.addEventListener('touchstart', (e) => {
+                if(document.getElementById('cpPhotobookView').style.display === 'none') return;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                tracking = true;
+            }, { passive: true });
+
+            bookEl.addEventListener('touchend', (e) => {
+                if (!tracking) return;
+                tracking = false;
+                let dx = e.changedTouches[0].clientX - startX;
+                let dy = e.changedTouches[0].clientY - startY;
+
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+                    if (dx < 0) nextPage(); else prevPage();
+                } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+                    let rect = bookEl.getBoundingClientRect();
+                    let x = e.changedTouches[0].clientX - rect.left;
+                    if (x > rect.width / 2) nextPage(); else prevPage();
+                }
+            }, { passive: true });
+
+            bookEl.addEventListener('click', (e) => {
+                if (isTouchDevice) return; 
+                let rect = bookEl.getBoundingClientRect();
+                let x = e.clientX - rect.left; 
+                if (x > rect.width / 2) nextPage(); else prevPage(); 
+            });
+        }
+        window.addEventListener('DOMContentLoaded', initSimpleBookGestures);
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('cpPhotobookView').style.display === 'none') return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextPage(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevPage(); }
+            else if (e.key === 'Home') { e.preventDefault(); goToCover(); }
+            else if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+            else if (e.key === 'Escape' && document.body.classList.contains('fullscreen-mode')) exitFullscreenMode();
+        });
+
+        function toggleFullscreen() {
+            const isFS = document.body.classList.contains('fullscreen-mode');
+            if (!isFS) { 
+                document.body.classList.add('fullscreen-mode'); 
+                if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); 
+                else if (document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen(); 
+                showRotateHint(); 
+            } 
+            else { exitFullscreenMode(); }
+        }
+        function exitFullscreenMode() { document.body.classList.remove('fullscreen-mode'); hideRotateHint(); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else if (document.webkitFullscreenElement) document.webkitExitFullscreen(); }
+        document.addEventListener('fullscreenchange', handleFullscreenChange); document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        function handleFullscreenChange() { const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement); if (!isFS && document.body.classList.contains('fullscreen-mode')) { document.body.classList.remove('fullscreen-mode'); hideRotateHint(); } }
+        function showRotateHint() { 
+            if (!isTouchDevice) return; 
+            if (window.innerWidth < window.innerHeight) { 
+                var overlay = document.getElementById('pb-rotate-overlay');
+                overlay.classList.add('active');
+                clearTimeout(rotateHintTimer);
+                rotateHintTimer = setTimeout(function() { overlay.classList.remove('active'); }, 4000);
+            } 
+        }
+        function hideRotateHint() { 
+            const hint = document.getElementById('pb-rotate-overlay'); 
+            hint.classList.remove('active'); 
+            clearTimeout(rotateHintTimer); 
+        }
+        if (screen.orientation) screen.orientation.addEventListener('change', () => { if (screen.orientation.type.includes('landscape')) hideRotateHint(); }); window.addEventListener('orientationchange', () => { if (window.innerWidth > window.innerHeight) hideRotateHint(); });
+
+        // --- Modificación 4: Añadir "colaboradores" en renderAdmBody ---
+        function openAdm() { admState = { tab: 'services', view: 'list', editId: null }; document.getElementById('admPanel').classList.add('active'); document.body.style.overflow = 'hidden'; renderAdmTabs(); renderAdmBody(); }
+        function closeAdm() { document.getElementById('admPanel').classList.remove('active'); document.body.style.overflow = ''; }
+        document.getElementById('admTabs').addEventListener('click', function(e) { var btn = e.target.closest('button[data-t]'); if (!btn) return; admState.tab = btn.dataset.t; admState.view = 'list'; admState.editId = null; renderAdmTabs(); renderAdmBody(); });
+        function renderAdmTabs() { document.querySelectorAll('#admTabs button').forEach(function(b) { b.classList.toggle('active', b.dataset.t === admState.tab); }); }
+        
+        function renderAdmBody() { 
+            var body = document.getElementById('admBody'); 
+            switch (admState.tab) { 
+                case 'services': renderAdmServices(body); break; 
+                case 'clients': renderAdmClients(body); break; 
+                case 'portfolio': renderAdmPortfolio(body); break; 
+                case 'testimonials': renderAdmTestimonials(body); break; 
+                case 'colaboradores': renderAdmColaboradores(body); break; 
+                case 'settings': renderAdmSettings(body); break; 
+            } 
+        }
+
+        // --- NUEVA VISTA PARA COLABORADORES ---
+        function renderAdmColaboradores(body) {
+            body.innerHTML = `
+                <h3 style="margin-bottom:1rem">Control de Agenda y Notas de Remisión</h3>
+                
+                <div style="display:flex; gap:10px; margin-bottom:1.5rem; flex-wrap:wrap;">
+                    <button class="af-btn af-btn-p" onclick="alert('Aquí puedes enlazar tu función para crear PDF/JPG')">📝 Generar Nota de Remisión</button>
+                    <button class="af-btn af-btn-s" onclick="alert('Lógica para añadir fechas a la nube')">📅 Agendar Nuevo Evento</button>
+                </div>
+
+                <div style="background:#fafafa; padding:1.2rem; border-radius:var(--radius); border:1px solid var(--border-light);">
+                    <label class="af-l" style="color:var(--accent); font-size:1rem; margin-bottom: 0.5rem;">Calendario Compartido</label>
+                    <p class="adm-hint" style="margin-bottom:1rem;">Visualiza los días reservados. Se sincroniza mediante la base de datos para que los colaboradores revisen disponibilidad.</p>
+                    
+                    <div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; text-align:center; font-family:var(--fb);">
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">L</div>
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">M</div>
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">M</div>
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">J</div>
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">V</div>
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">S</div>
+                        <div style="font-weight:600; color:var(--text-muted); font-size:0.8rem;">D</div>
+                        
+                        <div style="background:#fff; border:1px solid #eee; padding:12px 5px; border-radius:6px; font-size:0.9rem;">14</div>
+                        <div style="background:var(--accent-subtle); border:1px solid var(--accent); color:var(--accent); font-weight:bold; padding:12px 5px; border-radius:6px; font-size:0.9rem; cursor:pointer;" title="Sesión de Fotos Agendada">15</div>
+                        <div style="background:#fff; border:1px solid #eee; padding:12px 5px; border-radius:6px; font-size:0.9rem;">16</div>
+                        <div style="background:#fff; border:1px solid #eee; padding:12px 5px; border-radius:6px; font-size:0.9rem;">17</div>
+                    </div>
+                    
+                    <div style="margin-top:1.5rem;">
+                        <label class="af-l">Datos rápidos para Nota de Remisión</label>
+                        <input class="af-i" type="text" placeholder="Nombre del Cliente">
+                        <input class="af-i" type="date">
+                        <textarea class="af-i af-ta" placeholder="Descripción de los servicios a cubrir..."></textarea>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAdmServices(body) {
+            if (admState.view === 'edit') {
+                var svc = admState.editId ? D.services.find(function(s) { return s.id === admState.editId; }) : null; var isEdit = !!svc;
+                body.innerHTML = '<h3 style="margin-bottom:1rem">' + (isEdit ? 'Editar' : 'Nuevo') + ' paquete</h3>' +
+                    '<div class="toggle-row" style="background:#f4ede4; padding:0.5rem 1rem; border-radius:8px; margin-bottom:1rem;">' +
+                    '<label><div class="toggle-sw"><input type="checkbox" id="ae_featured" ' + (svc && svc.isFeatured ? 'checked' : '') + '><div class="toggle-track"></div><div class="toggle-thumb"></div></div>Destacar como "Más contratado"</label></div>' +
+                    '<label class="af-l">Icono (emoji)</label><input class="af-i" id="ae_icon" value="' + esc(svc ? svc.icon : '') + '" placeholder="💍">' +
+                    '<label class="af-l">Título</label><input class="af-i" id="ae_title" value="' + esc(svc ? svc.title : '') + '" placeholder="Boda Básico">' +
+                    '<label class="af-l">Descripción</label><input class="af-i" id="ae_desc" value="' + esc(svc ? svc.desc : '') + '" placeholder="Cobertura de...">' +
+                    '<label class="af-l">Precio</label><input class="af-i" id="ae_price" value="' + esc(svc ? svc.price : '') + '" placeholder="Desde $3,500">' +
+                    '<label class="af-l">Características (una por línea)</label><textarea class="af-i af-ta" id="ae_feats" placeholder="100 fotos editadas\nVideo resumen">' + esc((svc && svc.features) ? svc.features.join('\n') : '') + '</textarea>' +
+                    '<div class="af-btns"><button class="af-btn af-btn-p" onclick="saveService(\'' + (svc ? svc.id : '') + '\')">Guardar</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\';renderAdmBody()">Cancelar</button></div>';
+                return;
+            }
+            var h = '<button class="adm-add-btn" onclick="admState.view=\'edit\';admState.editId=null;renderAdmBody()">+ Nuevo paquete</button>';
+            D.services.sort(function(a, b) { return (a.order || 0) - (b.order || 0); }).forEach(function(svc) { h += ('<div class="al-item"><div class="al-item-info"><div class="al-item-t">' + esc(svc.icon) + ' ' + esc(svc.title) + (svc.isFeatured ? ' <span style="font-size:0.6rem; background:var(--accent); color:#fff; padding:2px 6px; border-radius:4px; margin-left:4px;">DESTACADO</span>' : '') + '</div><div class="al-item-s">' + esc(svc.price) + '</div></div><div class="al-acts"><button class="al-btn" onclick="editService(\'' + svc.id + '\')">Editar</button><button class="al-btn del" onclick="delService(\'' + svc.id + '\')">Eliminar</button></div></div>'); });
+            body.innerHTML = h;
+        }
+        function editService(id) { admState.view = 'edit'; admState.editId = id; renderAdmBody(); }
+        function saveService(oldId) { var icon = document.getElementById('ae_icon').value.trim(), title = document.getElementById('ae_title').value.trim(), desc = document.getElementById('ae_desc').value.trim(), price = document.getElementById('ae_price').value.trim(), feats = document.getElementById('ae_feats').value.trim().split('\n').filter(function(f) { return f.trim(); }); var isFeatured = document.getElementById('ae_featured').checked; if (!title) { toast('El título es obligatorio'); return; } if (oldId) { var svc = D.services.find(function(s) { return s.id === oldId; }); if (svc) { svc.icon = icon; svc.title = title; svc.desc = desc; svc.price = price; svc.features = feats; svc.isFeatured = isFeatured; } } else { D.services.push({ id: uid(), icon: icon, title: title, desc: desc, price: price, features: feats, order: D.services.length, isFeatured: isFeatured }); } saveData(); admState.view = 'list'; renderAdmBody(); renderPublic(); }
+        function delService(id) { if (!confirm('¿Eliminar este paquete?')) return; D.services = D.services.filter(function(s) { return s.id !== id; }); saveData(); renderAdmBody(); renderPublic(); toast('Paquete eliminado'); }
+
+        function renderAdmClients(body) {
+            if (admState.view === 'edit') { renderClientForm(body); return; }
+            if (admState.view === 'photobook') { renderPhotobookAdmin(body); return; }
+            var h = '<button class="adm-add-btn" onclick="newClient()">+ Nuevo evento / cliente</button><p class="adm-hint">Cada cliente tiene un código único para acceder.</p>';
+            var codes = Object.keys(D.clients); if (!codes.length) { body.innerHTML = h + '<div class="adm-empty">No hay clientes registrados.</div>'; return; }
+            codes.forEach(function(code) {
+                var c = D.clients[code], badges = '';
+                if (c.hasVideo) badges += '<span class="toggle-badge on">Video</span> ';
+                if (c.hasPhotos) badges += '<span class="toggle-badge on">Fotos</span> ';
+                if (c.hasPhotobook) badges += '<span class="toggle-badge on">Fotolibro</span> ';
+                if (!badges) badges = '<span class="toggle-badge off">Sin contenido</span>';
+                
+                h += ('<div class="al-item" style="flex-wrap:wrap"><div class="al-item-info"><div class="al-item-t">' + esc(c.name) + '</div><div class="al-item-s">' + esc(c.event) + ' · Código: <strong>' + esc(code) + '</strong></div><div style="margin-top:.3rem">' + badges + '</div></div><div class="al-acts" style="flex-wrap:wrap"><button class="al-btn" onclick="copyClientUrl(\'' + code + '\')">🔗 Copiar Link</button><button class="al-btn" onclick="editClient(\'' + code + '\')">Editar</button>' + (c.hasPhotobook ? '<button class="al-btn" onclick="editPhotobook(\'' + code + '\')">Fotolibro</button>' : '') + '<button class="al-btn del" onclick="delClient(\'' + code + '\')">Eliminar</button></div></div>');
+            });
+            body.innerHTML = h;
+        }
+        function newClient() { admState.view = 'edit'; admState.editId = null; renderAdmBody(); }
+        function editClient(code) { admState.view = 'edit'; admState.editId = code; renderAdmBody(); }
+
+        function initTempPhotos(photos) { tempClientPhotos = (photos || []).map(function(p) { return { src: p.src, name: p.name, set: p.set || 'General', driveId: p.driveId || null }; }); }
+        
+        function renderClientForm(body) {
+            var isNew = !admState.editId;
+            var c = isNew ? { name: '', event: '', hasVideo: true, hasPhotos: true, hasPhotobook: false, video: { youtubeId: '', title: '' }, photos: [], driveFolderUrl: '', galleryCover: '', photobook: { cover: null, spreads: [null], hasBackCover: false, back: null }, expireAt: Date.now() + 31536000000 } : D.clients[admState.editId];
+            initTempPhotos(c.photos || []);
+            
+            var expireStr = toDateInput(c.expireAt || (Date.now() + 31536000000));
+            
+            body.innerHTML = '<h3 style="margin-bottom:1rem">' + (isNew ? 'Nuevo evento' : 'Editar evento') + '</h3>' +
+                '<label class="af-l">Código de acceso (sin espacios)</label><input class="af-i" id="ce_code" value="' + esc(isNew ? '' : admState.editId) + '" placeholder="boda2024" ' + (isNew ? '' : 'readonly style="opacity:.6;cursor:not-allowed"') + '>' +
+                '<div class="af-row"><div><label class="af-l">Nombre del cliente</label><input class="af-i" id="ce_name" value="' + esc(c.name) + '" placeholder="María & Carlos"></div><div><label class="af-l">Evento</label><input class="af-i" id="ce_event" value="' + esc(c.event) + '" placeholder="Boda — 15 de marzo, 2024"></div></div>' +
+                '<label class="af-l">Vencimiento del Acceso (1 año por defecto)</label><div style="display:flex; gap:.5rem; margin-bottom:.8rem;"><input type="date" class="af-i" id="ce_expire" value="' + expireStr + '" style="margin:0;"><button type="button" class="af-btn af-btn-s" style="margin:0;" onclick="addOneYear()">+ 1 Año</button></div>' +
+                '<div style="margin:1rem 0;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)"><label class="af-l" style="margin-bottom:.6rem">Contenido del evento</label>' +
+                '<div class="toggle-row"><label><div class="toggle-sw"><input type="checkbox" id="ce_hasVideo" ' + (c.hasVideo ? 'checked' : '') + ' onchange="toggleClientSection(\'video\')"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>Video</label></div>' +
+                '<div class="toggle-row"><label><div class="toggle-sw"><input type="checkbox" id="ce_hasPhotos" ' + (c.hasPhotos ? 'checked' : '') + ' onchange="toggleClientSection(\'photos\')"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>Fotos (Galería Digital)</label></div>' +
+                '<div class="toggle-row"><label><div class="toggle-sw"><input type="checkbox" id="ce_hasPhotobook" ' + (c.hasPhotobook ? 'checked' : '') + ' onchange="toggleClientSection(\'photobook\')"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>Fotolibro digital</label></div></div>' +
+                
+                '<div id="ce_videoSec" style="display:' + (c.hasVideo ? 'block' : 'none') + ';margin-bottom:1rem;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)">' +
+                '<label class="af-l">Enlace de Google Drive, YouTube o Iframe</label>' +
+                '<textarea class="af-i af-ta" id="ce_ytId" placeholder="Pega el enlace de Google Drive, YouTube o el código iframe...">' + esc((c.video || {}).youtubeId || '') + '</textarea>' +
+                '<label class="af-l">Título del video</label><input class="af-i" id="ce_vidTitle" value="' + esc((c.video || {}).title || '') + '" placeholder="Video Resumen"></div>' +
+                
+                '<div id="ce_photosSec" style="display:' + (c.hasPhotos ? 'block' : 'none') + ';margin-bottom:1rem;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)">' +
+                '<label class="af-l" style="color:var(--accent)">Extraer Galería (Soporta Subcarpetas / Sets)</label>' +
+                
+                '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">' +
+                    '<input class="af-i" id="ce_driveFolderInput" placeholder="URL o ID de la carpeta principal" style="margin-bottom:0;flex:1;min-width:200px;">' +
+                    '<button type="button" class="af-btn af-btn-p" style="margin:0; background:#2b5797;" onclick="fetchDriveGalleryForClient()">1. Refrescar / Extraer de Drive</button>' +
+                '</div>' +
+                
+                '<div id="ce_driveGalleryStatus" style="font-size:0.8rem; color:var(--accent); margin-bottom:1rem; font-weight:500;"></div>' +
+                '<label class="af-l">URL de carpeta para descargar todo</label><input class="af-i" id="ce_driveUrl" value="' + esc(c.driveFolderUrl || '') + '">' +
+                
+                '<label class="af-l" style="margin-top:.5rem">Foto de Portada de la Galería (Opcional)</label>' +
+                '<div style="display:flex;gap:10px;margin-bottom:0.5rem;">' +
+                    '<input class="af-i" id="ce_galleryCover" placeholder="Si está vacío, usará la 1ra foto" value="' + esc(c.galleryCover || '') + '" style="margin-bottom:0;flex:1;">' +
+                    '<input type="file" accept="image/*" onchange="uploadGeneralImg(this, \'ce_galleryCover\')" style="width:100px;font-size:0.7rem;padding-top:10px;">' +
+                '</div>' +
+                
+                '<label class="af-l" style="margin-top:.5rem">Fotos en la galería</label>' +
+                
+                '<div id="ce_photosSummary" class="adm-hint" style="padding: 1rem; background: var(--accent-subtle); border: 1px dashed var(--accent); border-radius: var(--radius); text-align: center; font-weight: 600; color: var(--accent); font-size: 0.9rem; margin-top:0.5rem;">📸 ' + (c.photos ? c.photos.length : 0) + ' fotos cargadas</div>' +
+                
+                '<div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">' +
+                    '<button type="button" class="af-btn af-btn-p" style="flex:1; background:#1da851;" onclick="sortClientPhotosAsc()">2. Ordenar de Menor a Mayor (1 a 100)</button>' +
+                    '<button type="button" class="af-btn af-btn-s" style="flex:1;" onclick="document.getElementById(\'ce_photosList\').style.display=\'block\'; this.style.display=\'none\';">Ver y Ordenar Fotos Manualmente</button>' +
+                '</div>' +
+                
+                '<div id="ce_photosList" style="display:none; margin-top:1rem;"></div>' +
+                '<button type="button" class="adm-add-btn" style="margin-top:.5rem" onclick="addClientPhoto()">+ Agregar foto manual</button></div>' +
+                
+                '<div id="ce_photobookSec" style="display:' + (c.hasPhotobook ? 'block' : 'none') + ';margin-bottom:1rem;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)"><p class="adm-hint">El contenido del fotolibro se configura por separado. Guárdalo primero y luego usa el botón "Fotolibro" en la lista de clientes.</p></div>' +
+                '<div class="af-btns"><button class="af-btn af-btn-p" onclick="saveClient(\'' + (isNew ? '' : admState.editId) + '\')">Guardar Evento</button><button class="af-btn af-btn-s" onclick="admState.view=\'list\';renderAdmBody()">Cancelar</button></div>';
+            
+            renderClientPhotosList(tempClientPhotos);
+        }
+        function toggleClientSection(sec) { document.getElementById('ce_' + sec + 'Sec').style.display = document.getElementById('ce_has' + sec.charAt(0).toUpperCase() + sec.slice(1)).checked ? 'block' : 'none'; }
+        
+        function sortClientPhotosAsc() {
+            if (!tempClientPhotos || tempClientPhotos.length === 0) {
+                toast('No hay fotos para ordenar.');
+                return;
+            }
+            var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+            tempClientPhotos.sort(function(a, b) {
+                return collator.compare(a.name || '', b.name || '');
+            });
+            renderClientPhotosList(tempClientPhotos);
+            
+            saveClient(admState.editId);
+            toast('✅ Ordenado y guardado.');
+        }
+
+        function dragPhotoStart(e, i) {
+            draggedPhotoIdx = i;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', i); 
+        }
+        function dragPhotoOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+        function dropPhoto(e, targetIdx) {
+            e.preventDefault();
+            if(draggedPhotoIdx === -1 || draggedPhotoIdx === targetIdx) return;
+            var item = tempClientPhotos.splice(draggedPhotoIdx, 1)[0];
+            tempClientPhotos.splice(targetIdx, 0, item);
+            renderClientPhotosList(tempClientPhotos);
+            toast('Orden actualizado (Haz clic en Guardar)');
+            draggedPhotoIdx = -1;
+        }
+
+        function renderClientPhotosList(photos) {
+            var list = document.getElementById('ce_photosList'); if (!list) return; 
+            var h = '';
+            (photos || []).forEach(function(p, i) { 
+                h += `<div class="adm-photo-item" draggable="true" ondragstart="dragPhotoStart(event, ${i})" ondragover="dragPhotoOver(event)" ondrop="dropPhoto(event, ${i})" style="cursor:grab; flex-wrap:wrap">
+                    <span style="color:#999; margin-right:5px; font-size:1.2rem;" title="Arrastrar para ordenar">↕</span>
+                    <img src="${esc(p.src)}" alt="" loading="lazy">
+                    <input type="text" value="${esc(p.name || '')}" placeholder="Nombre" onchange="updateClientPhotoName(${i},this.value)" style="flex:1; min-width:80px;">
+                    <input type="text" value="${esc(p.set || 'General')}" placeholder="Set" onchange="updateClientPhotoSet(${i},this.value)" style="flex:1; min-width:80px;">
+                    <button type="button" onclick="removeClientPhoto(${i})" title="Quitar">×</button>
+                </div>`; 
+            });
+            list.innerHTML = h;
+        }
+        
+        async function fetchDriveGalleryForClient() {
+            var apiKey = D.settings.driveApiKey;
+            if (!apiKey) { toast('Configura tu Clave API en la pestaña General.'); return; }
+            var input = document.getElementById('ce_driveFolderInput').value.trim();
+            var folderId = input; var match = input.match(/\/folders\/([a-zA-Z0-9_-]+)/) || input.match(/id=([a-zA-Z0-9_-]+)/); if (match) folderId = match[1];
+            if (!folderId) { toast('URL o ID de carpeta inválido.'); return; }
+
+            var status = document.getElementById('ce_driveGalleryStatus');
+            status.textContent = 'Analizando carpeta principal y extrayendo TODAS las fotos (paginación activa)... Por favor, espera.';
+
+            try {
+                async function getAllFiles(fId, onlyImages) {
+                    let all = []; let pToken = '';
+                    let q = `'${fId}' in parents and trashed=false`;
+                    if (onlyImages) q += " and mimeType contains 'image/'";
+                    do {
+                        let url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=nextPageToken,files(id,name,mimeType)&key=${apiKey}&pageSize=1000`;
+                        if (pToken) url += `&pageToken=${pToken}`;
+                        let res = await fetch(url);
+                        let data = await res.json();
+                        if (data.error) throw new Error(data.error.message);
+                        if (data.files) all = all.concat(data.files);
+                        pToken = data.nextPageToken;
+                    } while (pToken);
+                    return all;
+                }
+
+                let rootFiles = await getAllFiles(folderId, false);
+                let folders = rootFiles.filter(f => f.mimeType === 'application/vnd.google-apps.folder');
+                let looseImages = rootFiles.filter(f => f.mimeType.includes('image/'));
+
+                var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+                folders.sort((a, b) => collator.compare(a.name, b.name));
+                looseImages.sort((a, b) => collator.compare(a.name, b.name));
+
+                let allPhotos = [];
+
+                looseImages.forEach(img => {
+                    allPhotos.push({ src: `https://lh3.googleusercontent.com/d/${img.id}=s1600`, name: img.name, set: 'General', driveId: img.id });
+                });
+
+                for (let folder of folders) {
+                    status.textContent = `Extrayendo set: ${folder.name}...`;
+                    let subFiles = await getAllFiles(folder.id, true);
+                    subFiles.sort((a, b) => collator.compare(a.name, b.name));
+                    subFiles.forEach(img => {
+                        allPhotos.push({ src: `https://lh3.googleusercontent.com/d/${img.id}=s1600`, name: img.name, set: folder.name, driveId: img.id });
+                    });
+                }
+
+                tempClientPhotos = allPhotos;
+                document.getElementById('ce_photosSummary').innerHTML = '✅ ' + allPhotos.length + ' fotos extraídas con éxito. Usa el botón de abajo para ordenar.';
+                renderClientPhotosList(tempClientPhotos);
+                status.textContent = `¡Éxito! Se importaron ${allPhotos.length} fotos organizadas en ${folders.length + (looseImages.length?1:0)} sets.`;
+                toast('Galería extraída correctamente.');
+
+            } catch(e) {
+                status.textContent = 'Error al extraer: ' + e.message;
+                toast('Error de extracción. Verifica tu API Key.');
+            }
+        }
+
+        function addClientPhoto() {
+            var list = document.getElementById('ce_photosList'); if (!list) return; var idx = list.children.length; var div = document.createElement('div'); div.className = 'adm-photo-item';
+            div.innerHTML = `<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" loading="lazy" style="opacity:.3">
+                <input type="text" value="" placeholder="URL de la imagen" onchange="updateClientPhotoSrc(${idx},this.value)" style="flex:1.5;">
+                <input type="text" value="" placeholder="Nombre" onchange="updateClientPhotoName(${idx},this.value)" style="flex:1;">
+                <input type="text" value="General" placeholder="Set" onchange="updateClientPhotoSet(${idx},this.value)" style="flex:1;">
+                <button type="button" onclick="removeClientPhoto(${idx})" title="Quitar">×</button>`;
+            list.appendChild(div);
+        }
+        function updateClientPhotoSrc(idx, val) { while (tempClientPhotos.length <= idx) tempClientPhotos.push({ src: '', name: '', set: 'General' }); tempClientPhotos[idx].src = val.trim(); var img = document.getElementById('ce_photosList').children[idx].querySelector('img'); if (img && val) img.src = val; else if (img) img.style.opacity = '.3'; }
+        function updateClientPhotoName(idx, val) { while (tempClientPhotos.length <= idx) tempClientPhotos.push({ src: '', name: '', set: 'General' }); tempClientPhotos[idx].name = val.trim(); }
+        function updateClientPhotoSet(idx, val) { while (tempClientPhotos.length <= idx) tempClientPhotos.push({ src: '', name: '', set: 'General' }); tempClientPhotos[idx].set = val.trim() || 'General'; }
+        function removeClientPhoto(idx) { tempClientPhotos.splice(idx, 1); renderClientPhotosList(tempClientPhotos); }
+        
+        function saveClient(oldCode) {
+            var code = document.getElementById('ce_code').value.trim().toLowerCase().replace(/\s+/g, ''), name = document.getElementById('ce_name').value.trim(), event = document.getElementById('ce_event').value.trim();
+            if (!code || !name) { toast('Código y nombre son obligatorios'); return; } if (!oldCode && D.clients[code]) { toast('Ese código ya existe'); return; }
+            var hasVideo = document.getElementById('ce_hasVideo').checked, hasPhotos = document.getElementById('ce_hasPhotos').checked, hasPhotobook = document.getElementById('ce_hasPhotobook').checked;
+            var ytRaw = document.getElementById('ce_ytId').value.trim(), vidTitle = document.getElementById('ce_vidTitle').value.trim(), driveUrl = document.getElementById('ce_driveUrl').value.trim(), galleryCover = document.getElementById('ce_galleryCover').value.trim();
+            
+            var finalIframe = ytRaw;
+            if (ytRaw.includes('drive.google.com/file/d/')) {
+                var m = ytRaw.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (m) finalIframe = '<iframe src="https://drive.google.com/file/d/' + m[1] + '/preview" allow="autoplay; fullscreen" width="100%" height="100%" frameborder="0"></iframe>';
+            } else if (ytRaw.includes('youtu.be/') || (ytRaw.includes('youtube.com/') && !ytRaw.includes('<iframe'))) {
+                var ytM = ytRaw.match(/(?:youtu\.be\/|v=|\/v\/|\/embed\/)([^&?\s]+)/);
+                if (ytM) finalIframe = '<iframe src="https://www.youtube.com/embed/' + ytM[1] + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen width="100%" height="100%" frameborder="0"></iframe>';
+            }
+
+            var expireDate = document.getElementById('ce_expire').value; var expireTime = expireDate ? new Date(expireDate + 'T12:00:00').getTime() : (Date.now() + 31536000000);
+            var photos = tempClientPhotos.filter(function(p) { return p.src.trim(); });
+            if (oldCode && oldCode !== code) { delete D.clients[oldCode]; }
+            D.clients[code] = { name: name, event: event, hasVideo: hasVideo, hasPhotos: hasPhotos, hasPhotobook: hasPhotobook, video: hasVideo ? { youtubeId: finalIframe, title: vidTitle } : { youtubeId: '', title: '' }, photos: hasPhotos ? photos : [], driveFolderUrl: driveUrl, galleryCover: galleryCover, photobook: D.clients[code] && D.clients[code].photobook ? D.clients[code].photobook : { cover: null, spreads: [null], hasBackCover: false, back: null }, expireAt: expireTime };
+            saveData(); admState.view = 'list'; renderAdmBody(); toast('Evento guardado');
+        }
+        function delClient(code) { if (!confirm('¿Eliminar el evento "' + D.clients[code].name + '"?')) return; delete D.clients[code]; saveData(); renderAdmBody(); toast('Evento eliminado'); }
+
+        function editPhotobook(code) { admState.view = 'photobook'; admState.editId = code; renderAdmBody(); }
+        function renderPhotobookAdmin(body) {
+            var code = admState.editId; var c = D.clients[code]; if (!c) { admState.view = 'list'; renderAdmBody(); return; }
+            var pb = c.photobook || { cover: null, spreads: [null], hasBackCover: false, back: null }; if (!pb.spreads || !pb.spreads.length) pb.spreads = [null]; c.photobook = pb;
+            body.innerHTML =
+                '<div class="gallery-header" style="margin-bottom:1rem"><button class="cp-back" style="background:var(--border-light);color:var(--text-muted);border-color:var(--border)" onclick="admState.view=\'list\';renderAdmBody()">← Volver a clientes</button><div><h3 style="font-family:var(--fh);margin-bottom:0">Fotolibro: ' + esc(c.name) + '</h3></div></div>' +
+                '<div style="margin-bottom:1.5rem;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)">' +
+                '<label class="af-l" style="color:var(--accent)">Galería Rápida desde Google Drive</label>' +
+                '<div style="display:flex;gap:.5rem;flex-wrap:wrap">' +
+                '<input class="af-i" id="pb_driveFolderId" placeholder="URL o ID de la carpeta" style="margin-bottom:0;flex:1;min-width:200px">' +
+                '<button class="af-btn af-btn-p" style="margin:0" onclick="fetchDriveFolderForPB()">Extraer Fotos</button>' +
+                '<button class="af-btn af-btn-s" style="margin:0" onclick="autoFillDriveFiles()">Autollenar Fotolibro</button>' +
+                '</div><div id="pbDriveGallery" style="display:flex;gap:.5rem;overflow-x:auto;margin-top:.8rem;padding-bottom:.5rem;"></div></div>' +
+                '<div style="margin-bottom:1rem"><label class="af-l">Portada</label>' +
+                '<div class="pb-slot" style="max-width:200px;display:inline-block;vertical-align:top;margin-right:.5rem" ondragover="allowDropPB(event)" ondragleave="leaveDropPB(event)" ondrop="leaveDropPB(event); dropOnPBSlot(event, \'cover\')"><label>Portada 12×12</label>' +
+                '<input type="text" value="' + esc(pb.cover || '') + '" placeholder="URL de la imagen" onchange="updatePB(\'cover\',this.value)" style="margin-bottom:3px">' +
+                '<input type="file" accept="image/*" onchange="uploadPBImg(this,\'cover\')" style="font-size:.6rem;color:#999">' +
+                (pb.cover ? '<img src="' + esc(pb.cover) + '" style="margin-top:4px">' : '') + '</div></div>' +
+                '<label class="af-l">Páginas interiores (lienzos panorámicos 12×24)</label>' +
+                '<div class="pb-slots" id="pbSlotsAdmin"></div><button class="adm-add-btn" style="margin-top:.5rem" onclick="addPBSpread()">+ Agregar página</button>' +
+                '<div style="margin-top:1rem" class="toggle-row"><label><div class="toggle-sw"><input type="checkbox" id="pb_hasBack" ' + (pb.hasBackCover ? 'checked' : '') + ' onchange="togglePBBack()"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>Contraportada</label></div>' +
+                '<div id="pbBackSec" style="display:' + (pb.hasBackCover ? 'block' : 'none') + ';margin-bottom:1rem"><label class="af-l">Imagen de contraportada</label>' +
+                '<div class="pb-slot" style="max-width:200px;display:inline-block;vertical-align:top" ondragover="allowDropPB(event)" ondragleave="leaveDropPB(event)" ondrop="leaveDropPB(event); dropOnPBSlot(event, \'back\')"><label>Contraportada 12×12</label>' +
+                '<input type="text" value="' + esc(pb.back || '') + '" placeholder="URL de la imagen" onchange="updatePB(\'back\',this.value)" style="margin-bottom:3px">' +
+                '<input type="file" accept="image/*" onchange="uploadPBImg(this,\'back\')" style="font-size:.6rem;color:#999">' +
+                (pb.back ? '<img src="' + esc(pb.back) + '" style="margin-top:4px">' : '') + '</div></div>' +
+                '<div class="af-btns" style="margin-top:1rem"><button class="af-btn af-btn-p" onclick="savePBData()">Guardar fotolibro</button></div>';
+            renderPBSlotsAdmin(pb);
+        }
+        function renderPBSlotsAdmin(pb) {
+            var container = document.getElementById('pbSlotsAdmin'); if (!container) return; 
+            var h = '';
+            pb.spreads.forEach(function(src, i) { h += ('<div class="pb-slot" id="pbSlot_' + i + '" ondragover="allowDropPB(event)" ondragleave="leaveDropPB(event)" ondrop="leaveDropPB(event); dropOnPBSlot(event, \'spread\', ' + i + ')"><label>Lienzo ' + (i + 1) + '</label><input type="text" value="' + esc(src || '') + '" placeholder="URL de imagen" onchange="updatePBSpread(' + i + ',this.value)"><input type="file" accept="image/*" onchange="uploadPBImg(this,\'spread\',' + i + ')" style="font-size:.55rem;color:#999">' + (src ? '<img src="' + esc(src) + '">' : '') + '<button type="button" class="rm-slot" onclick="removePBSpread(' + i + ')">×</button></div>'); });
+            container.innerHTML = h;
+        }
+        
+        function allowDropPB(e) { e.preventDefault(); e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--accent-subtle)'; }
+        function leaveDropPB(e) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = '#fafafa'; }
+        function dropOnPBSlot(e, type, idx) {
+            e.preventDefault(); var src = e.dataTransfer.getData('text/plain'); if(!src) return;
+            if (type === 'cover') updatePB('cover', src); else if (type === 'back') updatePB('back', src); else updatePBSpread(idx, src);
+            renderPhotobookAdmin(document.getElementById('admBody')); toast('Foto asignada');
+        }
+
+        function addPBSpread() { D.clients[admState.editId].photobook.spreads.push(null); saveData(); renderPhotobookAdmin(document.getElementById('admBody')); }
+        function removePBSpread(i) { D.clients[admState.editId].photobook.spreads.splice(i, 1); saveData(); renderPhotobookAdmin(document.getElementById('admBody')); }
+        function updatePB(key, val) { D.clients[admState.editId].photobook[key] = val.trim() || null; saveData(); }
+        function updatePBSpread(i, val) { D.clients[admState.editId].photobook.spreads[i] = val.trim() || null; saveData(); var img = document.getElementById('pbSlot_' + i).querySelector('img'); if (val.trim() && img) { img.src = val.trim(); img.style.display = ''; } else if (img) { img.style.display = 'none'; } }
+        function togglePBBack() { var checked = document.getElementById('pb_hasBack').checked; D.clients[admState.editId].photobook.hasBackCover = checked; document.getElementById('pbBackSec').style.display = checked ? 'block' : 'none'; saveData(); }
+        function uploadPBImg(input, type, idx) {
+            var file = input.files[0]; if (!file) return; var reader = new FileReader();
+            reader.onload = function(e) { var img = new Image(); img.onload = function() { var canvas = document.createElement('canvas'); var w = img.width, h = img.height; if (w > 1800) { h = Math.floor(h * (1800 / w)); w = 1800; } canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h); var b64 = canvas.toDataURL('image/jpeg', .82); if (type === 'cover') updatePB('cover', b64); else if (type === 'back') updatePB('back', b64); else updatePBSpread(idx, b64); renderPhotobookAdmin(document.getElementById('admBody')); toast('Imagen cargada'); }; img.src = e.target.result; };
+            reader.readAsDataURL(file); input.value = '';
+        }
+        function savePBData() { saveData(); toast('Fotolibro guardado correctamente'); }
+
+        async function fetchDriveFolderForPB() {
+            var apiKey = D.settings.driveApiKey; if (!apiKey) { toast('Configura tu Clave API en General.'); return; }
+            var folderInput = document.getElementById('pb_driveFolderId').value.trim(); var folderId = folderInput;
+            var match = folderInput.match(/\/folders\/([a-zA-Z0-9_-]+)/) || folderInput.match(/id=([a-zA-Z0-9_-]+)/); if (match) folderId = match[1];
+            if (!folderId) { toast('ID o URL de carpeta inválido.'); return; }
+            var url = 'https://www.googleapis.com/drive/v3/files?q=%27' + folderId + '%27+in+parents+and+mimeType+contains+%27image/%27&fields=files(id,name)&key=' + apiKey;
+            document.getElementById('pbDriveGallery').innerHTML = '<p class="adm-hint">Cargando...</p>';
+            fetch(url).then(function(res) { return res.json(); }).then(function(data) {
+                if (data.error) throw new Error(data.error.message); var files = data.files || [];
+                if (!files.length) { document.getElementById('pbDriveGallery').innerHTML = '<p class="adm-hint">Carpeta vacía.</p>'; return; }
+                renderDriveGalleryForPB(files);
+            }).catch(function(err) { toast('Error: ' + err.message); document.getElementById('pbDriveGallery').innerHTML = '<p class="adm-hint" style="color:#c0392b">Error al cargar.</p>'; });
+        }
+
+        function renderDriveGalleryForPB(files) {
+            currentDriveFiles = files; 
+            var gal = document.getElementById('pbDriveGallery'); gal.innerHTML = '';
+            var frag = document.createDocumentFragment();
+            files.forEach(function(f) {
+                var srcThumb = 'https://lh3.googleusercontent.com/d/' + f.id + '=s300', fullSrc = 'https://lh3.googleusercontent.com/d/' + f.id + '=s1600', img = document.createElement('img');
+                img.src = srcThumb; img.title = f.name; img.style.height = '70px'; img.style.cursor = 'grab'; img.style.borderRadius = '4px'; img.style.border = '2px solid transparent'; img.style.transition = 'border-color 0.2s';
+                img.loading = "lazy"; img.draggable = true; img.ondragstart = function(e) { e.dataTransfer.setData('text/plain', fullSrc); };
+                img.onclick = function() { autoFillNextPBSlot(fullSrc); }; frag.appendChild(img);
+            });
+            gal.appendChild(frag);
+        }
+
+        function autoFillNextPBSlot(src) {
+            var code = admState.editId, pb = D.clients[code].photobook;
+            if (!pb.cover) { updatePB('cover', src); toast('Foto asignada a la portada'); renderPhotobookAdmin(document.getElementById('admBody')); return; }
+            for (var i = 0; i < pb.spreads.length; i++) { if (!pb.spreads[i]) { updatePBSpread(i, src); toast('Foto asignada al lienzo ' + (i + 1)); renderPhotobookAdmin(document.getElementById('admBody')); return; } }
+            if (pb.hasBackCover && !pb.back) { updatePB('back', src); toast('Foto asignada a la contraportada'); renderPhotobookAdmin(document.getElementById('admBody')); return; }
+            toast('Todos los espacios están llenos. Añade más páginas para agregar más fotos.');
+        }
+
+        function autoFillDriveFiles() {
+            if (!currentDriveFiles || currentDriveFiles.length === 0) { toast('Primero extrae las fotos.'); return; }
+            if (!confirm('¿Autollenar fotolibro completo? Esto reemplazará las fotos actuales. Tus fotos en Drive deben estar enumeradas (1, 2, 3...).')) return;
+            var code = admState.editId, pb = D.clients[code].photobook;
+            var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+            var sortedFiles = currentDriveFiles.slice().sort(function(a, b) { return collator.compare(a.name, b.name); });
+            var totalFiles = sortedFiles.length; if(totalFiles === 0) return;
+            var fileIdx = 0; pb.cover = 'https://lh3.googleusercontent.com/d/' + sortedFiles[fileIdx++].id + '=s1600';
+            var reserveForBack = pb.hasBackCover && fileIdx < totalFiles; var spreadLimit = reserveForBack ? totalFiles - 1 : totalFiles;
+            pb.spreads = []; while (fileIdx < spreadLimit) { pb.spreads.push('https://lh3.googleusercontent.com/d/' + sortedFiles[fileIdx++].id + '=s1600'); }
+            if (pb.spreads.length === 0) pb.spreads = [null]; 
+            if (reserveForBack) { pb.back = 'https://lh3.googleusercontent.com/d/' + sortedFiles[fileIdx].id + '=s1600'; }
+            saveData(); renderPhotobookAdmin(document.getElementById('admBody')); toast('Fotolibro autollenado por orden numérico');
+        }
+
+        function renderAdmPortfolio(body) {
+            body.innerHTML = `
+                <div style="margin-bottom:1.5rem;padding:1rem;background:#fafafa;border-radius:var(--radius);border:1px solid var(--border-light)">
+                    <label class="af-l" style="color:var(--accent)">Importar Portafolio desde Google Drive</label>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+                        <input class="af-i" id="port_driveFolderId" placeholder="URL o ID de la carpeta" style="margin-bottom:0;flex:1;min-width:200px;">
+                        <button class="af-btn af-btn-p" style="margin:0" onclick="fetchDrivePortfolio()">Extraer Portafolio</button>
+                    </div>
+                    <div id="port_driveStatus" style="font-size:0.8rem; color:var(--accent); font-weight:500;"></div>
+                </div>
+                <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
+                    <button class="adm-add-btn" style="margin-bottom:0;" onclick="addPortfolioImg()">+ Agregar Imagen</button>
+                    <button class="adm-add-btn" style="margin-bottom:0;" onclick="addPortfolioVid()">+ Agregar Video</button>
+                </div>
+                <div id="admPortList"></div>
+            `;
+            var list = document.getElementById('admPortList');
+            var h = '';
+            D.portfolio.forEach(function(item, i) { 
+                var isVid = item.type === 'video';
+                h += '<div class="adm-photo-item" style="flex-wrap:wrap;">';
+                h += '<img src="' + esc(item.src) + '" alt="" style="width:60px; height:60px;">';
+                if (isVid) h += '<input type="text" value="' + esc(item.videoUrl || '') + '" placeholder="Enlace del Video" onchange="updPortVid(' + i + ',this.value)" style="flex:1; min-width:150px; background:#f4ede4;">';
+                h += '<input type="text" value="' + esc(item.src) + '" placeholder="URL de la ' + (isVid ? 'Miniatura' : 'Imagen') + '" onchange="updPortSrc(' + i + ',this.value)" style="flex:1; min-width:150px;">';
+                h += '<input type="text" value="' + esc(item.label) + '" placeholder="Categoría (Ej. Bodas)" onchange="updPortLabel(' + i + ',this.value)" style="flex:1; min-width:100px;">';
+                h += '<button type="button" onclick="delPortfolioImg(' + i + ')" title="Quitar">×</button></div>';
+            });
+            list.innerHTML = h;
+        }
+        
+        async function fetchDrivePortfolio() {
+            var apiKey = D.settings.driveApiKey; if (!apiKey) { toast('Configura tu Clave API en General.'); return; }
+            var input = document.getElementById('port_driveFolderId').value.trim(); var folderId = input; var match = input.match(/\/folders\/([a-zA-Z0-9_-]+)/) || input.match(/id=([a-zA-Z0-9_-]+)/); if (match) folderId = match[1];
+            if (!folderId) { toast('URL o ID de carpeta inválido.'); return; }
+            var status = document.getElementById('port_driveStatus'); status.textContent = 'Analizando carpeta principal y paginando...';
+            try {
+                async function getAllFiles(fId, onlyImages) {
+                    let all = []; let pToken = ''; let q = `'${fId}' in parents and trashed=false`; if (onlyImages) q += " and mimeType contains 'image/'";
+                    do { let url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=nextPageToken,files(id,name,mimeType)&key=${apiKey}&pageSize=1000`; if (pToken) url += `&pageToken=${pToken}`; let res = await fetch(url); let data = await res.json(); if (data.error) throw new Error(data.error.message); if (data.files) all = all.concat(data.files); pToken = data.nextPageToken; } while (pToken); return all;
+                }
+                let rootFiles = await getAllFiles(folderId, false);
+                let folders = rootFiles.filter(f => f.mimeType === 'application/vnd.google-apps.folder'); let looseImages = rootFiles.filter(f => f.mimeType.includes('image/'));
+                var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'}); folders.sort((a, b) => collator.compare(a.name, b.name)); looseImages.sort((a, b) => collator.compare(a.name, b.name));
+                let newPhotos = []; looseImages.forEach(img => { newPhotos.push({ src: `https://lh3.googleusercontent.com/d/${img.id}=s800`, label: 'General', type: 'image' }); });
+                for (let folder of folders) { status.textContent = `Extrayendo categoría: ${folder.name}...`; let subFiles = await getAllFiles(folder.id, true); subFiles.sort((a, b) => collator.compare(a.name, b.name)); subFiles.forEach(img => { newPhotos.push({ src: `https://lh3.googleusercontent.com/d/${img.id}=s800`, label: folder.name, type: 'image' }); }); }
+                D.portfolio = D.portfolio.concat(newPhotos); saveData(); renderAdmBody(); renderPublic(); status.textContent = `¡Éxito! Se añadieron ${newPhotos.length} fotos al portafolio.`; toast('Portafolio actualizado.');
+            } catch(e) { status.textContent = 'Error: ' + e.message; toast('Error de extracción.'); }
+        }
+
+        function addPortfolioImg() { D.portfolio.push({ type: 'image', src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=650&fit=crop&auto=format', label: 'Nuevo' }); saveData(); renderAdmBody(); }
+        function addPortfolioVid() { D.portfolio.push({ type: 'video', src: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&h=650&fit=crop&auto=format', videoUrl: '', label: 'Nuevo Video' }); saveData(); renderAdmBody(); }
+        function updPortSrc(i, val) { D.portfolio[i].src = val.trim(); saveData(); renderPublic(); renderAdmBody(); }
+        function updPortVid(i, val) { D.portfolio[i].videoUrl = val.trim(); saveData(); renderPublic(); renderAdmBody(); }
+        function updPortLabel(i, val) { D.portfolio[i].label = val.trim(); saveData(); renderPublic(); }
+        function delPortfolioImg(i) { D.portfolio.splice(i, 1); saveData(); renderAdmBody(); renderPublic(); }
+
+        function renderAdmTestimonials(body) {
+            var h = '<button class="adm-add-btn" onclick="addTestimonial()">+ Agregar testimonio</button>';
+            D.testimonials.forEach(function(t, i) { h += ('<div class="al-item" style="flex-wrap:wrap"><div class="al-item-info" style="flex-basis:100%"><div class="al-item-t" style="white-space:normal;font-weight:400;font-style:italic">' + esc(t.text) + '</div><div class="al-item-s" style="margin-top:.3rem">— ' + esc(t.author) + '</div></div><div class="al-acts"><button class="al-btn" onclick="editTestimonial(' + i + ')">Editar</button><button class="al-btn del" onclick="delTestimonial(' + i + ')">Eliminar</button></div></div>'); });
+            body.innerHTML = h;
+        }
+        function addTestimonial() { D.testimonials.push({ text: '"Escribe aquí el testimonio..."', author: 'Nombre del cliente' }); saveData(); renderAdmBody(); }
+        function editTestimonial(i) { var t = D.testimonials[i]; var newText = prompt('Testimonio:', t.text.replace(/"/g, '')); if (newText === null) return; var newAuthor = prompt('Autor:', t.author); if (newAuthor === null) return; D.testimonials[i].text = newText; D.testimonials[i].author = newAuthor; saveData(); renderAdmBody(); renderPublic(); }
+        function delTestimonial(i) { D.testimonials.splice(i, 1); saveData(); renderAdmBody(); renderPublic(); }
+
+        function renderAdmSettings(body) {
+            var s = D.settings;
+            body.innerHTML = '<h3 style="margin-bottom:1rem">Datos generales del sitio</h3>' +
+                '<div class="af-row"><div><label class="af-l">Teléfono</label><input class="af-i" id="se_phone" value="' + esc(s.phone) + '"></div><div><label class="af-l">Teléfono (solo números)</label><input class="af-i" id="se_phoneRaw" value="' + esc(s.phoneRaw) + '"></div></div>' +
+                '<label class="af-l">Dirección</label><input class="af-i" id="se_addr" value="' + esc(s.address) + '">' +
+                '<label class="af-l">Horario</label><input class="af-i" id="se_hours" value="' + esc(s.hours) + '">' +
+                '<label class="af-l">Facebook URL</label><input class="af-i" id="se_fb" value="' + esc(s.facebook) + '">' +
+                '<label class="af-l">WhatsApp Number</label><input class="af-i" id="se_wa" value="' + esc(s.waNumber) + '">' +
+                '<label class="af-l">Texto del hero</label><textarea class="af-i af-ta" id="se_hero">' + esc(s.heroDesc) + '</textarea>' +
+                '<label class="af-l">Logotipo del sitio (URL de imagen)</label>' +
+                '<div style="display:flex;gap:10px;margin-bottom:1rem;"><input class="af-i" id="se_logoImg" placeholder="Si está vacío, mostrará el texto" value="' + esc(s.logoImage || '') + '" style="margin-bottom:0;flex:1;"><input type="file" accept="image/*" onchange="uploadGeneralImg(this, \'se_logoImg\')" style="width:100px;font-size:0.7rem;padding-top:10px;"></div>' +
+                '<label class="af-l">Imagen Principal (Inicio)</label>' +
+                '<div style="display:flex;gap:10px;margin-bottom:1rem;"><input class="af-i" id="se_heroImg" value="' + esc(s.heroImage || '') + '" style="margin-bottom:0;flex:1;"><input type="file" accept="image/*" onchange="uploadGeneralImg(this, \'se_heroImg\')" style="width:100px;font-size:0.7rem;padding-top:10px;"></div>' +
+                '<label class="af-l">Google Maps Embed URL</label><input class="af-i" id="se_map" value="' + esc(s.mapEmbed) + '">' +
+                '<label class="af-l" style="margin-top:1rem; color:var(--accent)">Clave API de Google Drive</label><input class="af-i" id="se_driveApi" value="' + esc(s.driveApiKey || '') + '">' +
+                '<label class="af-l" style="margin-top:1rem">Cambiar contraseña admin</label><input class="af-i" type="password" id="se_pass" placeholder="Dejar vacío para no cambiar">' +
+                '<div class="af-btns"><button class="af-btn af-btn-p" onclick="saveSettings()">Guardar cambios locales</button></div>' +
+                '<hr style="border:none; border-top:1px solid var(--border-light); margin: 2rem 0;">' +
+                '<h3 style="margin-bottom:1rem; color:var(--accent);">Sincronización de la Página</h3>' +
+                '<div style="display:flex; gap:10px; flex-wrap:wrap;">' +
+                '<button class="af-btn" style="background:#2b5797;color:#fff;" onclick="loadData(true)">Forzar Descarga de la Nube</button>' +
+                '<button class="af-btn af-btn-d" onclick="downloadJSON()">Descargar Respaldo JSON</button>' +
+                '</div>';
+        }
+        function saveSettings() {
+            var s = D.settings; s.phone = document.getElementById('se_phone').value.trim(); s.phoneRaw = document.getElementById('se_phoneRaw').value.trim(); s.address = document.getElementById('se_addr').value.trim(); s.hours = document.getElementById('se_hours').value.trim(); s.facebook = document.getElementById('se_fb').value.trim(); s.waNumber = document.getElementById('se_wa').value.trim(); s.heroDesc = document.getElementById('se_hero').value.trim(); s.mapEmbed = document.getElementById('se_map').value.trim(); s.driveApiKey = document.getElementById('se_driveApi').value.trim(); s.heroImage = document.getElementById('se_heroImg').value.trim(); s.logoImage = document.getElementById('se_logoImg').value.trim();
+            var p = document.getElementById('se_pass').value; if (p.length > 3) D.adminPass = p;
+            saveData(); renderPublic(); toast('Configuración guardada');
+        }
+
+        function checkUrlForClient() {
+            var params = new URLSearchParams(window.location.search);
+            var clientCode = params.get('c');
+            if (clientCode && D && D.clients && D.clients[clientCode]) {
+                var curUrl = window.location.href; curClient = clientCode; var viewParam = null;
+                if(curUrl.includes('-galeria')) viewParam = 'galeria'; else if(curUrl.includes('-video')) viewParam = 'video'; else if(curUrl.includes('-fotolibro')) viewParam = 'fotolibro';
+                enterPortal(viewParam);
+            }
+        }
+
+        window.onload = function() { loadData(); };
     </script>
 </body>
 </html>
